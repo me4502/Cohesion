@@ -7,6 +7,7 @@ import com.me4502.Cohesion.Cohesion;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
 		new LwjglApplication(new Cohesion(), config);
 	}
 }

@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
 
@@ -17,36 +19,66 @@ public class Cohesion extends ApplicationAdapter {
 	Texture img;
 
 	FrameBuffer buffer;
+
 	OrthographicCamera camera;
 
 	public static final Random RANDOM = new Random();
+
+	/* Shaders */
+	ShaderProgram simple;
+	ShaderProgram postProcessing;
+
+	Map map;
 
 	@Override
 	public void create () {
 
 		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
 
-		camera = new OrthographicCamera(buffer.getWidth(), buffer.getHeight());
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
+
+		camera = new OrthographicCamera(640, 640 * (h / w));
+		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+		camera.update();
 
 		batch = new SpriteBatch();
 
 		img = new Texture("badlogic.jpg");
+
+		ShaderProgram.pedantic = false;
+
+		simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
+		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
+
+		map = new Map();
 	}
 
 	@Override
 	public void render () {
 
-		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 0.4f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
+		camera.update();
 		batch.setProjectionMatrix(camera.combined);
-		batch.draw(img, RANDOM.nextInt(300), RANDOM.nextInt(300));
+
+		buffer.begin();
+		Gdx.gl.glClearColor(0, 0, 0, 1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		if(simple.isCompiled()) {
+			batch.setShader(simple);
+		}
+
+		batch.begin();
+		batch.draw(img, 10, 10);
 		batch.end();
 		buffer.end();
 
+		if(simple.isCompiled()) {
+			batch.setShader(postProcessing);
+		}
+
 		batch.begin();
-		batch.draw(buffer.getColorBufferTexture(), 0, 0);
+		batch.draw(buffer.getColorBufferTexture(), 0, 0, buffer.getWidth(), buffer.getHeight(), 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 		batch.end();
 	}
 }

@@ -16,7 +16,6 @@ import com.me4502.Cohesion.map.Map;
 public class Cohesion extends ApplicationAdapter {
 
 	SpriteBatch batch;
-	Texture img;
 
 	FrameBuffer buffer;
 
@@ -27,6 +26,10 @@ public class Cohesion extends ApplicationAdapter {
 	/* Shaders */
 	ShaderProgram simple;
 	ShaderProgram postProcessing;
+	
+	/* Textures */
+	Texture player;
+	Texture platform;
 
 	Map map;
 
@@ -44,13 +47,14 @@ public class Cohesion extends ApplicationAdapter {
 
 		batch = new SpriteBatch();
 
-		img = new Texture("badlogic.jpg");
-
 		ShaderProgram.pedantic = false;
 
 		simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
 		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
 
+		player = new Texture("data/entity/player.png");
+		platform = new Texture("data/platforms/platform.png");
+		
 		map = new Map();
 	}
 
@@ -69,7 +73,7 @@ public class Cohesion extends ApplicationAdapter {
 		}
 
 		batch.begin();
-		batch.draw(img, 10, 10);
+		batch.draw(platform, 10, 10);
 		batch.end();
 		buffer.end();
 

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -11,25 +12,27 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
 
 	SpriteBatch batch;
+	public ShapeRenderer shapes;
 
 	FrameBuffer buffer;
 
 	OrthographicCamera camera;
 
 	public static Cohesion instance;
-	
+
 	public static final Random RANDOM = new Random();
 
 	/* Shaders */
 	public ShaderProgram simple;
 	public ShaderProgram colorize;
 	public ShaderProgram postProcessing;
-	
+
 	/* Textures */
 	public Texture player;
 	public Texture platform;
@@ -40,7 +43,7 @@ public class Cohesion extends ApplicationAdapter {
 	public void create () {
 
 		instance = this;
-		
+
 		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
 
 		float w = Gdx.graphics.getWidth();
@@ -51,6 +54,7 @@ public class Cohesion extends ApplicationAdapter {
 		camera.update();
 
 		batch = new SpriteBatch();
+		shapes = new ShapeRenderer();
 
 		ShaderProgram.pedantic = false;
 
@@ -60,21 +64,63 @@ public class Cohesion extends ApplicationAdapter {
 
 		player = new Texture("data/entity/player.png");
 		platform = new Texture("data/platforms/platform.png");
-		
+
 		map = new Map();
+
+		Gdx.input.setInputProcessor(new InputProcessor() {
+			@Override
+			public boolean keyDown(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyTyped(char character) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				return false;
+			}
+
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				return false;
+			}
+
+			@Override
+			public boolean scrolled(int amount) {
+				return false;
+			}
+		});
 	}
 
 	@Override
 	public void render () {
 
-		map.update();
-		
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
 		buffer.begin();
 		Gdx.gl.glClearColor(0, 0, 0, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		map.update();
 
 		if(simple.isCompiled()) {
 			batch.setShader(simple);

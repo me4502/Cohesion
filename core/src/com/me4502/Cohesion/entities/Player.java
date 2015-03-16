@@ -1,5 +1,7 @@
 package com.me4502.Cohesion.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.map.MapInstance;
@@ -15,4 +17,16 @@ public class Player extends Entity {
 		return true;
 	}
 
+	@Override
+	public void update() {
+
+		if(Gdx.input.isKeyPressed(Keys.A))
+			velocity.add(-5, 0);
+		if(Gdx.input.isKeyPressed(Keys.D))
+			velocity.add(5, 0);
+		if(Gdx.input.isKeyPressed(Keys.SPACE))
+			velocity.add(0, 4);
+
+		super.update();
+	}
 }

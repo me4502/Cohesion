@@ -15,22 +15,22 @@ public abstract class Entity {
 	Vector2 velocity;
 
 	Sprite sprite;
-	
+
 	Bounds bounds;
-	
+
 	MapInstance map;
 
 	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
 		this.map = map;
 		this.sprite = sprite;
-		
+
 		bounds = new RectangularBounds(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
-		
+
 		this.position = position;
 		velocity = new Vector2(0,0);
 	}
-	
+
 	public Bounds getBoundingBox() {
 		return bounds;
 	}
@@ -56,21 +56,23 @@ public abstract class Entity {
 			if(!move(getPosition().add(velocity)))
 				velocity.add(GRAVITY).dot(new Vector2(0.7f,0.7f));
 		}
-		
+
 		sprite.setPosition(position.x, position.y);
+
+		bounds.drawDebugBounds(position);
 	}
 
 	protected boolean move(Vector2 position) {
-		
+
 		for(Entity ent : map.entities) {
 			if(ent == this) continue;
-			if(ent.getBoundingBox().doesIntersect(ent.getPosition(), this))
+			if(getBoundingBox().doesIntersect(getPosition(), ent))
 				return false;
 		}
-		
+
 		this.position = position;
 		return true;
 	}
-	
+
 	public abstract boolean hasGravity();
 }

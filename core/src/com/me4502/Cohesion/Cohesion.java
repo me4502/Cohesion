@@ -21,11 +21,14 @@ public class Cohesion extends ApplicationAdapter {
 
 	OrthographicCamera camera;
 
+	public static Cohesion instance;
+	
 	public static final Random RANDOM = new Random();
 
 	/* Shaders */
-	ShaderProgram simple;
-	ShaderProgram postProcessing;
+	public ShaderProgram simple;
+	public ShaderProgram colorize;
+	public ShaderProgram postProcessing;
 	
 	/* Textures */
 	Texture player;
@@ -36,6 +39,8 @@ public class Cohesion extends ApplicationAdapter {
 	@Override
 	public void create () {
 
+		instance = this;
+		
 		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
 
 		float w = Gdx.graphics.getWidth();
@@ -50,6 +55,7 @@ public class Cohesion extends ApplicationAdapter {
 		ShaderProgram.pedantic = false;
 
 		simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
+		colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
 		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
 
 		player = new Texture("data/entity/player.png");

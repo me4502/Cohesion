@@ -3,8 +3,11 @@ package com.me4502.Cohesion.entities;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.map.MapInstance;
+import com.me4502.Cohesion.util.Bounds;
+import com.me4502.Cohesion.util.RectangularBounds;
 
-public class Entity {
+public abstract class Entity {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 3);
 
@@ -12,10 +15,24 @@ public class Entity {
 	Vector2 velocity;
 
 	Sprite sprite;
+	
+	Bounds bounds;
+	
+	MapInstance map;
 
-	public Entity(Sprite sprite) {
+	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
+		this.map = map;
 		this.sprite = sprite;
+		
+		bounds = new RectangularBounds(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
+		
+		this.position = position;
+		velocity = new Vector2(0,0);
+	}
+	
+	public Bounds getBoundingBox() {
+		return bounds;
 	}
 
 	public void setPosition(Vector2 position) {
@@ -23,7 +40,7 @@ public class Entity {
 	}
 
 	public Vector2 getPosition() {
-		return position;
+		return position.cpy();
 	}
 
 	public void render(SpriteBatch batch) {
@@ -32,12 +49,28 @@ public class Entity {
 
 	public void update() {
 
-		velocity.add(GRAVITY);
+		if(hasGravity())
+			velocity.sub(GRAVITY);
 
-		move(position.add(velocity));
+		if(velocity.len2() > 0) {
+			if(!move(getPosition().add(velocity)))
+				velocity.add(GRAVITY).dot(new Vector2(0.7f,0.7f));
+		}
+		
+		sprite.setPosition(position.x, position.y);
 	}
 
-	protected void move(Vector2 position) {
+	protected boolean move(Vector2 position) {
+		
+		for(Entity ent : map.entities) {
+			if(ent == this) continue;
+			if(ent.getBoundingBox().doesIntersect(ent.getPosition(), this))
+				return false;
+		}
+		
 		this.position = position;
+		return true;
 	}
+	
+	public abstract boolean hasGravity();
 }

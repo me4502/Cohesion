@@ -31,8 +31,8 @@ public class Cohesion extends ApplicationAdapter {
 	public ShaderProgram postProcessing;
 	
 	/* Textures */
-	Texture player;
-	Texture platform;
+	public Texture player;
+	public Texture platform;
 
 	Map map;
 
@@ -67,6 +67,8 @@ public class Cohesion extends ApplicationAdapter {
 	@Override
 	public void render () {
 
+		map.update();
+		
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
@@ -79,7 +81,7 @@ public class Cohesion extends ApplicationAdapter {
 		}
 
 		batch.begin();
-		batch.draw(platform, 10, 10);
+		map.render(batch);
 		batch.end();
 		buffer.end();
 

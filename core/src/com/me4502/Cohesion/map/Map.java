@@ -12,8 +12,9 @@ public class Map {
 	
 	public Map() {
 
-		instances.add(new MapInstance(Color.GREEN));
-		instances.add(new MapInstance(Color.BLUE));
+		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
+		instances.add(new MapInstance(new Color(0f, 1.0f, 0f, 0.33f)));
+		instances.add(new MapInstance(new Color(0f, 0f, 1.0f, 0.33f)));
 	}
 
 	public void render(SpriteBatch batch) {

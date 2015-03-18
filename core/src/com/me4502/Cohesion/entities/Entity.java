@@ -20,6 +20,8 @@ public abstract class Entity {
 
 	MapInstance map;
 
+	boolean onGround;
+
 	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
 		this.map = map;
@@ -49,27 +51,41 @@ public abstract class Entity {
 
 	public void update() {
 
-		if(hasGravity())
+		onGround = doesIntersect(getPosition().sub(0, 3));
+
+		if(hasGravity() && !onGround && velocity.y > -9) //Only apply gravity if we aren't on the ground
 			velocity.sub(GRAVITY);
 
 		if(velocity.len2() > 0) {
-			if(!move(getPosition().add(velocity)))
-				velocity.add(GRAVITY).dot(new Vector2(0.7f,0.7f));
+			int tries = 0;
+			while(!move(getPosition().add(velocity)) && tries < 3) {
+				velocity.scl(new Vector2(0.01f,0.01f));
+				tries ++;
+			}
+			if(onGround && tries >= 3) velocity.y = 0;
 		}
+
+		velocity.scl(new Vector2(0.9f,0.9f));
 
 		sprite.setPosition(position.x, position.y);
 
 		bounds.drawDebugBounds(position);
 	}
 
-	protected boolean move(Vector2 position) {
+	protected boolean doesIntersect(Vector2 position) {
 
 		for(Entity ent : map.entities) {
 			if(ent == this) continue;
-			if(getBoundingBox().doesIntersect(getPosition(), ent))
-				return false;
+			if(getBoundingBox().doesIntersect(position, ent))
+				return true;
 		}
 
+		return false;
+	}
+
+	protected boolean move(Vector2 position) {
+
+		if(doesIntersect(position)) return false;
 		this.position = position;
 		return true;
 	}

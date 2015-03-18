@@ -21,11 +21,11 @@ public class Player extends Entity {
 	public void update() {
 
 		if(Gdx.input.isKeyPressed(Keys.A))
-			velocity.add(-5, 0);
+			velocity.add(onGround ? -1 : -0.1f, 0);
 		if(Gdx.input.isKeyPressed(Keys.D))
-			velocity.add(5, 0);
-		if(Gdx.input.isKeyPressed(Keys.SPACE))
-			velocity.add(0, 4);
+			velocity.add(onGround ? 1 : 0.1f, 0);
+		if(Gdx.input.isKeyPressed(Keys.SPACE) && onGround)
+			velocity.add(0, 8);
 
 		super.update();
 	}

@@ -2,7 +2,7 @@ package com.me4502.Cohesion.util;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
+import com.flowpowered.math.vector.Vector2d;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 
@@ -18,13 +18,13 @@ public class RectangularBounds extends Bounds {
 	}
 
 	@Override
-	public boolean doesIntersect(Vector2 position, Entity entity) {
+	public boolean doesIntersect(Vector2d position, Entity entity) {
 
 		if(entity.getBoundingBox() instanceof RectangularBounds) {
 			RectangularBounds otherBox = (RectangularBounds) entity.getBoundingBox();
 
-			if(position.x < entity.getPosition().x + otherBox.width && position.x + width > entity.getPosition().x)
-				if(position.y < entity.getPosition().y + otherBox.height && position.y + height > entity.getPosition().y)
+			if(position.getX() < entity.getPosition().getX() + otherBox.width && position.getX() + width > entity.getPosition().getX())
+				if(position.getY() < entity.getPosition().getY() + otherBox.height && position.getY() + height > entity.getPosition().getY())
 					return true;
 		}
 
@@ -32,21 +32,21 @@ public class RectangularBounds extends Bounds {
 	}
 
 	@Override
-	public boolean doesIntersect(Vector2 position, Vector2 intersectionpoint) {
+	public boolean doesIntersect(Vector2d position, Vector2d intersectionpoint) {
 
-		if(position.x <= intersectionpoint.x && position.x + width >= intersectionpoint.x)
-			if(position.y <= intersectionpoint.y && position.y + height >= intersectionpoint.y)
+		if(position.getX() <= intersectionpoint.getX() && position.getX() + width >= intersectionpoint.getX())
+			if(position.getY() <= intersectionpoint.getY() && position.getY() + height >= intersectionpoint.getY())
 				return true;
 
 		return false;
 	}
 
 	@Override
-	public void drawDebugBounds(Vector2 position) {
+	public void drawDebugBounds(Vector2d position) {
 
 		Cohesion.instance.shapes.setColor(Color.WHITE);
 		Cohesion.instance.shapes.begin(ShapeType.Filled);
-		Cohesion.instance.shapes.rect(position.x, position.y, width, height);
+		Cohesion.instance.shapes.rect(position.getFloorX(), position.getFloorY(), width, height);
 		Cohesion.instance.shapes.end();
 	}
 }

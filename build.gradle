@@ -77,7 +77,6 @@ project(":core") {
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile 'com.flowpowered:flow-math:1.0.1-SNAPSHOT'
     }
 }
 

@@ -23,11 +23,9 @@ public class RectangularBounds extends Bounds {
 		if(entity.getBoundingBox() instanceof RectangularBounds) {
 			RectangularBounds otherBox = (RectangularBounds) entity.getBoundingBox();
 
-			if (position.x + width <= entity.getPosition().x) return false;
-			if (position.x >= entity.getPosition().x + otherBox.width) return false;
-			if (position.y - height >= entity.getPosition().y) return false;
-			if (position.y <= entity.getPosition().y - otherBox.height) return false;
-			return true;
+			if(position.x < entity.getPosition().x + otherBox.width && position.x + width > entity.getPosition().x)
+				if(position.y < entity.getPosition().y + otherBox.height && position.y + height > entity.getPosition().y)
+					return true;
 		}
 
 		return false;

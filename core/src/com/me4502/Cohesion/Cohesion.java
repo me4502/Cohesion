@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
@@ -38,6 +39,8 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture platform;
 
 	Map map;
+	
+	private Vector2 lastCameraPosition;
 
 	@Override
 	public void create () {
@@ -50,7 +53,7 @@ public class Cohesion extends ApplicationAdapter {
 		float h = Gdx.graphics.getHeight();
 
 		camera = new OrthographicCamera(640, 640 * (h / w));
-		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+		//camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
 		batch = new SpriteBatch();
@@ -113,7 +116,11 @@ public class Cohesion extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-		camera.translate(0,0);
+		camera.position.set(map.getCentrePoint().add(camera.viewportWidth/4, camera.viewportHeight/4), 0);
+		//if(lastCameraPosition != null) {
+		//	camera.translate((map.getCentrePoint().x - lastCameraPosition.x) /2f, map.getCentrePoint().y - lastCameraPosition.y);
+		//}
+		//lastCameraPosition = map.getCentrePoint();
 		
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);

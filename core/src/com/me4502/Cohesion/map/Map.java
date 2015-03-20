@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class Map {
 
@@ -27,5 +28,18 @@ public class Map {
 
 		for(MapInstance instance : instances)
 			instance.update();
+	}
+	
+	public Vector2 getCentrePoint() {
+		
+		Vector2 result = new Vector2(0,0);
+		
+		for(MapInstance instance : instances) {
+			result.add(instance.player.getPosition().x, instance.player.getPosition().y);
+		}
+		
+		result.scl(1f/instances.size());
+		
+		return result;
 	}
 }

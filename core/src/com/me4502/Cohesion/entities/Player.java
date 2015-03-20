@@ -20,13 +20,15 @@ public class Player extends Entity {
 	@Override
 	public void update() {
 
+		sprite.setRotation(sprite.getRotation() - velocity.x  *4);
+		
 		if(Gdx.input.isKeyPressed(Keys.A))
-			velocity.add(onGround ? -1 : -0.1f, 0);
+			velocity.add(onGround ? -1 : -0.2f, 0);
 		if(Gdx.input.isKeyPressed(Keys.D))
-			velocity.add(onGround ? 1 : 0.1f, 0);
+			velocity.add(onGround ? 1 : 0.2f, 0);
 		if(Gdx.input.isKeyPressed(Keys.SPACE) && onGround)
-			velocity.add(0, 8);
-
+			velocity.add(0, 10);
+		
 		super.update();
 	}
 }

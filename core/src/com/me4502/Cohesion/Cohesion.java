@@ -126,7 +126,7 @@ public class Cohesion extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 
 		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 1f);
+		Gdx.gl.glClearColor(0, 0, 0, 1/5f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		map.update();

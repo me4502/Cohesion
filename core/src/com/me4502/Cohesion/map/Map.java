@@ -32,7 +32,7 @@ public class Map {
 	
 	public Vector2 getCentrePoint() {
 		
-		Vector2 result = new Vector2(0,0);
+		Vector2 result = new Vector2(0f,0f);
 		
 		for(MapInstance instance : instances) {
 			result.add(instance.player.getPosition().x, instance.player.getPosition().y);

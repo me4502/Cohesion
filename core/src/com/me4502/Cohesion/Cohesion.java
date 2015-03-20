@@ -113,6 +113,8 @@ public class Cohesion extends ApplicationAdapter {
 	@Override
 	public void render () {
 
+		camera.translate(0,0);
+		
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 

@@ -9,7 +9,9 @@ import com.me4502.Cohesion.util.RectangularBounds;
 
 public abstract class Entity {
 
-	public static final Vector2 GRAVITY = new Vector2(0, 3);
+	public static final Vector2 GRAVITY = new Vector2(0, 1.9f);
+	
+	public static int COLLISION_TRY_COUNT = 10;
 
 	Vector2 position;
 	Vector2 velocity;
@@ -51,25 +53,42 @@ public abstract class Entity {
 
 	public void update() {
 
-		onGround = doesIntersect(getPosition().sub(0, 3));
+		onGround = doesIntersect(getPosition().sub(0, 2));
 
 		if(hasGravity() && !onGround && velocity.y > -9) //Only apply gravity if we aren't on the ground
 			velocity.sub(GRAVITY);
 
 		if(velocity.len2() > 0) {
 			int tries = 0;
-			while(!move(getPosition().add(velocity)) && tries < 3) {
-				velocity.scl(new Vector2(0.01f,0.01f));
+			Vector2 oldVel = velocity.cpy();
+			while(!move(getPosition().add(velocity)) && tries < COLLISION_TRY_COUNT) {
+				velocity.scl(new Vector2(1f,0.01f));
 				tries ++;
 			}
-			if(onGround && tries >= 3) velocity.y = 0;
+			if(tries == COLLISION_TRY_COUNT) {
+				velocity = oldVel;
+				tries = 0;
+				while(!move(getPosition().add(velocity)) && tries < COLLISION_TRY_COUNT) {
+					velocity.scl(new Vector2(0.01f,1f));
+					tries ++;
+				}
+				if(tries == COLLISION_TRY_COUNT) {
+					velocity = oldVel;
+					tries = 0;
+					while(!move(getPosition().add(velocity)) && tries < COLLISION_TRY_COUNT) {
+						velocity.scl(new Vector2(0.01f,0.01f));
+						tries ++;
+					}
+					
+					if(onGround && tries == COLLISION_TRY_COUNT) velocity.y = 0;
+				}
+			}
 		}
 
-		velocity.scl(new Vector2(0.9f,0.9f));
-
+		velocity.scl(new Vector2(onGround ? 0.8f : 0.99f, onGround ? 0.8f : 0.99f));
 		sprite.setPosition(position.x, position.y);
 
-		bounds.drawDebugBounds(position);
+		//bounds.drawDebugBounds(position);
 	}
 
 	protected boolean doesIntersect(Vector2 position) {

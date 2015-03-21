@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Matrix4;
 import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
@@ -39,15 +39,13 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture platform;
 
 	Map map;
-	
-	private Vector2 lastCameraPosition;
+
+	private Matrix4 standardMatrix = new Matrix4();
 
 	@Override
 	public void create () {
 
 		instance = this;
-
-		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
 
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
@@ -55,6 +53,8 @@ public class Cohesion extends ApplicationAdapter {
 		camera = new OrthographicCamera(640, 640 * (h / w));
 		//camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
+
+		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth, (int)camera.viewportHeight, false, true);
 
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
@@ -69,6 +69,8 @@ public class Cohesion extends ApplicationAdapter {
 		platform = new Texture("data/platforms/platform.png");
 
 		map = new Map();
+
+		standardMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
@@ -121,12 +123,12 @@ public class Cohesion extends ApplicationAdapter {
 		//	camera.translate((map.getCentrePoint().x - lastCameraPosition.x) /2f, map.getCentrePoint().y - lastCameraPosition.y);
 		//}
 		//lastCameraPosition = map.getCentrePoint();
-		
+
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
 		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 1/5f);
+		Gdx.gl.glClearColor(0, 0, 0, 1/5f); //Add motion blur - the lazy way.
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		map.update();
@@ -143,6 +145,8 @@ public class Cohesion extends ApplicationAdapter {
 		if(simple.isCompiled()) {
 			batch.setShader(postProcessing);
 		}
+
+		batch.setProjectionMatrix(standardMatrix);
 
 		batch.begin();
 		batch.draw(buffer.getColorBufferTexture(), 0, 0, buffer.getWidth(), buffer.getHeight(), 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);

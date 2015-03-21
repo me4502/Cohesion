@@ -10,9 +10,11 @@ varying vec2 v_texCoords;
 uniform sampler2D u_texture;
 			
 void main() {
-	//if(texture2D(u_texture, v_texCoords).x > 0f && texture2D(u_texture, v_texCoords).x == texture2D(u_texture, v_texCoords).y && texture2D(u_texture, v_texCoords).y == texture2D(u_texture, v_texCoords).z) {
-	//	gl_FragColor = vec4(1.0,1.0,1.0,1.0);
-	//} else {
-		gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
-	//}
+
+	gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
+		
+	if(gl_FragColor.x > 0) gl_FragColor.x *= 10;
+    if(gl_FragColor.y > 0) gl_FragColor.y *= 10;
+    if(gl_FragColor.z > 0) gl_FragColor.z *= 10;
+        
 }

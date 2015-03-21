@@ -17,35 +17,38 @@ import com.me4502.Cohesion.entities.Player;
 public class MapInstance {
 
 	public List<Entity> entities = new ArrayList<Entity>();
-	
+
 	Player player;
 
 	Color color;
-	
+
 	Random random = new Random();
-	
+
 	int lastTileHeight;
-	
+
+	Vector2 playerStartLocation;
+
 	public MapInstance(Color color) {
 		this.color = color;
-		
-		entities.add(player = new Player(this, new Sprite(Cohesion.instance.player), new Vector2(50,100)));
-		
+
+		playerStartLocation = new Vector2(50, 100);
+		entities.add(player = new Player(this, new Sprite(Cohesion.instance.player), new Vector2(50, 100)));
+
 		entities.add(new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(50,50)));
 		lastTileHeight = 50;
-				
+
 		for(int x = 100; x < 1000; x += 75)
 			entities.add(new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(x,lastTileHeight=lastTileHeight+MathUtils.random(-400, 75))));
 	}
 
 	public void render(SpriteBatch batch) {
-	
+
 		batch.setShader(Cohesion.instance.colorize);
 		Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
-		
+
 		for(Entity ent : entities)
 			ent.render(batch);
-		
+
 		batch.setShader(Cohesion.instance.simple);
 	}
 
@@ -53,5 +56,10 @@ public class MapInstance {
 
 		for(Entity ent : entities)
 			ent.update();
+	}
+
+	public float getDistanceFromStart() {
+
+		return player.getPosition().dst2(playerStartLocation);
 	}
 }

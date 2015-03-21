@@ -10,7 +10,7 @@ import com.me4502.Cohesion.util.RectangularBounds;
 public abstract class Entity {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.9f);
-	
+
 	public static int COLLISION_TRY_COUNT = 10;
 
 	Vector2 position;
@@ -20,7 +20,7 @@ public abstract class Entity {
 
 	Bounds bounds;
 
-	MapInstance map;
+	public MapInstance map;
 
 	boolean onGround;
 
@@ -79,7 +79,7 @@ public abstract class Entity {
 						velocity.scl(new Vector2(0.01f,0.01f));
 						tries ++;
 					}
-					
+
 					if(onGround && tries == COLLISION_TRY_COUNT) velocity.y = 0;
 				}
 			}

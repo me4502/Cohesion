@@ -10,12 +10,21 @@ import com.badlogic.gdx.math.Vector2;
 public class Map {
 
 	List<MapInstance> instances = new ArrayList<MapInstance>();
-
+	
+	int currentX = 150;
+	
+	int lastTileBase;
+	
+	int lastScoreX = 0;
+	int score = 0;
+	
 	public Map() {
 
 		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
 		instances.add(new MapInstance(new Color(0f, 1.0f, 0f, 0.33f)));
 		instances.add(new MapInstance(new Color(0f, 0f, 1.0f, 0.33f)));
+		
+		lastTileBase = 50;
 	}
 
 	public void render(SpriteBatch batch) {
@@ -50,6 +59,37 @@ public class Map {
 		
 		if(instances.isEmpty()) { //GameOver
 			return; //Do stuff.
+		}
+		
+		if(getCentrePoint().x > currentX - 500) {
+			for(MapInstance map : instances) {
+				map.generateNext(currentX, lastTileBase = lastTileBase-25);
+			}
+			
+			currentX += 75;
+		}
+		
+		float averageX = 0, averageY = 0;
+		
+		Vector2 pos = null;
+		
+		for(MapInstance instance : instances) {
+			averageX += instance.player.getPosition().x;
+			averageY += instance.player.getPosition().y;
+			
+			pos = instance.player.getPosition();
+		}
+		
+		averageX /= instances.size();
+		averageY /= instances.size();
+		
+		if(pos != null && pos.dst2(averageX, averageY) < 25 && (int)averageX > lastScoreX) {
+			lastScoreX = (int)averageX;
+			
+			score += 1;
+			if(score % 100 == 0) {
+				//Generate new player.
+			}
 		}
 	}
 

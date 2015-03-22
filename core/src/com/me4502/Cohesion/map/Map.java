@@ -27,26 +27,29 @@ public class Map {
 	public void update() {
 
 		MapInstance furtherest = null;
-		float difference = -1;
+		float smallestDistance = Float.MAX_VALUE;
 
 		for(MapInstance instance : instances) {
 			instance.update();
+			
+			if(instance.getDistanceFromStart() < smallestDistance)
+				smallestDistance = instance.getDistanceFromStart();
 		}
 
 		for(MapInstance instance : instances) {
-			if(furtherest == null || instance.getDistanceFromStart() > furtherest.getDistanceFromStart()) {
-				if(furtherest != null)
-					difference = instance.getDistanceFromStart() - furtherest.getDistanceFromStart();
+			if(instance.getDistanceFromStart() > smallestDistance && instance.getDistanceFromStart() - smallestDistance > 640*640)
 				furtherest = instance;
-			} else if(furtherest != null && instance.getDistanceFromStart() - furtherest.getDistanceFromStart() > difference)
-				difference = instance.getDistanceFromStart() - furtherest.getDistanceFromStart();
 		}
 
-		if(difference > 0)
-			System.out.println(difference);
-
-		if(furtherest != null && difference > 100 * 100) {
+		if(furtherest != null) {
 			instances.remove(furtherest);
+		}
+		
+		if(instances.size() == 1)
+			instances.clear();
+		
+		if(instances.isEmpty()) { //GameOver
+			return; //Do stuff.
 		}
 	}
 

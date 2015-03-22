@@ -47,6 +47,8 @@ public class Cohesion extends ApplicationAdapter {
 
 		instance = this;
 
+		RANDOM.setSeed(RANDOM.nextLong());
+		
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 

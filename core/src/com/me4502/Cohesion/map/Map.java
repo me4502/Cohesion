@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.Cohesion;
 
 public class Map {
 
@@ -58,6 +59,7 @@ public class Map {
 			instances.clear();
 		
 		if(instances.isEmpty()) { //GameOver
+			gameOver();
 			return; //Do stuff.
 		}
 		
@@ -89,6 +91,10 @@ public class Map {
 			score += 1;
 			if(score % 100 == 0) {
 				//Generate new player.
+				instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
+				instances.add(new MapInstance(new Color(0f, 1.0f, 0f, 0.33f)));
+				instances.add(new MapInstance(new Color(0f, 0f, 1.0f, 0.33f)));
+
 			}
 		}
 	}
@@ -104,5 +110,10 @@ public class Map {
 		result.scl(1f/instances.size());
 
 		return result;
+	}
+	
+	public void gameOver() {
+		
+		Cohesion.instance.map = new Map();
 	}
 }

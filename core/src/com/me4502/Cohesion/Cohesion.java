@@ -37,8 +37,9 @@ public class Cohesion extends ApplicationAdapter {
 	/* Textures */
 	public Texture player;
 	public Texture platform;
+	public Texture projectile;
 
-	Map map;
+	public Map map;
 
 	private Matrix4 standardMatrix = new Matrix4();
 
@@ -69,6 +70,7 @@ public class Cohesion extends ApplicationAdapter {
 
 		player = new Texture("data/entity/player.png");
 		platform = new Texture("data/platforms/platform.png");
+		projectile = new Texture("data/entity/projectile.png");
 
 		map = new Map();
 
@@ -144,7 +146,7 @@ public class Cohesion extends ApplicationAdapter {
 		batch.end();
 		buffer.end();
 
-		if(simple.isCompiled()) {
+		if(postProcessing.isCompiled()) {
 			batch.setShader(postProcessing);
 		}
 

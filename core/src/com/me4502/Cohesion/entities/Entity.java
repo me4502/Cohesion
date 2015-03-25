@@ -94,7 +94,7 @@ public abstract class Entity {
 	protected boolean doesIntersect(Vector2 position) {
 
 		for(Entity ent : map.entities) {
-			if(ent == this) continue;
+			if(ent == this || !ent.doesHardCollide()) continue;
 			if(getBoundingBox().doesIntersect(position, ent))
 				return true;
 		}
@@ -110,4 +110,8 @@ public abstract class Entity {
 	}
 
 	public abstract boolean hasGravity();
+	
+	public boolean doesHardCollide() {
+		return true;
+	}
 }

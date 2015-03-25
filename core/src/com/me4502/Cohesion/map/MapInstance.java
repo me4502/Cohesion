@@ -1,7 +1,9 @@
 package com.me4502.Cohesion.map;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +23,8 @@ public class MapInstance {
 	Color color;
 
 	Vector2 playerStartLocation;
+	
+	private Queue<Entity> spawningQueue = new ArrayDeque<Entity>();
 
 	public MapInstance(Color color) {
 		this.color = color;
@@ -42,9 +46,11 @@ public class MapInstance {
 
 	public void render(SpriteBatch batch) {
 
-		batch.setShader(Cohesion.instance.colorize);
-		Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
-
+		if(Cohesion.instance.colorize.isCompiled()) {
+			batch.setShader(Cohesion.instance.colorize);
+			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
+		}
+		
 		for(Entity ent : entities)
 			ent.render(batch);
 
@@ -53,8 +59,16 @@ public class MapInstance {
 
 	public void update() {
 
+		while(!spawningQueue.isEmpty())
+			entities.add(spawningQueue.poll());
+		
 		for(Entity ent : entities)
 			ent.update();
+	}
+	
+	public void spawnEntity(Entity entity) {
+		
+		spawningQueue.add(entity);
 	}
 
 	public float getDistanceFromStart() {

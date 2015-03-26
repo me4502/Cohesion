@@ -9,7 +9,7 @@ import com.me4502.Cohesion.util.RectangularBounds;
 
 public abstract class Entity {
 
-	public static final Vector2 GRAVITY = new Vector2(0, 1.9f);
+	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
 	public static int COLLISION_TRY_COUNT = 10;
 
@@ -85,7 +85,7 @@ public abstract class Entity {
 			}
 		}
 
-		velocity.scl(new Vector2(onGround ? 0.8f : 0.99f, onGround ? 0.8f : 0.99f));
+		velocity.scl(new Vector2(onGround ? 0.75f : 0.99f, onGround ? 0.75f : 0.99f));
 		sprite.setPosition(position.x, position.y);
 
 		//bounds.drawDebugBounds(position);

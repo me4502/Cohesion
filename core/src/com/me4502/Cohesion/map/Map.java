@@ -79,7 +79,7 @@ public class Map {
 			averageX += instance.player.getPosition().x + instance.player.sprite.getWidth()/2;
 			averageY += instance.player.getPosition().y + instance.player.sprite.getHeight()/2;
 			
-			pos = instance.player.getPosition();
+			pos = instance.player.getPosition().add(instance.player.sprite.getWidth()/2, instance.player.sprite.getHeight()/2);
 		}
 		
 		averageX /= instances.size();
@@ -102,7 +102,7 @@ public class Map {
 		Vector2 result = new Vector2(0f,0f);
 
 		for(MapInstance instance : instances) {
-			result.add(instance.player.getPosition().x, instance.player.getPosition().y);
+			result.add(instance.player.getPosition().x + instance.player.sprite.getWidth()/2, instance.player.getPosition().y + instance.player.sprite.getHeight()/2);
 		}
 
 		result.scl(1f/instances.size());

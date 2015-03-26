@@ -23,7 +23,7 @@ public class Cohesion extends ApplicationAdapter {
 
 	FrameBuffer buffer;
 
-	OrthographicCamera camera;
+	public OrthographicCamera camera;
 
 	public static Cohesion instance;
 

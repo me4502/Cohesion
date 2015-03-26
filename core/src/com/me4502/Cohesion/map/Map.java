@@ -47,7 +47,7 @@ public class Map {
 		}
 
 		for(MapInstance instance : instances) {
-			if(instance.getDistanceFromStart() > smallestDistance && instance.getDistanceFromStart() - smallestDistance > 640*640)
+			if(instance.getDistanceFromStart() > smallestDistance && instance.getDistanceFromStart() - smallestDistance > 800*800)
 				furtherest = instance;
 		}
 
@@ -76,8 +76,8 @@ public class Map {
 		Vector2 pos = null;
 		
 		for(MapInstance instance : instances) {
-			averageX += instance.player.getPosition().x;
-			averageY += instance.player.getPosition().y;
+			averageX += instance.player.getPosition().x + instance.player.sprite.getWidth()/2;
+			averageY += instance.player.getPosition().y + instance.player.sprite.getHeight()/2;
 			
 			pos = instance.player.getPosition();
 		}
@@ -85,16 +85,14 @@ public class Map {
 		averageX /= instances.size();
 		averageY /= instances.size();
 		
-		if(pos != null && pos.dst2(averageX, averageY) < 25 && (int)averageX > lastScoreX) {
+		if(pos != null && pos.dst2(averageX, averageY) < 16*16 && (int)averageX > lastScoreX) {
 			lastScoreX = (int)averageX;
 			
 			score += 1;
+			System.out.println(score);
 			if(score % 100 == 0) {
 				//Generate new player.
-				instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
-				instances.add(new MapInstance(new Color(0f, 1.0f, 0f, 0.33f)));
-				instances.add(new MapInstance(new Color(0f, 0f, 1.0f, 0.33f)));
-
+				//TODO
 			}
 		}
 	}

@@ -16,7 +16,7 @@ public abstract class Entity {
 	Vector2 position;
 	Vector2 velocity;
 
-	Sprite sprite;
+	public Sprite sprite;
 
 	Bounds bounds;
 
@@ -55,7 +55,7 @@ public abstract class Entity {
 
 		onGround = doesIntersect(getPosition().sub(0, 2));
 
-		if(hasGravity() && !onGround && velocity.y > -9) //Only apply gravity if we aren't on the ground
+		if(hasGravity() && !onGround) //Only apply gravity if we aren't on the ground
 			velocity.sub(GRAVITY);
 
 		if(velocity.len2() > 0) {

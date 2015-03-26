@@ -18,4 +18,12 @@ public class Projectile extends Entity {
 	public boolean doesHardCollide() {
 		return false;
 	}
+	
+	@Override
+	public void update() {
+		
+		sprite.setRotation((float) Math.toDegrees(Math.atan2(velocity.y, velocity.x)));
+		
+		super.update();
+	}
 }

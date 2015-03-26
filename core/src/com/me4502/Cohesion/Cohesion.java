@@ -57,7 +57,7 @@ public class Cohesion extends ApplicationAdapter {
 		//camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
-		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth, (int)camera.viewportHeight, false, true);
+		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth*4, (int)camera.viewportHeight*4, false, true); //Super Sampling
 
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
@@ -153,7 +153,7 @@ public class Cohesion extends ApplicationAdapter {
 		batch.setProjectionMatrix(standardMatrix);
 
 		batch.begin();
-		batch.draw(buffer.getColorBufferTexture(), 0, 0, buffer.getWidth(), buffer.getHeight(), 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+		batch.draw(buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 		batch.end();
 	}
 }

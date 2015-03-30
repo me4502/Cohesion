@@ -44,10 +44,14 @@ public class Player extends Entity {
 
 			map.spawnEntity(proj = new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)));
 		
-			proj.velocity.set(flatMouse.sub(getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)).scl(0.5f));
+			proj.velocity.set(flatMouse.sub(getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)).scl(0.25f));
 			lastShootTime = 0;
 		}
 		
 		super.update();
+	}
+	
+	public boolean doesHardCollide() {
+		return false;
 	}
 }

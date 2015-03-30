@@ -88,7 +88,7 @@ public class Map {
 		if(pos != null && pos.dst2(averageX, averageY) < 16*16 && (int)averageX > lastScoreX) {
 			lastScoreX = (int)averageX;
 			
-			score += 1;
+			score += instances.size();
 			System.out.println(score);
 			if(score % 100 == 0) {
 				//Generate new player.

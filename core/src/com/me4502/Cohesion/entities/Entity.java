@@ -11,7 +11,7 @@ public abstract class Entity {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
-	public static int COLLISION_TRY_COUNT = 10;
+	public static float COLLISION_ACCURACY = 100f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
 
 	Vector2 position;
 	Vector2 velocity;
@@ -23,6 +23,11 @@ public abstract class Entity {
 	public MapInstance map;
 
 	boolean onGround;
+	
+	/* Movement Modifiers */
+	float collisionDrag = 0.01f;
+	float airDrag = 0.99f;
+	float groundDrag = 0.75f;
 
 	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
@@ -59,44 +64,61 @@ public abstract class Entity {
 			velocity.sub(GRAVITY);
 
 		if(velocity.len2() > 0) {
-			int tries = 0;
-			Vector2 oldVel = velocity.cpy();
-			while(!move(getPosition().add(velocity)) && tries < COLLISION_TRY_COUNT) {
-				velocity.scl(new Vector2(1f,0.01f));
-				tries ++;
-			}
-			if(tries == COLLISION_TRY_COUNT) {
-				velocity = oldVel;
-				tries = 0;
-				while(!move(getPosition().add(velocity)) && tries < COLLISION_TRY_COUNT) {
-					velocity.scl(new Vector2(0.01f,1f));
-					tries ++;
-				}
-				if(tries == COLLISION_TRY_COUNT) {
-					velocity = oldVel;
-					tries = 0;
-					while(!move(getPosition().add(velocity)) && tries < COLLISION_TRY_COUNT) {
-						velocity.scl(new Vector2(0.01f,0.01f));
-						tries ++;
+			boolean moved = false;
+			for(float i = 1f; i > 0.000001f; i-=(1f/COLLISION_ACCURACY)) {
+				Vector2 tmp = velocity.cpy().scl(i);
+				Vector2 cpy = tmp.cpy();
+				if(!move(getPosition().add(tmp))) {
+					tmp = tmp.scl(collisionDrag,1.0f);
+					if(!move(getPosition().add(tmp))) {
+						tmp = cpy.cpy();
+						tmp = tmp.scl(1.0f,collisionDrag);
+						if(!move(getPosition().add(tmp))) {
+							tmp = cpy.cpy();
+							tmp = tmp.scl(collisionDrag,collisionDrag);
+							if(!move(getPosition().add(tmp))) {
+								continue;
+							} else {
+								velocity = tmp;
+								break;
+							}
+						} else {
+							velocity = tmp;
+							break;
+						}
+					} else {
+						velocity = tmp;
+						break;
 					}
-
-					if(onGround && tries == COLLISION_TRY_COUNT) velocity.y = 0;
+				} else {
+					velocity = tmp;
+					break;
 				}
+			}
+			
+			if(onGround && !moved) {
+				velocity.y = 0f;
 			}
 		}
 
-		velocity.scl(new Vector2(onGround ? 0.75f : 0.99f, onGround ? 0.75f : 0.99f));
+		velocity.scl(new Vector2(onGround ? groundDrag : airDrag, onGround ? groundDrag : airDrag));
 		sprite.setPosition(position.x, position.y);
 
 		//bounds.drawDebugBounds(position);
+	}
+	
+	public void onCollision(Entity ent) {
+		
 	}
 
 	protected boolean doesIntersect(Vector2 position) {
 
 		for(Entity ent : map.entities) {
 			if(ent == this || !ent.doesHardCollide()) continue;
-			if(getBoundingBox().doesIntersect(position, ent))
+			if(getBoundingBox().doesIntersect(position, ent)) {
+				ent.onCollision(this);
 				return true;
+			}
 		}
 
 		return false;

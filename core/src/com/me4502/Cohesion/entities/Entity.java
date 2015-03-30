@@ -23,7 +23,7 @@ public abstract class Entity {
 	public MapInstance map;
 
 	boolean onGround;
-	
+
 	/* Movement Modifiers */
 	float collisionDrag = 0.01f;
 	float airDrag = 0.99f;
@@ -65,7 +65,7 @@ public abstract class Entity {
 
 		if(velocity.len2() > 0) {
 			boolean moved = false;
-			for(float i = 1f; i > 0.000001f; i-=(1f/COLLISION_ACCURACY)) {
+			for(float i = 1f; i > 0.000001f; i-=1f/COLLISION_ACCURACY) {
 				Vector2 tmp = velocity.cpy().scl(i);
 				Vector2 cpy = tmp.cpy();
 				if(!move(getPosition().add(tmp))) {
@@ -95,7 +95,7 @@ public abstract class Entity {
 					break;
 				}
 			}
-			
+
 			if(onGround && !moved) {
 				velocity.y = 0f;
 			}
@@ -106,9 +106,9 @@ public abstract class Entity {
 
 		//bounds.drawDebugBounds(position);
 	}
-	
+
 	public void onCollision(Entity ent) {
-		
+
 	}
 
 	protected boolean doesIntersect(Vector2 position) {
@@ -132,7 +132,7 @@ public abstract class Entity {
 	}
 
 	public abstract boolean hasGravity();
-	
+
 	public boolean doesHardCollide() {
 		return true;
 	}

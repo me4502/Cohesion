@@ -23,7 +23,7 @@ public class MapInstance {
 	Color color;
 
 	Vector2 playerStartLocation;
-	
+
 	private Queue<Entity> spawningQueue = new ArrayDeque<Entity>();
 
 	public MapInstance(Color color) {
@@ -34,13 +34,13 @@ public class MapInstance {
 
 		entities.add(new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(50,50)));
 	}
-	
+
 	public void generateNext(int x, int base) {
 		entities.add(new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(x, base+randomRange(-100, 75))));
 	}
-	
+
 	public int randomRange(int min, int max) {
-		
+
 		return min + Cohesion.RANDOM.nextInt(max - min + 1);
 	}
 
@@ -50,7 +50,7 @@ public class MapInstance {
 			batch.setShader(Cohesion.instance.colorize);
 			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
 		}
-		
+
 		for(Entity ent : entities)
 			ent.render(batch);
 
@@ -61,13 +61,13 @@ public class MapInstance {
 
 		while(!spawningQueue.isEmpty())
 			entities.add(spawningQueue.poll());
-		
+
 		for(Entity ent : entities)
 			ent.update();
 	}
-	
+
 	public void spawnEntity(Entity entity) {
-		
+
 		spawningQueue.add(entity);
 	}
 

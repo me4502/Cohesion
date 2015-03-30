@@ -49,7 +49,7 @@ public class Cohesion extends ApplicationAdapter {
 		instance = this;
 
 		RANDOM.setSeed(RANDOM.nextLong());
-		
+
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
@@ -123,10 +123,6 @@ public class Cohesion extends ApplicationAdapter {
 	public void render () {
 
 		camera.position.set(map.getCentrePoint().add(camera.viewportWidth/4, camera.viewportHeight/4), 0);
-		//if(lastCameraPosition != null) {
-		//	camera.translate((map.getCentrePoint().x - lastCameraPosition.x) /2f, map.getCentrePoint().y - lastCameraPosition.y);
-		//}
-		//lastCameraPosition = map.getCentrePoint();
 
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);

@@ -7,10 +7,10 @@ import com.me4502.Cohesion.map.MapInstance;
 public class Projectile extends Entity {
 
 	public boolean hasCollided;
-	
+
 	public Projectile(MapInstance map, Sprite sprite, Vector2 position) {
 		super(map, sprite, position);
-		
+
 		collisionDrag = -0.3f;
 		groundDrag = 0.99f;
 	}
@@ -20,15 +20,16 @@ public class Projectile extends Entity {
 		return true;
 	}
 
+	@Override
 	public boolean doesHardCollide() {
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
-		
+
 		sprite.setRotation((float) Math.toDegrees(Math.atan2(velocity.y, velocity.x)));
-		
+
 		super.update();
 	}
 }

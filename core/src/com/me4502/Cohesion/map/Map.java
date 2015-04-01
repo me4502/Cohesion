@@ -3,6 +3,8 @@ package com.me4502.Cohesion.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +21,8 @@ public class Map {
 	int lastScoreX = 0;
 	int score = 0;
 
+	int updateTick = 0;
+
 	public Map() {
 
 		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
@@ -34,7 +38,19 @@ public class Map {
 			instance.render(batch);
 	}
 
+	public boolean isSlowed() {
+		return Gdx.input.isKeyPressed(Keys.SHIFT_LEFT);
+	}
+
 	public void update() {
+
+		updateTick ++;
+
+		if(isSlowed() && updateTick < 5) {
+			return;
+		}
+
+		updateTick = 0;
 
 		MapInstance furtherest = null;
 		float smallestDistance = Float.MAX_VALUE;

@@ -2,6 +2,7 @@ package com.me4502.Cohesion.map;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
+import com.me4502.Cohesion.entities.Blockade;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.Platform;
 import com.me4502.Cohesion.entities.Player;
@@ -36,7 +38,12 @@ public class MapInstance {
 	}
 
 	public void generateNext(int x, int base) {
-		entities.add(new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(x, base+randomRange(-100, 75))));
+		Platform platform;
+		entities.add(platform = new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(x, base+randomRange(-100, 75))));
+
+		if(Cohesion.RANDOM.nextInt(10) == 0) {
+			entities.add(new Blockade(this, new Sprite(Cohesion.instance.blockade), new Vector2(x+randomRange(0,32), platform.getPosition().y+randomRange(0, 100))));
+		}
 	}
 
 	public int randomRange(int min, int max) {
@@ -64,6 +71,13 @@ public class MapInstance {
 
 		for(Entity ent : entities)
 			ent.update();
+
+		Iterator<Entity> iter = entities.iterator();
+		while(iter.hasNext()) {
+			Entity ent = iter.next();
+			if(ent.shouldRemove())
+				iter.remove();
+		}
 	}
 
 	public void spawnEntity(Entity entity) {

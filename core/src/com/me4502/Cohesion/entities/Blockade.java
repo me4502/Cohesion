@@ -10,9 +10,10 @@ public class Blockade extends Entity {
 		super(map, sprite, position);
 	}
 
+	@Override
 	public void onCollision(Entity ent) {
 		if(ent instanceof Projectile && !((Projectile) ent).hasCollided) {
-			this.velocity.add(ent.velocity.cpy().scl(ent.collisionDrag));
+			velocity.sub(ent.velocity.cpy().scl(ent.collisionDrag));
 			((Projectile)ent).hasCollided = true;
 		}
 	}

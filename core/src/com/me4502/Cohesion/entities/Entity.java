@@ -23,6 +23,7 @@ public abstract class Entity {
 	public MapInstance map;
 
 	boolean onGround;
+	boolean remove;
 
 	/* Movement Modifiers */
 	float collisionDrag = 0.01f;
@@ -32,12 +33,22 @@ public abstract class Entity {
 	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
 		this.map = map;
-		this.sprite = sprite;
-
+		this.position = position;
 		bounds = new RectangularBounds(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
 
-		this.position = position;
+		if(!move(position)) {
+			remove = true;
+			return;
+		}
+		sprite.setPosition(position.x, position.y);
+
+		this.sprite = sprite;
+
 		velocity = new Vector2(0,0);
+	}
+
+	public boolean shouldRemove() {
+		return remove;
 	}
 
 	public Bounds getBoundingBox() {
@@ -53,10 +64,13 @@ public abstract class Entity {
 	}
 
 	public void render(SpriteBatch batch) {
-		sprite.draw(batch);
+		if(!shouldRemove())
+			sprite.draw(batch);
 	}
 
 	public void update() {
+
+		if(shouldRemove()) return;
 
 		onGround = doesIntersect(getPosition().sub(0, 2));
 

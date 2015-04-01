@@ -38,6 +38,7 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture player;
 	public Texture platform;
 	public Texture projectile;
+	public Texture blockade;
 
 	public Map map;
 
@@ -57,7 +58,7 @@ public class Cohesion extends ApplicationAdapter {
 		//camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
-		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth*4, (int)camera.viewportHeight*4, false, true); //Super Sampling
+		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth, (int)camera.viewportHeight, false, true); //Super Sampling
 
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
@@ -71,6 +72,7 @@ public class Cohesion extends ApplicationAdapter {
 		player = new Texture("data/entity/player.png");
 		platform = new Texture("data/platforms/platform.png");
 		projectile = new Texture("data/entity/projectile.png");
+		blockade = new Texture("data/platforms/blockade.png");
 
 		map = new Map();
 
@@ -122,13 +124,13 @@ public class Cohesion extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-		camera.position.set(map.getCentrePoint().add(camera.viewportWidth/4, camera.viewportHeight/4), 0);
+		camera.position.set(map.getCentrePoint(), 0);
 
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
 		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 1/5f); //Add motion blur - the lazy way.
+		Gdx.gl.glClearColor(0, 0, 0, 1/(map.isSlowed() ? 15f : 5f)); //Add motion blur - the lazy way.
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		map.update();

@@ -32,6 +32,7 @@ public class Cohesion extends ApplicationAdapter {
 	/* Shaders */
 	public ShaderProgram simple;
 	public ShaderProgram colorize;
+	public ShaderProgram blur;
 	public ShaderProgram postProcessing;
 
 	/* Textures */
@@ -39,6 +40,8 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture platform;
 	public Texture projectile;
 	public Texture blockade;
+	
+	public Texture lastFrame;
 
 	public Map map;
 
@@ -68,7 +71,8 @@ public class Cohesion extends ApplicationAdapter {
 		simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
 		colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
 		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
-
+		blur = new ShaderProgram(Gdx.files.internal("data/shaders/blur.vrt"), Gdx.files.internal("data/shaders/blur.frg"));
+		
 		player = new Texture("data/entity/player.png");
 		platform = new Texture("data/platforms/platform.png");
 		projectile = new Texture("data/entity/projectile.png");
@@ -129,9 +133,28 @@ public class Cohesion extends ApplicationAdapter {
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
+		//Blur. If possible.
+		if(lastFrame != null && blur.isCompiled()) {
+			//Blur it.
+			buffer.begin();
+			batch.setShader(blur);
+			batch.begin();
+			batch.draw(lastFrame,0,0);
+			batch.end();
+			buffer.end();
+			lastFrame = buffer.getColorBufferTexture();
+			buffer.begin();
+			batch.setShader(blur);
+			batch.begin();
+			batch.draw(lastFrame,0,0);
+			batch.end();
+			buffer.end();
+			lastFrame = buffer.getColorBufferTexture();
+		}
+		
 		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 1/(map.isSlowed() ? 15f : 5f)); //Add motion blur - the lazy way.
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		//Gdx.gl.glClearColor(0, 0, 0, 1/(map.isSlowed() ? 15f : 5f)); //Add motion blur - the lazy way.
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		map.update();
 
@@ -140,6 +163,7 @@ public class Cohesion extends ApplicationAdapter {
 		}
 
 		batch.begin();
+		batch.draw(lastFrame, 0, 0);
 		map.render(batch);
 		batch.end();
 		buffer.end();
@@ -151,7 +175,7 @@ public class Cohesion extends ApplicationAdapter {
 		batch.setProjectionMatrix(standardMatrix);
 
 		batch.begin();
-		batch.draw(buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+		batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 		batch.end();
 	}
 }

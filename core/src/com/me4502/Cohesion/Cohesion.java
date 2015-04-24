@@ -8,15 +8,12 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
@@ -47,6 +44,7 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture platform;
 	public Texture projectile;
 	public Texture blockade;
+	public Texture ground;
 	
 	public Texture lastFrame;
 
@@ -95,6 +93,7 @@ public class Cohesion extends ApplicationAdapter {
 		platform = new Texture("data/platforms/platform.png");
 		projectile = new Texture("data/entity/projectile.png");
 		blockade = new Texture("data/platforms/blockade.png");
+		ground = new Texture("data/platforms/ground.png");
 
 		map = new Map();
 

@@ -2,6 +2,7 @@ package com.me4502.Cohesion.map;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -9,14 +10,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
+import com.me4502.Cohesion.map.wgen.WorldGenTypes;
 
 public class Map {
 
 	List<MapInstance> instances = new ArrayList<MapInstance>();
 
 	int currentX = 150;
-
-	int lastTileBase;
 
 	int lastScoreX = 0;
 	int score = 0;
@@ -28,8 +28,6 @@ public class Map {
 		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
 		instances.add(new MapInstance(new Color(0f, 1.0f, 0f, 0.33f)));
 		instances.add(new MapInstance(new Color(0f, 0f, 1.0f, 0.33f)));
-
-		lastTileBase = 50;
 	}
 
 	public void render(SpriteBatch batch) {
@@ -81,7 +79,7 @@ public class Map {
 
 		if(getCentrePoint().x > currentX - 500) {
 			for(MapInstance map : instances) {
-				map.generateNext(currentX, lastTileBase = lastTileBase-25);
+				map.generateNext(new Random().nextInt(WorldGenTypes.values().length));
 			}
 
 			currentX += 75;

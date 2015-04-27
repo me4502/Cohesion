@@ -2,6 +2,7 @@ package com.me4502.Cohesion.map;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
@@ -11,11 +12,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
-import com.me4502.Cohesion.entities.Blockade;
 import com.me4502.Cohesion.entities.Entity;
-import com.me4502.Cohesion.entities.Ground;
 import com.me4502.Cohesion.entities.Platform;
 import com.me4502.Cohesion.entities.Player;
+import com.me4502.Cohesion.map.wgen.Generator;
+import com.me4502.Cohesion.map.wgen.WorldGenTypes;
 
 public class MapInstance {
 
@@ -29,6 +30,11 @@ public class MapInstance {
 
 	private Queue<Entity> spawningQueue = new ArrayDeque<Entity>();
 
+	private static final int CHUNK_LOADING_RANGE = 8;
+
+	int chunkIndex = -1;
+	private Chunk[] chunks = new Chunk[CHUNK_LOADING_RANGE];
+
 	public MapInstance(Color color) {
 		this.color = color;
 
@@ -38,17 +44,16 @@ public class MapInstance {
 		entities.add(new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(50,50)));
 	}
 
-	public void generateNext(int x, int base) {
-		
-		entities.add(new Ground(this, new Sprite(Cohesion.instance.ground), new Vector2(x, 0)));
-		
-		/*
-		Platform platform;
-		entities.add(platform = new Platform(this, new Sprite(Cohesion.instance.platform), new Vector2(x, base+randomRange(-100, 75))));
+	public void generateNext(int generatorId) {
 
-		if(Cohesion.RANDOM.nextInt(10) == 0) {
-			entities.add(new Blockade(this, new Sprite(Cohesion.instance.blockade), new Vector2(x+randomRange(0,32), platform.getPosition().y+randomRange(0, 100))));
-		}*/
+		chunkIndex ++;
+		if(chunkIndex >= chunks.length)
+			chunks = Arrays.copyOf(chunks, chunks.length + CHUNK_LOADING_RANGE);
+
+		chunks[chunkIndex] = new Chunk(this, chunkIndex * Chunk.CHUNK_WIDTH);
+
+		Generator gen = WorldGenTypes.getGenerator(generatorId);
+		gen.generate(chunks[chunkIndex]);
 	}
 
 	public int randomRange(int min, int max) {

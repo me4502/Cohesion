@@ -2,7 +2,6 @@ package com.me4502.Cohesion.map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -89,7 +88,7 @@ public class Map {
 
 		if(instances.get(0).getChunks(getCentrePoint().add(Chunk.CHUNK_WIDTH, 0)).isEmpty()) {
 
-			int gen = new Random().nextInt(WorldGenTypes.values().length);
+			int gen = Cohesion.RANDOM.nextInt(WorldGenTypes.values().length);
 
 			for(MapInstance map : instances) {
 				map.generateNext(gen);

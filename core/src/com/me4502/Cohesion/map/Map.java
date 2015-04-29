@@ -52,27 +52,12 @@ public class Map {
 
 		updateTick = 0;
 
-		//MapInstance furtherest = null;
-		//float smallestDistance = Float.MAX_VALUE;
-
 		for(MapInstance instance : instances) {
 			instance.update();
-
-			//if(instance.getDistanceFromStart() < smallestDistance)
-			//	smallestDistance = instance.getDistanceFromStart();
 		}
 
-		///for(MapInstance instance : instances) {
-		//	if(instance.getDistanceFromStart() > smallestDistance && instance.getDistanceFromStart() - smallestDistance > 800*800)
-		//		furtherest = instance;
-		//}
-
-		//if(furtherest != null) {
-		//	instances.remove(furtherest);
-		//}
-
 		for(MapInstance instance : instances) {
-			if(instance.player.getPosition().y < -32) {
+			if(instance.player.getPosition().y < -128) {
 				instances.remove(instance);
 				break;
 			}

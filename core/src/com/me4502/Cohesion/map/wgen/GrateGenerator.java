@@ -6,13 +6,27 @@ import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.tile.Ground;
 
-public class GroundGenerator extends Generator {
+public class GrateGenerator extends Generator {
+
+	//Do not tell Taylor Swift about this code.
+	int blankSpaces = 0;
 
 	@Override
 	public void generate(Chunk chunk) {
 
+		blankSpaces = 0;
+
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
+
+			if(blankSpaces == 0 && Math.random() > 0.5) {
+				blankSpaces ++;
+				continue;
+			}
+
+			blankSpaces = 0;
+
 			chunk.addTile(new Ground(chunk.map, new Sprite(Cohesion.instance.ground), new Vector2(i, 32)));
 		}
 	}
+
 }

@@ -2,7 +2,9 @@ package com.me4502.Cohesion.map.wgen;
 
 public enum WorldGenTypes {
 
-	FLAT(0, new GroundGenerator());
+	FLAT(0, new GroundGenerator()),
+	GRATE(1, new GrateGenerator()),
+	FLAT_PLATFORM(2, new FlatPlatformGenerator());
 
 	private int id;
 	private Generator generator;

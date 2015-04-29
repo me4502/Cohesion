@@ -28,6 +28,9 @@ public class Map {
 		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
 		instances.add(new MapInstance(new Color(0f, 1.0f, 0f, 0.33f)));
 		instances.add(new MapInstance(new Color(0f, 0f, 1.0f, 0.33f)));
+
+		for(MapInstance instance : instances)
+			instance.generateNext(0);
 	}
 
 	public void render(SpriteBatch batch) {
@@ -50,23 +53,30 @@ public class Map {
 
 		updateTick = 0;
 
-		MapInstance furtherest = null;
-		float smallestDistance = Float.MAX_VALUE;
+		//MapInstance furtherest = null;
+		//float smallestDistance = Float.MAX_VALUE;
 
 		for(MapInstance instance : instances) {
 			instance.update();
 
-			if(instance.getDistanceFromStart() < smallestDistance)
-				smallestDistance = instance.getDistanceFromStart();
+			//if(instance.getDistanceFromStart() < smallestDistance)
+			//	smallestDistance = instance.getDistanceFromStart();
 		}
+
+		///for(MapInstance instance : instances) {
+		//	if(instance.getDistanceFromStart() > smallestDistance && instance.getDistanceFromStart() - smallestDistance > 800*800)
+		//		furtherest = instance;
+		//}
+
+		//if(furtherest != null) {
+		//	instances.remove(furtherest);
+		//}
 
 		for(MapInstance instance : instances) {
-			if(instance.getDistanceFromStart() > smallestDistance && instance.getDistanceFromStart() - smallestDistance > 800*800)
-				furtherest = instance;
-		}
-
-		if(furtherest != null) {
-			instances.remove(furtherest);
+			if(instance.player.getPosition().y < -32) {
+				instances.remove(instance);
+				break;
+			}
 		}
 
 		if(instances.size() == 1)
@@ -77,9 +87,12 @@ public class Map {
 			return; //Do stuff.
 		}
 
-		if(getCentrePoint().x > currentX - 500) {
+		if(instances.get(0).getChunks(getCentrePoint().add(Chunk.CHUNK_WIDTH, 0)).isEmpty()) {
+
+			int gen = new Random().nextInt(WorldGenTypes.values().length);
+
 			for(MapInstance map : instances) {
-				map.generateNext(new Random().nextInt(WorldGenTypes.values().length));
+				map.generateNext(gen);
 			}
 
 			currentX += 75;

@@ -22,7 +22,7 @@ public class Cohesion extends ApplicationAdapter {
 	public ShapeRenderer shapes;
 
 	FrameBuffer buffer;
-	
+
 	/* Blur Data */
 	public static final int FBO_SIZE = 1024;
 	FrameBuffer blurA, blurB;
@@ -45,7 +45,7 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture projectile;
 	public Texture blockade;
 	public Texture ground;
-	
+
 	public Texture lastFrame;
 
 	public Map map;
@@ -70,7 +70,7 @@ public class Cohesion extends ApplicationAdapter {
 
 		blurA = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
 		blurB = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
-		
+
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 
@@ -80,15 +80,15 @@ public class Cohesion extends ApplicationAdapter {
 		colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
 		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
 		blur = new ShaderProgram(Gdx.files.internal("data/shaders/blur.vrt"), Gdx.files.internal("data/shaders/blur.frg"));
-		
+
 		blur.setUniformf("dir", 0f, 0f);
 		blur.setUniformf("resolution", FBO_SIZE);
 		blur.setUniformf("radius", 50);
 		blur.setUniformf("pass", 1000);
-		
+
 		if(blur.getLog().length() > 0)
 			System.out.println(blur.getLog());
-		
+
 		player = new Texture("data/entity/player.png");
 		platform = new Texture("data/platforms/platform.png");
 		projectile = new Texture("data/entity/projectile.png");
@@ -152,33 +152,33 @@ public class Cohesion extends ApplicationAdapter {
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.setShader(simple);
-			
+
 			batch.begin();
-			
+
 			batch.draw(lastFrame, 0, 0);
-			
+
 			batch.flush();
-			
+
 			blurA.end();
-			
+
 			batch.setShader(blur);
 			blur.setUniformf("dir", 1f, 0f);
-			
+
 			blurB.begin();
 			batch.draw(blurA.getColorBufferTexture(), 0, 0);
 			batch.flush();
-			
+
 			blurB.end();
 			batch.end();
 		}
-		
+
 		camera.position.set(map.getCentrePoint(), 0);
 
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
-		
+
 		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 0.25f);
+		Gdx.gl.glClearColor(0, 0, 0, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		map.update();

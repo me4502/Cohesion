@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
-import com.me4502.Cohesion.entities.Entity;
 
 public class RectangularBounds extends Bounds {
 
@@ -18,7 +17,7 @@ public class RectangularBounds extends Bounds {
 	}
 
 	@Override
-	public boolean doesIntersect(Vector2 position, Entity entity) {
+	public boolean doesIntersect(Vector2 position, Collidable entity) {
 
 		if(entity.getBoundingBox() instanceof RectangularBounds) {
 			RectangularBounds otherBox = (RectangularBounds) entity.getBoundingBox();

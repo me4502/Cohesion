@@ -4,15 +4,23 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
-import com.me4502.Cohesion.tile.Ground;
+import com.me4502.Cohesion.tile.Platform;
 
-public class GroundGenerator extends Generator {
+public class FlatPlatformGenerator extends Generator {
+
+	int tick;
 
 	@Override
 	public void generate(Chunk chunk) {
 
+		tick = 0;
+
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
-			chunk.addTile(new Ground(chunk.map, new Sprite(Cohesion.instance.ground), new Vector2(i, 32)));
+
+			tick ++;
+			if(tick % 2 == 0) continue;
+
+			chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 64)));
 		}
 	}
 }

@@ -1,13 +1,18 @@
 package com.me4502.Cohesion.entities;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.map.MapInstance;
+import com.me4502.Cohesion.tile.Tile;
 import com.me4502.Cohesion.util.Bounds;
+import com.me4502.Cohesion.util.Collidable;
 import com.me4502.Cohesion.util.RectangularBounds;
 
-public abstract class Entity {
+public abstract class Entity implements Collidable {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
@@ -51,6 +56,7 @@ public abstract class Entity {
 		return remove;
 	}
 
+	@Override
 	public Bounds getBoundingBox() {
 		return bounds;
 	}
@@ -59,6 +65,7 @@ public abstract class Entity {
 		move(position);
 	}
 
+	@Override
 	public Vector2 getPosition() {
 		return position.cpy();
 	}
@@ -126,6 +133,15 @@ public abstract class Entity {
 	}
 
 	protected boolean doesIntersect(Vector2 position) {
+
+		List<Chunk> chunks = map.getChunks(position);
+		for(Chunk chunk : chunks) {
+			for(Tile tile : chunk.getTiles()) {
+				if(getBoundingBox().doesIntersect(position, tile)) {
+					return true;
+				}
+			}
+		}
 
 		for(Entity ent : map.entities) {
 			if(ent == this || !ent.doesHardCollide()) continue;

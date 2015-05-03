@@ -18,7 +18,7 @@ public class GrateGenerator extends Generator {
 
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
 
-			if(blankSpaces == 0 && Cohesion.RANDOM.nextFloat() >= 0.5f) {
+			if(i > 0 && blankSpaces == 0 && Cohesion.RANDOM.nextFloat() >= 0.4f) {
 				blankSpaces ++;
 				continue;
 			}

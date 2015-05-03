@@ -33,7 +33,7 @@ public abstract class Entity implements Collidable {
 	/* Movement Modifiers */
 	float collisionDrag = 0.01f;
 	float airDrag = 0.99f;
-	float groundDrag = 0.75f;
+	float groundDrag = 0.8f;
 
 	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 

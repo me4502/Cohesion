@@ -41,7 +41,7 @@ public class Map {
 	public boolean isSlowed() {
 		return Gdx.input.isKeyPressed(Keys.SHIFT_LEFT);
 	}
-	
+
 	public boolean isAccelerated() {
 		return Gdx.input.isKeyPressed(Keys.CONTROL_LEFT);
 	}
@@ -60,9 +60,10 @@ public class Map {
 			instance.update();
 		}
 		if(isAccelerated()) {
-			for(MapInstance instance : instances) {
-				instance.update();
-			}
+			for(int i = 0; i < 20; i++)
+				for(MapInstance instance : instances) {
+					instance.update();
+				}
 		}
 
 		for(MapInstance instance : instances) {

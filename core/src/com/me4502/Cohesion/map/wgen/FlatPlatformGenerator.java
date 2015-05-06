@@ -6,7 +6,7 @@ import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.tile.Platform;
 
-public class FlatPlatformGenerator extends Generator {
+public class FlatPlatformGenerator implements Generator {
 
 	int tick;
 

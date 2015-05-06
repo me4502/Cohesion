@@ -44,7 +44,7 @@ public class Chunk {
 		for(Tile tile : tiles)
 			tile.update();
 
-		drawChunkGrid();
+		//drawChunkGrid();
 	}
 
 	public void drawChunkGrid() {

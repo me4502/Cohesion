@@ -81,13 +81,17 @@ public class Cohesion extends ApplicationAdapter {
 		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
 		blur = new ShaderProgram(Gdx.files.internal("data/shaders/blur.vrt"), Gdx.files.internal("data/shaders/blur.frg"));
 
-		blur.setUniformf("dir", 0f, 0f);
-		blur.setUniformf("resolution", FBO_SIZE);
-		blur.setUniformf("radius", 50);
-		blur.setUniformf("pass", 1000);
-
-		if(blur.getLog().length() > 0)
+		if(blur.getLog().length() > 0 && !blur.getLog().equals("No errors.\n"))
 			System.out.println(blur.getLog());
+
+		if(simple.getLog().length() > 0 && !simple.getLog().equals("No errors.\n"))
+			System.out.println(simple.getLog());
+
+		if(colorize.getLog().length() > 0 && !colorize.getLog().equals("No errors.\n"))
+			System.out.println(colorize.getLog());
+
+		if(postProcessing.getLog().length() > 0 && !postProcessing.getLog().equals("No errors.\n"))
+			System.out.println(postProcessing.getLog());
 
 		player = new Texture("data/entity/player.png");
 		platform = new Texture("data/platforms/platform.png");
@@ -149,9 +153,9 @@ public class Cohesion extends ApplicationAdapter {
 		if(lastFrame != null && blur.isCompiled()) {
 			//Blur it.
 			blurA.begin();
+			//batch.setShader(simple);
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			batch.setShader(simple);
 
 			batch.begin();
 
@@ -160,11 +164,14 @@ public class Cohesion extends ApplicationAdapter {
 			batch.flush();
 
 			blurA.end();
+			blurB.begin();
 
 			batch.setShader(blur);
-			blur.setUniformf("dir", 1f, 0f);
 
-			blurB.begin();
+			blur.setUniform2fv("dir", new float[]{1f, 0f}, 0, 2);
+			blur.setUniformf("resolution", FBO_SIZE);
+			blur.setUniformf("radius", 2);
+
 			batch.draw(blurA.getColorBufferTexture(), 0, 0);
 			batch.flush();
 
@@ -183,25 +190,30 @@ public class Cohesion extends ApplicationAdapter {
 
 		map.update();
 
-		if(simple.isCompiled()) {
-			batch.setShader(simple);
-		}
-
 		batch.begin();
 		if(lastFrame != null) {
 			batch.setProjectionMatrix(standardMatrix);
 			batch.setShader(blur);
-			blur.setUniformf("dir", 0f, 1f);
+			blur.setUniform2fv("dir", new float[]{0f, 1f}, 0, 2);
+			blur.setUniformf("resolution", FBO_SIZE);
+			blur.setUniformf("radius", 2);
+
 			batch.draw(lastFrame, 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 			batch.setProjectionMatrix(camera.combined);
-			batch.setShader(simple);
 		}
+
+		if(simple.isCompiled()) {
+			//batch.setShader(simple);
+		} else {
+			//batch.setShader(null);
+		}
+
 		map.render(batch);
 		batch.end();
 		buffer.end();
 
 		if(postProcessing.isCompiled()) {
-			batch.setShader(postProcessing);
+			//batch.setShader(postProcessing);
 		}
 
 		batch.setProjectionMatrix(standardMatrix);

@@ -6,7 +6,7 @@ import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.tile.Ground;
 
-public class GrateGenerator extends Generator {
+public class GrateGenerator implements Generator {
 
 	//Do not tell Taylor Swift about this code.
 	int blankSpaces = 0;

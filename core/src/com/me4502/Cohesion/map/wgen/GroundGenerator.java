@@ -6,7 +6,7 @@ import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.tile.Ground;
 
-public class GroundGenerator extends Generator {
+public class GroundGenerator implements Generator {
 
 	@Override
 	public void generate(Chunk chunk) {

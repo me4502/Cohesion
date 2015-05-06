@@ -74,7 +74,7 @@ public class MapInstance {
 	public void render(SpriteBatch batch) {
 
 		if(Cohesion.instance.colorize.isCompiled()) {
-			//batch.setShader(Cohesion.instance.colorize);
+			batch.setShader(Cohesion.instance.colorize);
 			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
 		}
 
@@ -85,7 +85,7 @@ public class MapInstance {
 		for(Entity ent : entities)
 			ent.render(batch);
 
-		//batch.setShader(Cohesion.instance.simple);
+		batch.setShader(Cohesion.instance.simple);
 	}
 
 	public void update() {

@@ -153,7 +153,7 @@ public class Cohesion extends ApplicationAdapter {
 		if(lastFrame != null && blur.isCompiled()) {
 			//Blur it.
 			blurA.begin();
-			//batch.setShader(simple);
+			batch.setShader(simple);
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -185,8 +185,8 @@ public class Cohesion extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 
 		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 1f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		//Gdx.gl.glClearColor(0, 0, 0, 0.1f);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		map.update();
 
@@ -198,14 +198,14 @@ public class Cohesion extends ApplicationAdapter {
 			blur.setUniformf("resolution", FBO_SIZE);
 			blur.setUniformf("radius", 2);
 
-			batch.draw(lastFrame, 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 			batch.setProjectionMatrix(camera.combined);
 		}
 
 		if(simple.isCompiled()) {
-			//batch.setShader(simple);
+			batch.setShader(simple);
 		} else {
-			//batch.setShader(null);
+			batch.setShader(null);
 		}
 
 		map.render(batch);
@@ -213,7 +213,7 @@ public class Cohesion extends ApplicationAdapter {
 		buffer.end();
 
 		if(postProcessing.isCompiled()) {
-			//batch.setShader(postProcessing);
+			batch.setShader(postProcessing);
 		}
 
 		batch.setProjectionMatrix(standardMatrix);

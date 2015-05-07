@@ -19,7 +19,7 @@ public abstract class Entity implements Collidable {
 	public static float COLLISION_ACCURACY = 100f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
 
 	Vector2 position;
-	Vector2 velocity;
+	public Vector2 velocity;
 
 	public Sprite sprite;
 
@@ -30,10 +30,12 @@ public abstract class Entity implements Collidable {
 	boolean onGround;
 	boolean remove;
 
+	public int timeSinceHit;
+
 	/* Movement Modifiers */
-	float collisionDrag = 0.01f;
-	float airDrag = 0.99f;
-	float groundDrag = 0.8f;
+	public float collisionDrag = 0.01f;
+	public float airDrag = 0.99f;
+	public float groundDrag = 0.8f;
 
 	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
@@ -97,9 +99,9 @@ public abstract class Entity implements Collidable {
 						if(!move(getPosition().add(tmp))) {
 							tmp = cpy.cpy();
 							tmp = tmp.scl(collisionDrag,collisionDrag);
-							if(!move(getPosition().add(tmp))) {
+							if(!move(getPosition().add(tmp)))
 								continue;
-							} else {
+							else {
 								velocity = tmp;
 								break;
 							}
@@ -117,9 +119,8 @@ public abstract class Entity implements Collidable {
 				}
 			}
 
-			if(onGround && !moved) {
+			if(onGround && !moved)
 				velocity.y = 0f;
-			}
 		}
 
 		velocity.scl(new Vector2(onGround ? groundDrag : airDrag, onGround ? groundDrag : airDrag));
@@ -135,13 +136,10 @@ public abstract class Entity implements Collidable {
 	protected boolean doesIntersect(Vector2 position) {
 
 		List<Chunk> chunks = map.getChunks(position);
-		for(Chunk chunk : chunks) {
-			for(Tile tile : chunk.getTiles()) {
-				if(getBoundingBox().doesIntersect(position, tile)) {
+		for(Chunk chunk : chunks)
+			for(Tile tile : chunk.getTiles())
+				if(getBoundingBox().doesIntersect(position, tile))
 					return true;
-				}
-			}
-		}
 
 		for(Entity ent : map.entities) {
 			if(ent == this || !ent.doesHardCollide()) continue;

@@ -11,10 +11,10 @@ public class VariablePlatformGenerator implements Generator {
 	int tick;
 
 	int lastY = START_Y;
-	
+
 	public static final int START_Y = 32;
 	public static final int VARIANCE = 64;
-	
+
 	@Override
 	public void generate(Chunk chunk) {
 
@@ -27,12 +27,12 @@ public class VariablePlatformGenerator implements Generator {
 			tick ++;
 			if(tick % 2 == 0) continue;
 
-			lastY = lastY + ((VARIANCE/2)-Cohesion.RANDOM.nextInt(VARIANCE));
-			
+			lastY = lastY + VARIANCE/2-Cohesion.RANDOM.nextInt(VARIANCE);
+
 			if(lastY < START_Y) lastY = START_Y;
-			
+
 			chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, lastY)));
 		}
-		
+
 	}
 }

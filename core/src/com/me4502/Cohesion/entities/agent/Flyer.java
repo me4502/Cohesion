@@ -1,0 +1,34 @@
+package com.me4502.Cohesion.entities.agent;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.map.MapInstance;
+
+public class Flyer extends Agent {
+
+	public Flyer(MapInstance map, Sprite sprite, Vector2 position) {
+		super(map, sprite, position);
+
+		health = 5;
+	}
+
+	@Override
+	public boolean hasGravity() {
+		return true;
+	}
+
+	@Override
+	public void update() {
+
+		timeSinceHit ++;
+
+		if(timeSinceHit > 5)
+			velocity.add(0, 1);
+	}
+
+	@Override
+	public void damage() {
+		health -= 1;
+	}
+
+}

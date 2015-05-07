@@ -1,14 +1,20 @@
-package com.me4502.Cohesion.entities;
+package com.me4502.Cohesion.entities.agent;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.entities.Entity;
+import com.me4502.Cohesion.entities.Projectile;
 import com.me4502.Cohesion.map.MapInstance;
 
-public class Blockade extends Entity {
+public abstract class Agent extends Entity {
 
-	public Blockade(MapInstance map, Sprite sprite, Vector2 position) {
+	protected double health;
+
+	public Agent(MapInstance map, Sprite sprite, Vector2 position) {
 		super(map, sprite, position);
 	}
+
+	public abstract void damage();
 
 	@Override
 	public void onCollision(Entity ent) {
@@ -16,11 +22,7 @@ public class Blockade extends Entity {
 			velocity.sub(ent.velocity.cpy().scl(ent.collisionDrag));
 			ent.timeSinceHit = 0;
 			timeSinceHit = 0;
+			damage();
 		}
-	}
-
-	@Override
-	public boolean hasGravity() {
-		return true;
 	}
 }

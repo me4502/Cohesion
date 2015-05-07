@@ -50,27 +50,22 @@ public class Map {
 
 		updateTick ++;
 
-		if(isSlowed() && updateTick < 3) {
+		if(isSlowed() && updateTick < 3)
 			return;
-		}
 
 		updateTick = 0;
 
-		for(MapInstance instance : instances) {
+		for(MapInstance instance : instances)
 			instance.update();
-		}
-		if(isAccelerated()) {
-			for(MapInstance instance : instances) {
+		if(isAccelerated())
+			for(MapInstance instance : instances)
 				instance.update();
-			}
-		}
 
-		for(MapInstance instance : instances) {
+		for(MapInstance instance : instances)
 			if(instance.player.getPosition().y < -128) {
 				instances.remove(instance);
 				break;
 			}
-		}
 
 		if(instances.size() == 1)
 			instances.clear();
@@ -84,9 +79,8 @@ public class Map {
 
 			int gen = Cohesion.RANDOM.nextInt(WorldGenTypes.values().length);
 
-			for(MapInstance map : instances) {
+			for(MapInstance map : instances)
 				map.generateNext(gen);
-			}
 
 			currentX += 75;
 		}
@@ -121,9 +115,8 @@ public class Map {
 
 		Vector2 result = new Vector2(0f,0f);
 
-		for(MapInstance instance : instances) {
+		for(MapInstance instance : instances)
 			result.add(instance.player.getPosition().x + instance.player.sprite.getWidth()/2, instance.player.getPosition().y + instance.player.sprite.getHeight()/2);
-		}
 
 		result.scl(1f/instances.size());
 

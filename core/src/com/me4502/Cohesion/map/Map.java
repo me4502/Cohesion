@@ -50,7 +50,7 @@ public class Map {
 
 		updateTick ++;
 
-		if(isSlowed() && updateTick < 5) {
+		if(isSlowed() && updateTick < 3) {
 			return;
 		}
 
@@ -60,10 +60,9 @@ public class Map {
 			instance.update();
 		}
 		if(isAccelerated()) {
-			for(int i = 0; i < 20; i++)
-				for(MapInstance instance : instances) {
-					instance.update();
-				}
+			for(MapInstance instance : instances) {
+				instance.update();
+			}
 		}
 
 		for(MapInstance instance : instances) {
@@ -133,6 +132,7 @@ public class Map {
 
 	public void gameOver() {
 
+		Cohesion.instance.lastFrame = null;
 		Cohesion.instance.map = new Map();
 	}
 }

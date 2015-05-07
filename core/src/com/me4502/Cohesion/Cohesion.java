@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
@@ -165,14 +168,16 @@ public class Cohesion extends ApplicationAdapter {
 
 			blurA.end();
 			blurB.begin();
+			Gdx.gl.glClearColor(0, 0, 0,1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 			batch.setShader(blur);
 
 			blur.setUniform2fv("dir", new float[]{1f, 0f}, 0, 2);
 			blur.setUniformf("resolution", FBO_SIZE);
-			blur.setUniformf("radius", 2);
+			blur.setUniformf("radius", 3);
 
-			batch.draw(blurA.getColorBufferTexture(), 0, 0);
+			batch.draw(blurA.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
 			batch.flush();
 
 			blurB.end();
@@ -185,8 +190,8 @@ public class Cohesion extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 
 		buffer.begin();
-		//Gdx.gl.glClearColor(0, 0, 0, 0.1f);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(0, 0, 0,1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		map.update();
 
@@ -196,9 +201,9 @@ public class Cohesion extends ApplicationAdapter {
 			batch.setShader(blur);
 			blur.setUniform2fv("dir", new float[]{0f, 1f}, 0, 2);
 			blur.setUniformf("resolution", FBO_SIZE);
-			blur.setUniformf("radius", 2);
-
-			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+			blur.setUniformf("radius", 3);
+			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
+						
 			batch.setProjectionMatrix(camera.combined);
 		}
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.me4502.Cohesion.Cohesion;
+import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.tile.Tile;
 
 public class Chunk {
@@ -27,7 +28,14 @@ public class Chunk {
 
 	public void addTile(Tile tile) {
 		tile.setPosition(tile.getPosition().add(startingX, 0));
+		tile.update();
 		tiles.add(tile);
+	}
+
+	public void addEntity(Entity tile) {
+		tile.setPosition(tile.getPosition().add(startingX, 0));
+		tile.update();
+		map.spawnEntity(tile);
 	}
 
 	public List<Tile> getTiles() {

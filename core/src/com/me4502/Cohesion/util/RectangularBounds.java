@@ -10,6 +10,8 @@ public class RectangularBounds extends Bounds {
 	int width;
 	int height;
 
+	int padding = 0;
+
 	public RectangularBounds(int width, int height) {
 
 		this.width = width;
@@ -47,5 +49,16 @@ public class RectangularBounds extends Bounds {
 		Cohesion.instance.shapes.begin(ShapeType.Filled);
 		Cohesion.instance.shapes.rect(position.x, position.y, width, height);
 		Cohesion.instance.shapes.end();
+	}
+
+	@Override
+	public Bounds padding() {
+
+		Bounds bounds = new RectangularBounds(width, height);
+		((RectangularBounds)bounds).padding = 2;
+		((RectangularBounds)bounds).width -= 2;
+		((RectangularBounds)bounds).height -= 2;
+
+		return bounds;
 	}
 }

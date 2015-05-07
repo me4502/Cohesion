@@ -7,8 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,7 +14,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
@@ -203,23 +200,21 @@ public class Cohesion extends ApplicationAdapter {
 			blur.setUniformf("resolution", FBO_SIZE);
 			blur.setUniformf("radius", 3);
 			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
-						
+
 			batch.setProjectionMatrix(camera.combined);
 		}
 
-		if(simple.isCompiled()) {
+		if(simple.isCompiled())
 			batch.setShader(simple);
-		} else {
+		else
 			batch.setShader(null);
-		}
 
 		map.render(batch);
 		batch.end();
 		buffer.end();
 
-		if(postProcessing.isCompiled()) {
+		if(postProcessing.isCompiled())
 			batch.setShader(postProcessing);
-		}
 
 		batch.setProjectionMatrix(standardMatrix);
 

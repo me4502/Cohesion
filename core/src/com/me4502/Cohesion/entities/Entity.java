@@ -138,12 +138,12 @@ public abstract class Entity implements Collidable {
 		List<Chunk> chunks = map.getChunks(position);
 		for(Chunk chunk : chunks)
 			for(Tile tile : chunk.getTiles())
-				if(getBoundingBox().doesIntersect(position, tile))
+				if(getBoundingBox().padding().doesIntersect(position, tile))
 					return true;
 
 		for(Entity ent : map.entities) {
 			if(ent == this || !ent.doesHardCollide()) continue;
-			if(getBoundingBox().doesIntersect(position, ent)) {
+			if(getBoundingBox().padding().doesIntersect(position, ent)) {
 				ent.onCollision(this);
 				return true;
 			}

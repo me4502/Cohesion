@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.Player;
@@ -34,8 +35,12 @@ public class MapInstance {
 	int chunkIndex = -1;
 	private Chunk[] chunks = new Chunk[CHUNK_LOADING_RANGE];
 
+	public World physicsWorld;
+
 	public MapInstance(Color color) {
 		this.color = color;
+
+		physicsWorld = new World(Entity.GRAVITY, true);
 
 		playerStartLocation = new Vector2(50, 100);
 		entities.add(player = new Player(this, new Sprite(Cohesion.instance.player), new Vector2(50, 100)));
@@ -106,6 +111,8 @@ public class MapInstance {
 			if(ent.shouldRemove())
 				iter.remove();
 		}
+
+		physicsWorld.step(1/60f, 6, 2);
 	}
 
 	public void spawnEntity(Entity entity) {

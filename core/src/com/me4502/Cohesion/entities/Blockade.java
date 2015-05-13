@@ -11,15 +11,6 @@ public class Blockade extends Entity {
 	}
 
 	@Override
-	public void onCollision(Entity ent) {
-		if(ent instanceof Projectile && ent.timeSinceHit > 5) {
-			velocity.sub(ent.velocity.cpy().scl(ent.collisionDrag));
-			ent.timeSinceHit = 0;
-			timeSinceHit = 0;
-		}
-	}
-
-	@Override
 	public boolean hasGravity() {
 		return true;
 	}

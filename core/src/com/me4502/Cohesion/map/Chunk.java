@@ -1,7 +1,6 @@
 package com.me4502.Cohesion.map;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,19 +16,20 @@ public class Chunk {
 	public int startingX;
 	public MapInstance map;
 
-	private List<Tile> tiles;
+	private Tile[] tiles;
 
 	public Chunk(MapInstance map, int startingX) {
 		this.map = map;
 		this.startingX = startingX;
 
-		tiles = new ArrayList<Tile>();
+		tiles = new Tile[0];
 	}
 
 	public void addTile(Tile tile) {
 		tile.setPosition(tile.getPosition().add(startingX, 0));
 		tile.update();
-		tiles.add(tile);
+		tiles = Arrays.copyOf(tiles, tiles.length + 1);
+		tiles[tiles.length-1] = tile;
 	}
 
 	public void addEntity(Entity tile) {
@@ -38,7 +38,7 @@ public class Chunk {
 		map.spawnEntity(tile);
 	}
 
-	public List<Tile> getTiles() {
+	public Tile[] getTiles() {
 		return tiles;
 	}
 

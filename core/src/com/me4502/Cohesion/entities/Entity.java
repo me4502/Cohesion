@@ -16,7 +16,7 @@ public abstract class Entity implements Collidable {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
-	public static float COLLISION_ACCURACY = 100f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
+	public static float COLLISION_ACCURACY = 10f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
 
 	Vector2 position;
 	public Vector2 velocity;
@@ -30,18 +30,22 @@ public abstract class Entity implements Collidable {
 	boolean onGround;
 	boolean remove;
 
-	public int timeSinceHit;
+	public int timeSinceHit = 1000;
 
 	/* Movement Modifiers */
 	public float collisionDrag = 0.01f;
 	public float airDrag = 0.99f;
 	public float groundDrag = 0.8f;
 
+	protected int age;
+
 	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
 		this.map = map;
 		this.position = position;
 		bounds = new RectangularBounds(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
+
+		velocity = new Vector2(0,0);
 
 		if(!move(position)) {
 			remove = true;
@@ -50,12 +54,10 @@ public abstract class Entity implements Collidable {
 		sprite.setPosition(position.x, position.y);
 
 		this.sprite = sprite;
-
-		velocity = new Vector2(0,0);
 	}
 
 	public boolean shouldRemove() {
-		return remove;
+		return remove || position.y < -200;
 	}
 
 	@Override
@@ -79,7 +81,11 @@ public abstract class Entity implements Collidable {
 
 	public void update() {
 
+		age ++;
+
 		if(shouldRemove()) return;
+
+		timeSinceHit ++;
 
 		onGround = doesIntersect(getPosition().sub(0, 2));
 
@@ -88,7 +94,7 @@ public abstract class Entity implements Collidable {
 
 		if(velocity.len2() > 0) {
 			boolean moved = false;
-			for(float i = 1f; i > 0.000001f; i-=1f/COLLISION_ACCURACY) {
+			for(float i = 1f; i > 1f/COLLISION_ACCURACY; i-=1f/COLLISION_ACCURACY) {
 				Vector2 tmp = velocity.cpy().scl(i);
 				Vector2 cpy = tmp.cpy();
 				if(!move(getPosition().add(tmp))) {
@@ -130,7 +136,11 @@ public abstract class Entity implements Collidable {
 	}
 
 	public void onCollision(Entity ent) {
-
+		if(ent.timeSinceHit > 5 && !(ent instanceof Player) && ent != this) {
+			velocity.sub(ent.velocity.scl(ent.collisionDrag));
+			ent.timeSinceHit = 0;
+			timeSinceHit = 0;
+		}
 	}
 
 	protected boolean doesIntersect(Vector2 position) {
@@ -138,12 +148,12 @@ public abstract class Entity implements Collidable {
 		List<Chunk> chunks = map.getChunks(position);
 		for(Chunk chunk : chunks)
 			for(Tile tile : chunk.getTiles())
-				if(getBoundingBox().padding().doesIntersect(position, tile))
+				if(getBoundingBox().doesIntersect(position, tile))
 					return true;
 
 		for(Entity ent : map.entities) {
 			if(ent == this || !ent.doesHardCollide()) continue;
-			if(getBoundingBox().padding().doesIntersect(position, ent)) {
+			if(getBoundingBox().doesIntersect(position, ent)) {
 				ent.onCollision(this);
 				return true;
 			}

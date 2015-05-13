@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.Player;
@@ -35,12 +34,8 @@ public class MapInstance {
 	int chunkIndex = -1;
 	private Chunk[] chunks = new Chunk[CHUNK_LOADING_RANGE];
 
-	public World physicsWorld;
-
 	public MapInstance(Color color) {
 		this.color = color;
-
-		physicsWorld = new World(Entity.GRAVITY, true);
 
 		playerStartLocation = new Vector2(50, 100);
 		entities.add(player = new Player(this, new Sprite(Cohesion.instance.player), new Vector2(50, 100)));
@@ -71,6 +66,21 @@ public class MapInstance {
 		return chunks;
 	}
 
+	public List<Chunk> getLoadedChunks(Vector2 position) {
+
+		List<Chunk> chunks = new ArrayList<Chunk>();
+
+		for(Chunk chunk : this.chunks) {
+			if(chunk == null) continue;
+
+			if(chunk.startingX <= position.x && chunk.startingX + Chunk.CHUNK_WIDTH > position.x
+					|| chunk.startingX <= position.x - Chunk.CHUNK_WIDTH && chunk.startingX + Chunk.CHUNK_WIDTH > position.x - Chunk.CHUNK_WIDTH
+					|| chunk.startingX <= position.x + Chunk.CHUNK_WIDTH && chunk.startingX + Chunk.CHUNK_WIDTH > position.x + Chunk.CHUNK_WIDTH)
+				chunks.add(chunk);
+		}
+		return chunks;
+	}
+
 	public int randomRange(int min, int max) {
 
 		return min + Cohesion.RANDOM.nextInt(max - min + 1);
@@ -83,7 +93,7 @@ public class MapInstance {
 			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
 		}
 
-		for(Chunk chunk : chunks)
+		for(Chunk chunk : getLoadedChunks(Cohesion.instance.map.getCentrePoint()))
 			if(chunk != null)
 				chunk.render(batch);
 
@@ -98,7 +108,7 @@ public class MapInstance {
 		while(!spawningQueue.isEmpty())
 			entities.add(spawningQueue.poll());
 
-		for(Chunk chunk : chunks)
+		for(Chunk chunk : getLoadedChunks(Cohesion.instance.map.getCentrePoint()))
 			if(chunk != null)
 				chunk.update();
 
@@ -111,8 +121,6 @@ public class MapInstance {
 			if(ent.shouldRemove())
 				iter.remove();
 		}
-
-		physicsWorld.step(1/60f, 6, 2);
 	}
 
 	public void spawnEntity(Entity entity) {

@@ -10,7 +10,7 @@ public class Projectile extends Entity {
 		super(map, sprite, position);
 
 		collisionDrag = -0.3f;
-		groundDrag = 0.99f;
+		groundDrag = 0.8f;
 	}
 
 	@Override
@@ -21,6 +21,11 @@ public class Projectile extends Entity {
 	@Override
 	public boolean doesHardCollide() {
 		return false;
+	}
+
+	@Override
+	public boolean shouldRemove() {
+		return super.shouldRemove() || age > 100;
 	}
 
 	@Override

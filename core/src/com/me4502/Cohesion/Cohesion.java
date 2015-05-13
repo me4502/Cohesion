@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.physics.box2d.Box2D;
 import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
@@ -100,8 +99,6 @@ public class Cohesion extends ApplicationAdapter {
 		ground = new Texture("data/platforms/ground.png");
 
 		map = new Map();
-
-		Box2D.init();
 
 		standardMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

@@ -22,6 +22,8 @@ public class Map {
 
 	int updateTick = 0;
 
+	Vector2 centrePoint = new Vector2(0,0);
+
 	public Map() {
 
 		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
@@ -52,6 +54,13 @@ public class Map {
 
 		if(isSlowed() && updateTick < 3)
 			return;
+
+		centrePoint.set(0, 0);
+
+		for(MapInstance instance : instances)
+			centrePoint.add(instance.player.getPosition().x + instance.player.sprite.getWidth()/2, instance.player.getPosition().y + instance.player.sprite.getHeight()/2);
+
+		centrePoint.scl(1f/instances.size());
 
 		updateTick = 0;
 
@@ -85,22 +94,10 @@ public class Map {
 			currentX += 75;
 		}
 
-		float averageX = 0, averageY = 0;
+		Vector2 pos = instances.get(0).player.getPosition();
 
-		Vector2 pos = null;
-
-		for(MapInstance instance : instances) {
-			averageX += instance.player.getPosition().x + instance.player.sprite.getWidth()/2;
-			averageY += instance.player.getPosition().y + instance.player.sprite.getHeight()/2;
-
-			pos = instance.player.getPosition().add(instance.player.sprite.getWidth()/2, instance.player.sprite.getHeight()/2);
-		}
-
-		averageX /= instances.size();
-		averageY /= instances.size();
-
-		if(pos != null && pos.dst2(averageX, averageY) < 16*16 && (int)averageX > lastScoreX) {
-			lastScoreX = (int)averageX;
+		if(pos != null && pos.dst2(getCentrePoint()) < 16*16 && (int)pos.x > lastScoreX) {
+			lastScoreX = (int)pos.x;
 
 			score += instances.size();
 			System.out.println(score);
@@ -113,14 +110,7 @@ public class Map {
 
 	public Vector2 getCentrePoint() {
 
-		Vector2 result = new Vector2(0f,0f);
-
-		for(MapInstance instance : instances)
-			result.add(instance.player.getPosition().x + instance.player.sprite.getWidth()/2, instance.player.getPosition().y + instance.player.sprite.getHeight()/2);
-
-		result.scl(1f/instances.size());
-
-		return result;
+		return centrePoint.cpy();
 	}
 
 	public void gameOver() {

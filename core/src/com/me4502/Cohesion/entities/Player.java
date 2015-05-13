@@ -32,10 +32,10 @@ public class Player extends Entity {
 			velocity.add(onGround ? -1 : -0.2f, 0);
 		if(Gdx.input.isKeyPressed(Keys.D))
 			velocity.add(onGround ? 1 : 0.2f, 0);
-		if(Gdx.input.isKeyPressed(Keys.SPACE) && onGround)
+		if((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.SPACE)) && onGround)
 			velocity.add(0, 10);
 
-		if(Gdx.input.isKeyPressed(Keys.W) && lastShootTime > 30) {
+		if(Gdx.input.isKeyPressed(Keys.S) && lastShootTime > 30) {
 			Projectile proj = null;
 
 			Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 1));

@@ -13,6 +13,7 @@ uniform sampler2D u_texture;
 uniform float resolution;
 uniform float radius;
 uniform vec2 dir;
+uniform float diffuse;
 
 void main() {
 	//this will be our RGBA sum
@@ -47,5 +48,5 @@ void main() {
 	
 	sum.a = sum.a * 2;
 
-	gl_FragColor = v_color * sum * vec4(0.9);
+	gl_FragColor = v_color * sum * vec4(diffuse);
 }

@@ -15,5 +15,5 @@ void main() {
 		
 	if(gl_FragColor.x > 0) gl_FragColor.x *= 10;
     if(gl_FragColor.y > 0) gl_FragColor.y *= 10;
-    if(gl_FragColor.z > 0) gl_FragColor.z *= 10;    
+    if(gl_FragColor.z > 0) gl_FragColor.z *= 10;
 }

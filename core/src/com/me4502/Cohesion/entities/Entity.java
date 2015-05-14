@@ -16,7 +16,7 @@ public abstract class Entity implements Collidable {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
-	public static float COLLISION_ACCURACY = 10f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
+	public static float COLLISION_ACCURACY = 100f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
 
 	Vector2 position;
 	public Vector2 velocity;
@@ -43,6 +43,7 @@ public abstract class Entity implements Collidable {
 
 		this.map = map;
 		this.position = position;
+		this.sprite = sprite;
 		bounds = new RectangularBounds(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
 
 		velocity = new Vector2(0,0);
@@ -52,8 +53,6 @@ public abstract class Entity implements Collidable {
 			return;
 		}
 		sprite.setPosition(position.x, position.y);
-
-		this.sprite = sprite;
 	}
 
 	public boolean shouldRemove() {

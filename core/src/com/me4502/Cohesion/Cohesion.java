@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,6 +26,7 @@ public class Cohesion extends ApplicationAdapter {
 
 	/* Blur Data */
 	public static final int FBO_SIZE = 1024;
+	public static final int BLUR_RADIUS = 5;
 	FrameBuffer blurA, blurB;
 
 	public OrthographicCamera camera;
@@ -38,6 +40,7 @@ public class Cohesion extends ApplicationAdapter {
 	public ShaderProgram colorize;
 	public ShaderProgram blur;
 	public ShaderProgram postProcessing;
+	public ShaderProgram background;
 
 	/* Textures */
 	public Texture player;
@@ -79,6 +82,7 @@ public class Cohesion extends ApplicationAdapter {
 		colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
 		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
 		blur = new ShaderProgram(Gdx.files.internal("data/shaders/blur.vrt"), Gdx.files.internal("data/shaders/blur.frg"));
+		background = new ShaderProgram(Gdx.files.internal("data/shaders/background.vrt"), Gdx.files.internal("data/shaders/background.frg"));
 
 		if(blur.getLog().length() > 0 && !blur.getLog().equals("No errors.\n"))
 			System.out.println(blur.getLog());
@@ -91,6 +95,9 @@ public class Cohesion extends ApplicationAdapter {
 
 		if(postProcessing.getLog().length() > 0 && !postProcessing.getLog().equals("No errors.\n"))
 			System.out.println(postProcessing.getLog());
+
+		if(background.getLog().length() > 0 && !background.getLog().equals("No errors.\n"))
+			System.out.println(background.getLog());
 
 		player = new Texture("data/entity/player.png");
 		platform = new Texture("data/platforms/platform.png");
@@ -152,7 +159,7 @@ public class Cohesion extends ApplicationAdapter {
 		if(lastFrame != null && blur.isCompiled()) {
 			//Blur it.
 			blurA.begin();
-			batch.setShader(simple);
+			batch.setShader(background);
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -171,7 +178,8 @@ public class Cohesion extends ApplicationAdapter {
 
 			blur.setUniform2fv("dir", new float[]{1f, 0f}, 0, 2);
 			blur.setUniformf("resolution", FBO_SIZE);
-			blur.setUniformf("radius", 3);
+			blur.setUniformf("radius", BLUR_RADIUS);
+			blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
 
 			batch.draw(blurA.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
 			batch.flush();
@@ -197,7 +205,8 @@ public class Cohesion extends ApplicationAdapter {
 			batch.setShader(blur);
 			blur.setUniform2fv("dir", new float[]{0f, 1f}, 0, 2);
 			blur.setUniformf("resolution", FBO_SIZE);
-			blur.setUniformf("radius", 3);
+			blur.setUniformf("radius", BLUR_RADIUS);
+			blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
 			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
 
 			batch.setProjectionMatrix(camera.combined);

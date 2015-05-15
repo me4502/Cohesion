@@ -13,7 +13,7 @@ void main() {
 
 	gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
 		
-	if(gl_FragColor.x > 0) gl_FragColor.x *= 10;
-    if(gl_FragColor.y > 0) gl_FragColor.y *= 10;
-    if(gl_FragColor.z > 0) gl_FragColor.z *= 10;
+	if(gl_FragColor.x > 0.0) gl_FragColor.x *= 10.0;
+    if(gl_FragColor.y > 0.0) gl_FragColor.y *= 10.0;
+    if(gl_FragColor.z > 0.0) gl_FragColor.z *= 10.0;
 }

@@ -46,7 +46,7 @@ void main() {
 	sum += texture2D(u_texture, vec2(tc.x + 3.0*(blur)*hstep, tc.y + 3.0*blur*vstep)) * 0.0540540541;
 	sum += texture2D(u_texture, vec2(tc.x + 4.0*(blur)*hstep, tc.y + 4.0*blur*vstep)) * 0.0162162162;
 	
-	sum.a = sum.a * 2;
+	sum.a = sum.a * 2.0;
 
 	gl_FragColor = v_color * sum * vec4(diffuse);
 }

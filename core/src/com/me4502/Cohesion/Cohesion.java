@@ -10,7 +10,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -55,6 +58,8 @@ public class Cohesion extends ApplicationAdapter {
 
 	private Matrix4 standardMatrix = new Matrix4();
 
+	public BitmapFont mainFont;
+
 	@Override
 	public void create () {
 
@@ -76,7 +81,7 @@ public class Cohesion extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 
-		ShaderProgram.pedantic = false;
+		ShaderProgram.pedantic = true;
 
 		simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
 		colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
@@ -108,6 +113,12 @@ public class Cohesion extends ApplicationAdapter {
 		map = new Map();
 
 		standardMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 24;
+		mainFont = generator.generateFont(parameter);
+		generator.dispose();
 
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
@@ -228,6 +239,11 @@ public class Cohesion extends ApplicationAdapter {
 
 		batch.begin();
 		batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+
+		String text = "Score " + map.score;
+
+		mainFont.setFixedWidthGlyphs("Score XXX");
+		mainFont.draw(batch, text, camera.viewportWidth/2 - 35, camera.viewportHeight - 20);
 		batch.end();
 	}
 }

@@ -18,7 +18,7 @@ public class Map {
 	int currentX = 150;
 
 	int lastScoreX = 0;
-	int score = 0;
+	public int score = 0;
 
 	int updateTick = 0;
 
@@ -96,7 +96,7 @@ public class Map {
 
 		Vector2 pos = instances.get(0).player.getPosition();
 
-		if(pos != null && pos.dst2(getCentrePoint()) < 16*16 && (int)pos.x > lastScoreX) {
+		if(pos != null && pos.dst2(getCentrePoint()) < 32*32 && (int)pos.x > lastScoreX) {
 			lastScoreX = (int)pos.x;
 
 			score += instances.size();

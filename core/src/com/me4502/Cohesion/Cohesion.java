@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -117,6 +118,9 @@ public class Cohesion extends ApplicationAdapter {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 24;
+		parameter.magFilter = TextureFilter.MipMapNearestNearest;
+		parameter.minFilter = TextureFilter.MipMapNearestNearest;
+		parameter.genMipMaps = true;
 		mainFont = generator.generateFont(parameter);
 		generator.dispose();
 

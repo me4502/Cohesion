@@ -24,8 +24,8 @@ public class RectangularBounds extends Bounds {
 		if(entity.getBoundingBox() instanceof RectangularBounds) {
 			RectangularBounds otherBox = (RectangularBounds) entity.getBoundingBox();
 
-			if(position.x + padding < entity.getPosition().x + otherBox.width && position.x + width > entity.getPosition().x)
-				if(position.y + padding < entity.getPosition().y + otherBox.height && position.y + height > entity.getPosition().y)
+			if(position.x + padding < entity.getPosition().x + otherBox.width && position.x + width-padding > entity.getPosition().x)
+				if(position.y + padding < entity.getPosition().y + otherBox.height && position.y + height-padding > entity.getPosition().y)
 					return true;
 		}
 
@@ -35,8 +35,8 @@ public class RectangularBounds extends Bounds {
 	@Override
 	public boolean doesIntersect(Vector2 position, Vector2 intersectionpoint) {
 
-		if(position.x + padding <= intersectionpoint.x && position.x + width >= intersectionpoint.x)
-			if(position.y + padding <= intersectionpoint.y && position.y + height >= intersectionpoint.y)
+		if(position.x + padding <= intersectionpoint.x && position.x + width-padding >= intersectionpoint.x)
+			if(position.y + padding <= intersectionpoint.y && position.y + height-padding >= intersectionpoint.y)
 				return true;
 
 		return false;
@@ -47,7 +47,7 @@ public class RectangularBounds extends Bounds {
 
 		Cohesion.instance.shapes.setColor(Color.WHITE);
 		Cohesion.instance.shapes.begin(ShapeType.Filled);
-		Cohesion.instance.shapes.rect(position.x + padding, position.y + padding, width, height);
+		Cohesion.instance.shapes.rect(position.x + padding, position.y + padding, width-padding, height-padding);
 		Cohesion.instance.shapes.end();
 	}
 
@@ -56,8 +56,6 @@ public class RectangularBounds extends Bounds {
 
 		Bounds bounds = new RectangularBounds(width, height);
 		((RectangularBounds)bounds).padding = 2;
-		((RectangularBounds)bounds).width -= 2;
-		((RectangularBounds)bounds).height -= 2;
 
 		return bounds;
 	}

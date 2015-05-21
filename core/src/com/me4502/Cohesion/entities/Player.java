@@ -48,9 +48,6 @@ public class Player extends Entity {
 			lastShootTime = 0;
 		}
 
-		if(Gdx.input.isKeyPressed(Keys.R))
-			move(Cohesion.instance.map.getCentrePoint());
-
 		super.update();
 	}
 

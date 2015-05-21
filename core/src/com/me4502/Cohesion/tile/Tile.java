@@ -3,6 +3,7 @@ package com.me4502.Cohesion.tile;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.MapInstance;
 import com.me4502.Cohesion.util.Bounds;
 import com.me4502.Cohesion.util.Collidable;
@@ -51,6 +52,6 @@ public class Tile implements Collidable {
 
 		sprite.setPosition(position.x, position.y);
 
-		//bounds.drawDebugBounds(position);
+		if(Cohesion.DEBUG) bounds.drawDebugBounds(position);
 	}
 }

@@ -52,7 +52,7 @@ public class Chunk {
 		for(Tile tile : tiles)
 			tile.update();
 
-		//drawChunkGrid();
+		if(Cohesion.DEBUG) drawChunkGrid();
 	}
 
 	public void drawChunkGrid() {

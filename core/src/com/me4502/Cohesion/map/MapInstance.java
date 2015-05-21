@@ -112,12 +112,10 @@ public class MapInstance {
 			if(chunk != null)
 				chunk.update();
 
-		for(Entity ent : entities)
-			ent.update();
-
 		Iterator<Entity> iter = entities.iterator();
 		while(iter.hasNext()) {
 			Entity ent = iter.next();
+			ent.update();
 			if(ent.shouldRemove())
 				iter.remove();
 		}

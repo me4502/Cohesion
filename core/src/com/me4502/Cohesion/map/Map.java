@@ -17,7 +17,7 @@ public class Map {
 
 	int currentX = 150;
 
-	int lastScoreX = 0;
+	int lastScoreX = currentX;
 	public int score = 0;
 
 	int updateTick = 0;
@@ -34,6 +34,13 @@ public class Map {
 
 		for(MapInstance instance : instances)
 			instance.generateNext(0);
+
+		centrePoint.set(0, 0);
+
+		for(MapInstance instance : instances)
+			centrePoint.add(instance.player.getPosition().x, instance.player.getPosition().y);
+
+		centrePoint.scl(1f/instances.size());
 	}
 
 	public void render(SpriteBatch batch) {
@@ -62,11 +69,14 @@ public class Map {
 
 		centrePoint.scl(1f/instances.size());
 
-		if(Gdx.input.isKeyJustPressed(Keys.R) && mergeCount > 0) {
+		if(Gdx.input.isKeyJustPressed(Keys.E) && mergeCount > 0) {
 			for(MapInstance instance : instances)
 				instance.player.move(Cohesion.instance.map.getCentrePoint());
 			mergeCount --;
 		}
+
+		if(Gdx.input.isKeyJustPressed(Keys.R))
+			gameOver();
 
 		for(MapInstance instance : instances)
 			instance.update();
@@ -96,14 +106,22 @@ public class Map {
 		Vector2 pos = instances.get(0).player.getPosition();
 
 		if(pos != null && pos.dst2(getCentrePoint()) < 32*32 && (int)pos.x > lastScoreX) {
+			giveScore(instances.size() * Math.abs(lastScoreX - (int)pos.x));
 			lastScoreX = (int)pos.x;
-
-			score += instances.size();
-			if(score % 1000 == 0) {
-				//Give a reward.
-
-			}
 		}
+	}
+
+	public void giveScore(int amount) {
+		for(int i = 0; i < amount; i++) {
+			score ++;
+			checkScore();
+		}
+	}
+
+	public void checkScore() {
+		if(score % 10000 == 0)
+			//Give a reward.
+			mergeCount ++;
 	}
 
 	public Vector2 getCentrePoint() {

@@ -17,6 +17,16 @@ public abstract class Agent extends Entity {
 	public abstract void damage();
 
 	@Override
+	public boolean shouldRemove() {
+		return super.shouldRemove() || health < 0;
+	}
+
+	@Override
+	public void update() {
+		super.update();
+	}
+
+	@Override
 	public void onCollision(Entity ent) {
 		if(ent instanceof Projectile && ent.timeSinceHit > 5) {
 			velocity.sub(ent.velocity.cpy().scl(ent.collisionDrag));

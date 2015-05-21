@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.Player;
+import com.me4502.Cohesion.entities.agent.Flyer;
 import com.me4502.Cohesion.map.wgen.Generator;
 import com.me4502.Cohesion.map.wgen.WorldGenTypes;
 
@@ -51,6 +52,8 @@ public class MapInstance {
 
 		Generator gen = WorldGenTypes.getGenerator(generatorId);
 		gen.generate(chunks[chunkIndex]);
+
+		spawnEntity(new Flyer(this, new Sprite(Cohesion.instance.player), new Vector2(chunkIndex * Chunk.CHUNK_WIDTH, 200)));
 	}
 
 	public List<Chunk> getChunks(Vector2 position) {

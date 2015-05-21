@@ -22,6 +22,8 @@ public class Map {
 
 	int updateTick = 0;
 
+	int mergeCount = 1;
+
 	Vector2 centrePoint = new Vector2(0,0);
 
 	public Map() {
@@ -44,10 +46,6 @@ public class Map {
 		return Gdx.input.isKeyPressed(Keys.SHIFT_LEFT);
 	}
 
-	public boolean isAccelerated() {
-		return Gdx.input.isKeyPressed(Keys.CONTROL_LEFT);
-	}
-
 	public void update() {
 
 		updateTick ++;
@@ -55,20 +53,23 @@ public class Map {
 		if(isSlowed() && updateTick < 3)
 			return;
 
+		updateTick = 0;
+
 		centrePoint.set(0, 0);
 
 		for(MapInstance instance : instances)
-			centrePoint.add(instance.player.getPosition().x + instance.player.sprite.getWidth()/2, instance.player.getPosition().y + instance.player.sprite.getHeight()/2);
+			centrePoint.add(instance.player.getPosition().x, instance.player.getPosition().y);
 
 		centrePoint.scl(1f/instances.size());
 
-		updateTick = 0;
+		if(Gdx.input.isKeyJustPressed(Keys.R) && mergeCount > 0) {
+			for(MapInstance instance : instances)
+				instance.player.move(Cohesion.instance.map.getCentrePoint());
+			mergeCount --;
+		}
 
 		for(MapInstance instance : instances)
 			instance.update();
-		if(isAccelerated())
-			for(MapInstance instance : instances)
-				instance.update();
 
 		for(MapInstance instance : instances)
 			if(instance.player.getPosition().y < -128) {
@@ -76,10 +77,8 @@ public class Map {
 				break;
 			}
 
-		if(instances.size() == 1)
+		if(instances.isEmpty() || instances.size() == 1) { //GameOver
 			instances.clear();
-
-		if(instances.isEmpty()) { //GameOver
 			gameOver();
 			return; //Do stuff.
 		}
@@ -100,16 +99,14 @@ public class Map {
 			lastScoreX = (int)pos.x;
 
 			score += instances.size();
-			System.out.println(score);
-			if(score % 100 == 0) {
-				//Generate new player.
-				//TODO
+			if(score % 1000 == 0) {
+				//Give a reward.
+
 			}
 		}
 	}
 
 	public Vector2 getCentrePoint() {
-
 		return centrePoint.cpy();
 	}
 

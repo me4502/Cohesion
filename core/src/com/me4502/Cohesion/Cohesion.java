@@ -23,6 +23,8 @@ import com.me4502.Cohesion.map.Map;
 
 public class Cohesion extends ApplicationAdapter {
 
+	public static final boolean DEBUG = true;
+
 	SpriteBatch batch;
 	public ShapeRenderer shapes;
 

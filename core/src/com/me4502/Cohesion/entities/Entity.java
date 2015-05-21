@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.map.MapInstance;
 import com.me4502.Cohesion.tile.Tile;
@@ -131,7 +132,7 @@ public abstract class Entity implements Collidable {
 		velocity.scl(new Vector2(onGround ? groundDrag : airDrag, onGround ? groundDrag : airDrag));
 		sprite.setPosition(position.x, position.y);
 
-		//bounds.drawDebugBounds(position);
+		if(Cohesion.DEBUG) bounds.drawDebugBounds(position);
 	}
 
 	public void onCollision(Entity ent) {
@@ -161,7 +162,7 @@ public abstract class Entity implements Collidable {
 		return false;
 	}
 
-	protected boolean move(Vector2 position) {
+	public boolean move(Vector2 position) {
 
 		if(doesIntersect(position)) return false;
 		this.position = position;

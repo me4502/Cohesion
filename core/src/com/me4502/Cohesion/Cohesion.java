@@ -248,7 +248,7 @@ public class Cohesion extends ApplicationAdapter {
 
 		String text = "Score " + map.score;
 
-		mainFont.setFixedWidthGlyphs("Score XXX");
+		mainFont.setFixedWidthGlyphs("Score XXXXX");
 		mainFont.draw(batch, text, camera.viewportWidth/2 - 35, camera.viewportHeight - 20);
 		batch.end();
 	}

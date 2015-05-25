@@ -4,11 +4,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.Projectile;
+import com.me4502.Cohesion.entities.agent.ai.AIBase;
 import com.me4502.Cohesion.map.MapInstance;
 
 public abstract class Agent extends Entity {
 
 	protected double health;
+
+	public AIBase baseAI;
 
 	public Agent(MapInstance map, Sprite sprite, Vector2 position) {
 		super(map, sprite, position);
@@ -23,6 +26,10 @@ public abstract class Agent extends Entity {
 
 	@Override
 	public void update() {
+
+		if(baseAI != null)
+			baseAI.update();
+
 		super.update();
 	}
 

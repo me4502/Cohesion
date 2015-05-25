@@ -2,6 +2,7 @@ package com.me4502.Cohesion.entities.agent;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.entities.agent.ai.AIHoming;
 import com.me4502.Cohesion.map.MapInstance;
 
 public class Flyer extends Agent {
@@ -10,6 +11,7 @@ public class Flyer extends Agent {
 		super(map, sprite, position);
 
 		health = 5;
+		baseAI = new AIHoming(this, position);
 	}
 
 	@Override

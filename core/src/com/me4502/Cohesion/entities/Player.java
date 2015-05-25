@@ -28,10 +28,14 @@ public class Player extends Entity {
 
 		sprite.setRotation(sprite.getRotation() - velocity.x  *4);
 
+		float modifier = 1.0f;
+		if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
+			modifier = 2.0f;
+
 		if(Gdx.input.isKeyPressed(Keys.A))
-			velocity.add(onGround ? -1 : -0.2f, 0);
+			velocity.add((onGround ? -1 : -0.2f) * modifier, 0);
 		if(Gdx.input.isKeyPressed(Keys.D))
-			velocity.add(onGround ? 1 : 0.2f, 0);
+			velocity.add((onGround ? 1 : 0.2f) * modifier, 0);
 		if((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.SPACE)) && onGround)
 			velocity.add(0, 10);
 

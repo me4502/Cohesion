@@ -72,8 +72,9 @@ public class Map {
 		if(Gdx.input.isKeyJustPressed(Keys.E) && mergeCount > 0) {
 			boolean success = false;
 			for(MapInstance instance : instances)
-				instance.player.move(Cohesion.instance.map.getCentrePoint());
-			mergeCount --;
+				if(instance.player.move(Cohesion.instance.map.getCentrePoint())) success = true;
+			if(success)
+				mergeCount --;
 		}
 
 		if(Gdx.input.isKeyJustPressed(Keys.R))

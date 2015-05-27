@@ -12,6 +12,10 @@ public abstract class AIBase {
 		this.agent = agent;
 	}
 
+	public boolean isBlocking() {
+		return getStatus() != AIStatus.STALLING;
+	}
+
 	public AIStatus getStatus() {
 		return status == null ? AIStatus.STALLING : status;
 	}
@@ -42,7 +46,7 @@ public abstract class AIBase {
 
 	public abstract void done();
 
-	public static enum AIStatus {
+	public enum AIStatus {
 		STALLING,
 		SEARCHING,
 		WORKING,

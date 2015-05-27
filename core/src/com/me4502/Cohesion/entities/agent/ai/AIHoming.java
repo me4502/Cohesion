@@ -15,17 +15,24 @@ public class AIHoming extends AIBase {
 
 	@Override
 	public void stall() {
-
+		if(agent.getPosition().dst2(homeLocation) > 64) {
+			setStatus(AIStatus.WORKING);
+		}
 	}
 
 	@Override
 	public void search() {
-
+		setStatus(AIStatus.WORKING);
 	}
 
 	@Override
 	public void work() {
+		Vector2 offset = homeLocation.cpy().sub(agent.getPosition());
+		agent.move(agent.getPosition().add(offset.setLength2(0.5f)));
 
+        if(agent.getPosition().dst2(homeLocation) <= 64) {
+            setStatus(AIStatus.DONE);
+        }
 	}
 
 	@Override

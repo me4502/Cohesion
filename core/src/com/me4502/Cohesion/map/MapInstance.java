@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
-import com.me4502.Cohesion.entities.Player;
+import com.me4502.Cohesion.entities.player.Player;
 import com.me4502.Cohesion.entities.agent.Flyer;
 import com.me4502.Cohesion.map.wgen.Generator;
 import com.me4502.Cohesion.map.wgen.WorldGenTypes;
@@ -124,9 +124,10 @@ public class MapInstance {
 		}
 	}
 
-	public void spawnEntity(Entity entity) {
+	public Entity spawnEntity(Entity entity) {
 
 		spawningQueue.add(entity);
+		return entity;
 	}
 
 	public float getDistanceFromStart() {

@@ -2,16 +2,24 @@ package com.me4502.Cohesion.entities.agent;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.entities.Entity;
+import com.me4502.Cohesion.entities.agent.ai.AIFight;
 import com.me4502.Cohesion.entities.agent.ai.AIHoming;
 import com.me4502.Cohesion.map.MapInstance;
+import com.me4502.Cohesion.util.DamageSource;
 
 public class Flyer extends Agent {
+
+	AIHoming homingAI;
+	AIFight fightingAI;
 
 	public Flyer(MapInstance map, Sprite sprite, Vector2 position) {
 		super(map, sprite, position);
 
 		health = 5;
-		baseAI = new AIHoming(this, position);
+		//Order is important.
+		aiBehaviour.add(0, fightingAI = new AIFight(this));
+		aiBehaviour.add(1, homingAI = new AIHoming(this, position));
 	}
 
 	@Override
@@ -31,8 +39,11 @@ public class Flyer extends Agent {
 	}
 
 	@Override
-	public void damage() {
-		health -= 1;
+	public void damage(DamageSource source) {
+        health -= 1;
+
+        if(source instanceof Entity)
+            fightingAI.setTarget((Entity) source);
 	}
 
 }

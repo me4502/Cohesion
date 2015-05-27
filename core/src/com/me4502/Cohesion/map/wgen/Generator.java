@@ -5,7 +5,7 @@ import com.me4502.Cohesion.map.Chunk;
 @FunctionalInterface
 public interface Generator {
 
-	public static final int TILE_WIDTH = 64;
+	int TILE_WIDTH = 64;
 
-	public void generate(Chunk chunk);
+	void generate(Chunk chunk);
 }

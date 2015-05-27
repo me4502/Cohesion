@@ -6,14 +6,17 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
+import com.me4502.Cohesion.entities.player.Player;
+import com.me4502.Cohesion.entities.projectile.Projectile;
 import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.map.MapInstance;
 import com.me4502.Cohesion.tile.Tile;
 import com.me4502.Cohesion.util.Bounds;
 import com.me4502.Cohesion.util.Collidable;
+import com.me4502.Cohesion.util.DamageSource;
 import com.me4502.Cohesion.util.RectangularBounds;
 
-public abstract class Entity implements Collidable {
+public abstract class Entity implements Collidable, DamageSource {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
@@ -28,7 +31,7 @@ public abstract class Entity implements Collidable {
 
 	public MapInstance map;
 
-	boolean onGround;
+	public boolean onGround;
 	boolean remove;
 
 	public int timeSinceHit = 1000;
@@ -49,11 +52,18 @@ public abstract class Entity implements Collidable {
 
 		velocity = new Vector2(0,0);
 
-		if(!move(position)) {
-			remove = true;
-			return;
-		}
+        try {
+            if (!move(position)) {
+                remove = true;
+                return;
+            }
+        } catch(Exception e){}
+
 		sprite.setPosition(position.x, position.y);
+	}
+
+	public MapInstance getMap() {
+		return map;
 	}
 
 	public boolean shouldRemove() {
@@ -137,6 +147,8 @@ public abstract class Entity implements Collidable {
 
 	public void onCollision(Entity ent) {
 		if(ent.timeSinceHit > 5 && !(ent instanceof Player) && ent != this) {
+            if(ent instanceof Projectile && ((Projectile) ent).getShooter().equals(this))
+                return;
 			velocity.sub(ent.velocity.scl(ent.collisionDrag));
 			ent.timeSinceHit = 0;
 			timeSinceHit = 0;

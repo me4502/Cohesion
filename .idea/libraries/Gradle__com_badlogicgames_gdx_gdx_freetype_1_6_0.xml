@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.badlogicgames.gdx:gdx-freetype:1.6.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype/1.6.0/2ea60958fc2ee0c519583fcd1fbda39175665d33/gdx-freetype-1.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype/1.6.0/72d972d74cf129d38e40686c3239958a3f4dac9f/gdx-freetype-1.6.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -13,7 +13,7 @@ import com.me4502.Cohesion.map.wgen.WorldGenTypes;
 
 public class Map {
 
-	List<MapInstance> instances = new ArrayList<MapInstance>();
+	List<MapInstance> instances = new ArrayList<>();
 
 	int currentX = 150;
 
@@ -84,7 +84,7 @@ public class Map {
 			instance.update();
 
 		for(MapInstance instance : instances)
-			if(instance.player.getPosition().y < -128) {
+			if(instance.player.getPosition().y < -128 || instance.player.shouldRemove()) {
 				instances.remove(instance);
 				break;
 			}
@@ -108,7 +108,7 @@ public class Map {
 		Vector2 pos = instances.get(0).player.getPosition();
 
 		if(pos != null && pos.dst2(getCentrePoint()) < 32*32 && (int)pos.x > lastScoreX) {
-			giveScore(instances.size() * Math.abs(lastScoreX - (int)pos.x));
+			giveScore(instances.size() * Math.abs(lastScoreX - (int)pos.x)/8);
 			lastScoreX = (int)pos.x;
 		}
 	}
@@ -121,7 +121,7 @@ public class Map {
 	}
 
 	public void checkScore() {
-		if(score % 10000 == 0)
+		if(score % 1000 == 0)
 			//Give a reward.
 			mergeCount ++;
 	}

@@ -13,19 +13,10 @@ import com.me4502.Cohesion.util.DamageSource;
 
 public abstract class Agent extends Entity {
 
-	protected double health;
-
-	public List<AIBase> aiBehaviour = new LinkedList<AIBase>();
+	public List<AIBase> aiBehaviour = new LinkedList<>();
 
 	public Agent(MapInstance map, Sprite sprite, Vector2 position) {
 		super(map, sprite, position);
-	}
-
-	public abstract void damage(DamageSource source);
-
-	@Override
-	public boolean shouldRemove() {
-		return super.shouldRemove() || health < 0;
 	}
 
 	@Override
@@ -37,19 +28,5 @@ public abstract class Agent extends Entity {
 		}
 
 		super.update();
-	}
-
-	@Override
-	public boolean onCollision(Entity ent) {
-		if(ent instanceof Projectile && ent.timeSinceHit > 5) {
-			if(((Projectile) ent).getShooter().equals(this)) return false;
-			velocity.sub(ent.velocity.cpy().scl(ent.collisionDrag));
-			ent.timeSinceHit = 0;
-			timeSinceHit = 0;
-			damage(((Projectile) ent).getShooter());
-			return true;
-		}
-
-		return super.onCollision(ent);
 	}
 }

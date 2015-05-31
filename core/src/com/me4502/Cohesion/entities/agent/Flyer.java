@@ -17,6 +17,7 @@ public class Flyer extends Agent {
 		super(map, sprite, position);
 
 		health = 5;
+		maxHealth = health;
 		//Order is important.
 		aiBehaviour.add(0, fightingAI = new AIFight(this, 250));
 		aiBehaviour.add(1, homingAI = new AIHoming(this, position));
@@ -39,11 +40,17 @@ public class Flyer extends Agent {
 	}
 
 	@Override
-	public void damage(DamageSource source) {
+	public boolean damage(DamageSource source) {
         health -= 1;
 
-        if(source instanceof Entity)
+        if(source instanceof Entity) {
             fightingAI.setTarget((Entity) source);
+            if(health < 0 && ((Entity) source).health < ((Entity) source).maxHealth) {
+                ((Entity) source).health ++;
+            }
+        }
+
+        return true;
 	}
 
 }

@@ -9,6 +9,7 @@ import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.projectile.Projectile;
 import com.me4502.Cohesion.map.MapInstance;
+import com.me4502.Cohesion.util.DamageSource;
 
 public class Player extends Entity {
 
@@ -16,6 +17,9 @@ public class Player extends Entity {
 
 	public Player(MapInstance map, Sprite sprite, Vector2 position) {
 		super(map, sprite, position);
+
+		this.health = 5;
+		this.maxHealth = this.health;
 	}
 
 	@Override
@@ -39,7 +43,7 @@ public class Player extends Entity {
 		if(Gdx.input.isKeyPressed(Keys.D))
 			velocity.add((onGround ? 1 : 0.2f) * modifier, 0);
 		if((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.SPACE)) && onGround)
-			velocity.add(0, 10);
+			velocity.add(0, 7.5f);
 
 		if(Gdx.input.isKeyPressed(Keys.S) && lastShootTime > 30) {
 			Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 1));
@@ -53,5 +57,12 @@ public class Player extends Entity {
 		}
 
 		super.update();
+	}
+
+	@Override
+	public boolean damage(DamageSource source) {
+		health -= 1;
+
+		return true;
 	}
 }

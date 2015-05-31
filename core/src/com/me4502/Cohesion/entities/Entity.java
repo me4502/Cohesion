@@ -145,14 +145,16 @@ public abstract class Entity implements Collidable, DamageSource {
 		if(Cohesion.DEBUG) bounds.drawDebugBounds(position);
 	}
 
-	public void onCollision(Entity ent) {
+	public boolean onCollision(Entity ent) {
 		if(ent.timeSinceHit > 5 && !(ent instanceof Player) && ent != this) {
             if(ent instanceof Projectile && ((Projectile) ent).getShooter().equals(this))
-                return;
+                return false;
 			velocity.sub(ent.velocity.scl(ent.collisionDrag));
 			ent.timeSinceHit = 0;
 			timeSinceHit = 0;
 		}
+
+		return true;
 	}
 
 	protected boolean doesIntersect(Vector2 position) {
@@ -166,8 +168,8 @@ public abstract class Entity implements Collidable, DamageSource {
 		for(Entity ent : map.entities) {
 			if(ent == this || !ent.doesHardCollide()) continue;
 			if(getBoundingBox().doesIntersect(position, ent)) {
-				ent.onCollision(this);
-				return true;
+				if(ent.onCollision(this))
+					return true;
 			}
 		}
 

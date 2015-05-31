@@ -40,13 +40,16 @@ public abstract class Agent extends Entity {
 	}
 
 	@Override
-	public void onCollision(Entity ent) {
+	public boolean onCollision(Entity ent) {
 		if(ent instanceof Projectile && ent.timeSinceHit > 5) {
-			if(((Projectile) ent).getShooter().equals(this)) return;
+			if(((Projectile) ent).getShooter().equals(this)) return false;
 			velocity.sub(ent.velocity.cpy().scl(ent.collisionDrag));
 			ent.timeSinceHit = 0;
 			timeSinceHit = 0;
 			damage(((Projectile) ent).getShooter());
+			return true;
 		}
+
+		return super.onCollision(ent);
 	}
 }

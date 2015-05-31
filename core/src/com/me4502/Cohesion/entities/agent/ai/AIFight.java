@@ -45,7 +45,7 @@ public class AIFight extends AIBase {
 
         stallTime ++;
 
-        if(stallTime % 50 == 0)
+        if(stallTime % 25 == 0)
             setStatus(AIStatus.SEARCHING);
     }
 
@@ -62,7 +62,7 @@ public class AIFight extends AIBase {
     public void work() {
         if(lastShootTime > 50) {
             lastShootTime = 0;
-            Projectile projectile = (Projectile) agent.getMap().spawnEntity(new Projectile(agent.getMap(), new Sprite(Cohesion.instance.projectile), agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2), agent));
+            Projectile projectile = agent.getMap().spawnEntity(new Projectile(agent.getMap(), new Sprite(Cohesion.instance.projectile), agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2), agent));
 
             Vector2 targetPosition = target.getPosition();
             projectile.velocity.set(targetPosition.sub(agent.getPosition().sub(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2)).scl(0.1f));

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.tile.Tile;
@@ -61,5 +62,9 @@ public class Chunk {
 		Cohesion.instance.shapes.begin(ShapeType.Line);
 		Cohesion.instance.shapes.rect(startingX, 0, CHUNK_WIDTH, 1000);
 		Cohesion.instance.shapes.end();
+	}
+
+	public boolean contains(Vector2 position) {
+		return position.x >= startingX && position.x < startingX + CHUNK_WIDTH;
 	}
 }

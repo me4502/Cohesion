@@ -111,20 +111,31 @@ public class MapInstance {
 		while(!spawningQueue.isEmpty())
 			entities.add(spawningQueue.poll());
 
-		for(Chunk chunk : getLoadedChunks(Cohesion.instance.map.getCentrePoint()))
+		List<Chunk> loadedChunks = getLoadedChunks(Cohesion.instance.map.getCentrePoint());
+
+		for(Chunk chunk : loadedChunks)
 			if(chunk != null)
 				chunk.update();
 
 		Iterator<Entity> iter = entities.iterator();
 		while(iter.hasNext()) {
 			Entity ent = iter.next();
-			ent.update();
-			if(ent.shouldRemove())
-				iter.remove();
+			if(isPositionInChunks(ent.getPosition(), loadedChunks) || ent.getPosition().x <= 0) {
+				ent.update();
+				if (ent.shouldRemove())
+					iter.remove();
+			}
 		}
 	}
 
-	public Entity spawnEntity(Entity entity) {
+	public boolean isPositionInChunks(Vector2 position, List<Chunk> chunks) {
+		for(Chunk chunk : chunks)
+			if(chunk.contains(position))
+				return true;
+		return false;
+	}
+
+	public <T extends Entity> T spawnEntity(T entity) {
 
 		spawningQueue.add(entity);
 		return entity;

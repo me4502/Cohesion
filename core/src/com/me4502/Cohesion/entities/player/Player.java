@@ -46,9 +46,9 @@ public class Player extends Entity {
 
 			Vector2 flatMouse = new Vector2(mouse.x, mouse.y);
 
-			Projectile proj = (Projectile) map.spawnEntity(new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this));
+			Projectile projectile = map.spawnEntity(new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this));
 
-			proj.velocity.set(flatMouse.sub(getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)).scl(0.25f));
+			projectile.velocity.set(flatMouse.sub(getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)).scl(0.25f));
 			lastShootTime = 0;
 		}
 

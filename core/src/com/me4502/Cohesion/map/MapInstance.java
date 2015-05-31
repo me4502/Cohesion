@@ -20,7 +20,7 @@ import com.me4502.Cohesion.map.wgen.WorldGenTypes;
 
 public class MapInstance {
 
-	public List<Entity> entities = new ArrayList<Entity>();
+	public List<Entity> entities = new ArrayList<>();
 
 	Player player;
 
@@ -28,7 +28,7 @@ public class MapInstance {
 
 	Vector2 playerStartLocation;
 
-	private Queue<Entity> spawningQueue = new ArrayDeque<Entity>();
+	private Queue<Entity> spawningQueue = new ArrayDeque<>();
 
 	private static final int CHUNK_LOADING_RANGE = 1;
 
@@ -58,7 +58,7 @@ public class MapInstance {
 
 	public List<Chunk> getChunks(Vector2 position) {
 
-		List<Chunk> chunks = new ArrayList<Chunk>();
+		List<Chunk> chunks = new ArrayList<>();
 
 		for(Chunk chunk : this.chunks) {
 			if(chunk == null) continue;
@@ -71,7 +71,7 @@ public class MapInstance {
 
 	public List<Chunk> getLoadedChunks(Vector2 position) {
 
-		List<Chunk> chunks = new ArrayList<Chunk>();
+		List<Chunk> chunks = new ArrayList<>();
 
 		for(Chunk chunk : this.chunks) {
 			if(chunk == null) continue;

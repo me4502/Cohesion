@@ -42,8 +42,12 @@ public abstract class Entity implements Collidable, DamageSource {
 	public float groundDrag = 0.8f;
 
 	protected int age;
+    public int timeSinceMove;
 
-	public Entity(MapInstance map, Sprite sprite, Vector2 position) {
+    public double maxHealth;
+    public double health;
+
+    public Entity(MapInstance map, Sprite sprite, Vector2 position) {
 
 		this.map = map;
 		this.position = position;
@@ -62,12 +66,14 @@ public abstract class Entity implements Collidable, DamageSource {
 		sprite.setPosition(position.x, position.y);
 	}
 
-	public MapInstance getMap() {
+    public boolean damage(DamageSource source){return false;}
+
+    public MapInstance getMap() {
 		return map;
 	}
 
 	public boolean shouldRemove() {
-		return remove || position.y < -200;
+		return remove || position.y < -200 || (maxHealth > 0 && health < 0);
 	}
 
 	@Override
@@ -85,13 +91,17 @@ public abstract class Entity implements Collidable, DamageSource {
 	}
 
 	public void render(SpriteBatch batch) {
-		if(!shouldRemove())
-			sprite.draw(batch);
+		if(!shouldRemove()) {
+            if(maxHealth > 0)
+                sprite.setAlpha((float) Math.min(health / maxHealth + 0.05f, 1.0f));
+            sprite.draw(batch);
+        }
 	}
 
 	public void update() {
 
 		age ++;
+        timeSinceMove ++;
 
 		if(shouldRemove()) return;
 
@@ -102,7 +112,7 @@ public abstract class Entity implements Collidable, DamageSource {
 		if(hasGravity() && !onGround) //Only apply gravity if we aren't on the ground
 			velocity.sub(GRAVITY);
 
-		if(velocity.len2() > 0) {
+		if(velocity.len2() > 0.05f) {
 			boolean moved = false;
 			for(float i = 1f; i > 1f/COLLISION_ACCURACY; i-=1f/COLLISION_ACCURACY) {
 				Vector2 tmp = velocity.cpy().scl(i);
@@ -118,18 +128,22 @@ public abstract class Entity implements Collidable, DamageSource {
 							if(!move(getPosition().add(tmp)))
 								continue;
 							else {
+                                moved = true;
 								velocity = tmp;
 								break;
 							}
 						} else {
+                            moved = true;
 							velocity = tmp;
 							break;
 						}
 					} else {
+                        moved = true;
 						velocity = tmp;
 						break;
 					}
 				} else {
+					moved = true;
 					velocity = tmp;
 					break;
 				}
@@ -137,6 +151,8 @@ public abstract class Entity implements Collidable, DamageSource {
 
 			if(onGround && !moved)
 				velocity.y = 0f;
+
+            if(moved) timeSinceMove = 0;
 		}
 
 		velocity.scl(new Vector2(onGround ? groundDrag : airDrag, onGround ? groundDrag : airDrag));
@@ -145,17 +161,19 @@ public abstract class Entity implements Collidable, DamageSource {
 		if(Cohesion.DEBUG) bounds.drawDebugBounds(position);
 	}
 
-	public boolean onCollision(Entity ent) {
-		if(ent.timeSinceHit > 5 && !(ent instanceof Player) && ent != this) {
-            if(ent instanceof Projectile && ((Projectile) ent).getShooter().equals(this))
-                return false;
-			velocity.sub(ent.velocity.scl(ent.collisionDrag));
-			ent.timeSinceHit = 0;
-			timeSinceHit = 0;
-		}
+    public boolean onCollision(Entity ent) {
+        if(ent instanceof Projectile && ent.timeSinceHit > 5 && ((Projectile) ent).timeSinceMove < 5) {
+            if(((Projectile) ent).getShooter().equals(this)) return false;
+            velocity.sub(ent.velocity.cpy().scl(ent.collisionDrag));
+            ent.timeSinceHit = 0;
+            timeSinceHit = 0;
+            if(damage(((Projectile) ent).getShooter()))
+                ((Projectile) ent).age += 5000;
+            return true;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 	protected boolean doesIntersect(Vector2 position) {
 

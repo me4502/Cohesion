@@ -18,7 +18,7 @@ public class Flyer extends Agent {
 
 		health = 5;
 		//Order is important.
-		aiBehaviour.add(0, fightingAI = new AIFight(this));
+		aiBehaviour.add(0, fightingAI = new AIFight(this, 250));
 		aiBehaviour.add(1, homingAI = new AIHoming(this, position));
 	}
 

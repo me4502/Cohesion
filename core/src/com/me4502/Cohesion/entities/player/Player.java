@@ -42,23 +42,16 @@ public class Player extends Entity {
 			velocity.add(0, 10);
 
 		if(Gdx.input.isKeyPressed(Keys.S) && lastShootTime > 30) {
-			Projectile proj = null;
-
 			Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 1));
 
 			Vector2 flatMouse = new Vector2(mouse.x, mouse.y);
 
-			map.spawnEntity(proj = new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this));
+			Projectile proj = (Projectile) map.spawnEntity(new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this));
 
 			proj.velocity.set(flatMouse.sub(getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)).scl(0.25f));
 			lastShootTime = 0;
 		}
 
 		super.update();
-	}
-
-	@Override
-	public boolean doesHardCollide() {
-		return false;
 	}
 }

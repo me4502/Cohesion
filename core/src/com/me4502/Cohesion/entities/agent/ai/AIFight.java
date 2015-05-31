@@ -5,45 +5,75 @@ import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.agent.Agent;
+import com.me4502.Cohesion.entities.player.Player;
 import com.me4502.Cohesion.entities.projectile.Projectile;
+
+import java.util.function.Predicate;
 
 public class AIFight extends AIBase {
 
-    Entity target;
-    int lastShootTime;
+    private static Predicate<Entity> defaultPredicate = (entity) -> entity instanceof Player;
 
-    public AIFight(Agent agent) {
+    Entity target;
+    double attackRadius;
+    Predicate<Entity> targetPredicate;
+
+    int lastShootTime;
+    int stallTime;
+
+    public AIFight(Agent agent, double attackRadius, Predicate<Entity> targetPredicate) {
         super(agent);
+
+        this.attackRadius = attackRadius;
+        this.targetPredicate = targetPredicate;
+    }
+
+    public AIFight(Agent agent, double attackRadius) {
+        this(agent, attackRadius, defaultPredicate);
     }
 
     public void setTarget(Entity target) {
         this.target = target;
         if(target == null)
-            setStatus(AIStatus.STALLING);
+            setStatus(AIStatus.DONE);
         else
             setStatus(AIStatus.WORKING);
     }
 
     @Override
     public void stall() {
+
+        stallTime ++;
+
+        if(stallTime % 50 == 0)
+            setStatus(AIStatus.SEARCHING);
     }
 
     @Override
     public void search() {
+        agent.getMap().entities.stream()
+                .filter(entity -> targetPredicate.test(entity) && agent.getPosition().dst2(entity.getPosition()) <= attackRadius*attackRadius)
+                .forEach(this::setTarget);
+        if(target == null)
+            setStatus(AIStatus.STALLING);
     }
 
     @Override
     public void work() {
         if(lastShootTime > 50) {
             lastShootTime = 0;
-            Projectile projectile = (Projectile) agent.getMap().spawnEntity(new Projectile(agent.getMap(), new Sprite(Cohesion.instance.projectile), agent.getPosition(), agent));
+            Projectile projectile = (Projectile) agent.getMap().spawnEntity(new Projectile(agent.getMap(), new Sprite(Cohesion.instance.projectile), agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2), agent));
 
-            Vector2 offset = target.getPosition().sub(projectile.getPosition());
-            projectile.velocity.set(projectile.getPosition().add(offset.setLength2(0.5f)));
-
+            Vector2 targetPosition = target.getPosition();
+            projectile.velocity.set(targetPosition.sub(agent.getPosition().sub(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2)).scl(0.1f));
         }
 
         lastShootTime ++;
+
+        if(target == null || target.shouldRemove() || agent.getPosition().dst2(target.getPosition()) > attackRadius*attackRadius*2) { //Only forget after leaves distance doubled.
+            setTarget(null);
+            setStatus(AIStatus.STALLING);
+        }
     }
 
     @Override

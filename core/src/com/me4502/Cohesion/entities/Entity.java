@@ -1,12 +1,9 @@
 package com.me4502.Cohesion.entities;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
-import com.me4502.Cohesion.entities.player.Player;
 import com.me4502.Cohesion.entities.projectile.Projectile;
 import com.me4502.Cohesion.map.Chunk;
 import com.me4502.Cohesion.map.MapInstance;
@@ -16,13 +13,15 @@ import com.me4502.Cohesion.util.Collidable;
 import com.me4502.Cohesion.util.DamageSource;
 import com.me4502.Cohesion.util.RectangularBounds;
 
+import java.util.List;
+
 public abstract class Entity implements Collidable, DamageSource {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
 	public static float COLLISION_ACCURACY = 100f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
 
-	Vector2 position;
+	private final Vector2 position;
 	public Vector2 velocity;
 
 	public Sprite sprite;
@@ -197,7 +196,7 @@ public abstract class Entity implements Collidable, DamageSource {
 	public boolean move(Vector2 position) {
 
 		if(doesIntersect(position)) return false;
-		this.position = position;
+		this.position.set(position);
 		return true;
 	}
 

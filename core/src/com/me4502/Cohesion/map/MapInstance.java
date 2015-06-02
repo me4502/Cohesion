@@ -1,22 +1,22 @@
 package com.me4502.Cohesion.map;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
+import com.me4502.Cohesion.entities.agent.Agent;
 import com.me4502.Cohesion.entities.player.Player;
-import com.me4502.Cohesion.entities.agent.Flyer;
 import com.me4502.Cohesion.map.wgen.Generator;
 import com.me4502.Cohesion.map.wgen.WorldGenTypes;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Queue;
 
 public class MapInstance {
 
@@ -52,8 +52,6 @@ public class MapInstance {
 
 		Generator gen = WorldGenTypes.getGenerator(generatorId);
 		gen.generate(chunks[chunkIndex]);
-
-		spawnEntity(new Flyer(this, new Sprite(Cohesion.instance.player), new Vector2(chunkIndex * Chunk.CHUNK_WIDTH, 200)));
 	}
 
 	public List<Chunk> getChunks(Vector2 position) {
@@ -108,8 +106,12 @@ public class MapInstance {
 
 	public void update() {
 
-		while(!spawningQueue.isEmpty())
-			entities.add(spawningQueue.poll());
+		while(!spawningQueue.isEmpty()) {
+			Entity ent = spawningQueue.poll();
+			if(ent instanceof Agent)
+				((Agent) ent).initializeAI();
+			entities.add(ent);
+		}
 
 		List<Chunk> loadedChunks = getLoadedChunks(Cohesion.instance.map.getCentrePoint());
 

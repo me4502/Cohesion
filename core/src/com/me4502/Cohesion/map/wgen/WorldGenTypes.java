@@ -6,7 +6,8 @@ public enum WorldGenTypes {
 	GRATE(1, new GrateGenerator()),
 	FLAT_PLATFORM(2, new FlatPlatformGenerator()),
 	VARIABLE_PLATFORM(3, new VariablePlatformGenerator()),
-	BLOCKADE_DROP(4, new BlockadeDropGenerator());
+	BLOCKADE_DROP(4, new BlockadeDropGenerator()),
+	NEST(5, new NestGenerator());
 
 	private int id;
 	private Generator generator;

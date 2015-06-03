@@ -25,13 +25,16 @@ public class Cohesion extends ApplicationAdapter {
 
 	public static final boolean DEBUG = false;
 
+	public static final int AA_AMOUNT = 1; //Default is 1
+    public static final int SHADER_QUALITY_LEVEL = 8; //Default is 8
+
 	SpriteBatch batch;
 	public ShapeRenderer shapes;
 
 	FrameBuffer buffer;
 
 	/* Blur Data */
-	public static final int FBO_SIZE = 1024;
+	public static final int FBO_SIZE = 128 * SHADER_QUALITY_LEVEL;
 	public static final int BLUR_RADIUS = 5;
 	FrameBuffer blurA, blurB;
 
@@ -73,10 +76,10 @@ public class Cohesion extends ApplicationAdapter {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
-		camera = new OrthographicCamera(640, 640 * (h / w));
+		camera = new OrthographicCamera(640, 640 * (h/w));
 		camera.update();
 
-		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth, (int)camera.viewportHeight, false, true); //Super Sampling
+		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth * AA_AMOUNT, (int)camera.viewportHeight * AA_AMOUNT, false, true); //Super Sampling
 
 		blurA = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
 		blurB = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
@@ -107,21 +110,21 @@ public class Cohesion extends ApplicationAdapter {
 		if(background.getLog().length() > 0 && !background.getLog().equals("No errors.\n"))
 			System.out.println(background.getLog());
 
-		player = new Texture("data/entity/player.png");
-		platform = new Texture("data/platforms/platform.png");
-		projectile = new Texture("data/entity/projectile.png");
-		blockade = new Texture("data/platforms/blockade.png");
-		ground = new Texture("data/platforms/ground.png");
+		player = new Texture(Gdx.files.internal("data/entity/player.png"), Format.RGBA8888, true);
+		platform = new Texture(Gdx.files.internal("data/platforms/platform.png"), Format.RGBA8888, true);
+		projectile = new Texture(Gdx.files.internal("data/entity/projectile.png"), Format.RGBA8888, true);
+		blockade = new Texture(Gdx.files.internal("data/platforms/blockade.png"), Format.RGBA8888, true);
+		ground = new Texture(Gdx.files.internal("data/platforms/ground.png"), Format.RGBA8888, true);
 
 		map = new Map();
 
-		standardMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		standardMatrix.setToOrtho2D(0, 0, buffer.getWidth(), buffer.getHeight());
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 24;
-		parameter.magFilter = TextureFilter.MipMapNearestNearest;
-		parameter.minFilter = TextureFilter.MipMapNearestNearest;
+		parameter.size = 24*AA_AMOUNT;
+		parameter.magFilter = TextureFilter.MipMapLinearLinear;
+		parameter.minFilter = TextureFilter.MipMapLinearLinear;
 		parameter.genMipMaps = true;
 		mainFont = generator.generateFont(parameter);
 		generator.dispose();
@@ -198,7 +201,7 @@ public class Cohesion extends ApplicationAdapter {
 			blur.setUniformf("radius", BLUR_RADIUS);
 			blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
 
-			batch.draw(blurA.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
+			batch.draw(blurA.getColorBufferTexture(), 0, 0, camera.viewportWidth*AA_AMOUNT, camera.viewportHeight*AA_AMOUNT, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
 			batch.flush();
 
 			blurB.end();
@@ -224,7 +227,7 @@ public class Cohesion extends ApplicationAdapter {
 			blur.setUniformf("resolution", FBO_SIZE);
 			blur.setUniformf("radius", BLUR_RADIUS);
 			blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
-			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
+			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth*AA_AMOUNT, camera.viewportHeight*AA_AMOUNT, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
 
 			batch.setProjectionMatrix(camera.combined);
 		}
@@ -244,12 +247,12 @@ public class Cohesion extends ApplicationAdapter {
 		batch.setProjectionMatrix(standardMatrix);
 
 		batch.begin();
-		batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+		batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth*AA_AMOUNT, camera.viewportHeight*AA_AMOUNT, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 
 		String text = "Score " + map.score;
 
 		mainFont.setFixedWidthGlyphs("Score XXXXX");
-		mainFont.draw(batch, text, camera.viewportWidth/2 - 35, camera.viewportHeight - 20);
+		mainFont.draw(batch, text, (camera.viewportWidth*AA_AMOUNT)/2 - 35, (camera.viewportHeight*AA_AMOUNT) - 20);
 		batch.end();
 	}
 }

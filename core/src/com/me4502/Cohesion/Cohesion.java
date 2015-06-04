@@ -53,6 +53,7 @@ public class Cohesion extends ApplicationAdapter {
 
 	/* Textures */
 	public Texture player;
+    public Texture flyer;
 	public Texture platform;
 	public Texture projectile;
 	public Texture blockade;
@@ -81,8 +82,8 @@ public class Cohesion extends ApplicationAdapter {
 
 		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth * AA_AMOUNT, (int)camera.viewportHeight * AA_AMOUNT, false, true); //Super Sampling
 
-		blurA = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
-		blurB = new FrameBuffer(Format.RGBA8888, FBO_SIZE, FBO_SIZE, false);
+		blurA = new FrameBuffer(Format.RGB888, FBO_SIZE, FBO_SIZE, false);
+		blurB = new FrameBuffer(Format.RGB888, FBO_SIZE, FBO_SIZE, false);
 
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
@@ -111,6 +112,7 @@ public class Cohesion extends ApplicationAdapter {
 			System.out.println(background.getLog());
 
 		player = new Texture(Gdx.files.internal("data/entity/player.png"), Format.RGBA8888, true);
+		flyer = new Texture(Gdx.files.internal("data/entity/flyer.png"), Format.RGBA8888, true);
 		platform = new Texture(Gdx.files.internal("data/platforms/platform.png"), Format.RGBA8888, true);
 		projectile = new Texture(Gdx.files.internal("data/entity/projectile.png"), Format.RGBA8888, true);
 		blockade = new Texture(Gdx.files.internal("data/platforms/blockade.png"), Format.RGBA8888, true);

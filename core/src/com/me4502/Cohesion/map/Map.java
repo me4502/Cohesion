@@ -1,8 +1,5 @@
 package com.me4502.Cohesion.map;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -10,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.wgen.WorldGenTypes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Map {
 
@@ -22,7 +22,7 @@ public class Map {
 
 	int updateTick = 0;
 
-	int mergeCount = 1;
+	int mergeCount = 2;
 
 	Vector2 centrePoint = new Vector2(0,0);
 
@@ -47,7 +47,19 @@ public class Map {
 
 		for(MapInstance instance : instances)
 			instance.render(batch);
-	}
+    }
+
+    public void renderGui(SpriteBatch batch) {
+
+        String text = "Score " + score;
+
+        Cohesion.instance.mainFont.setFixedWidthGlyphs("Score XXXXX");
+        Cohesion.instance.mainFont.draw(batch, text, Cohesion.instance.camera.viewportWidth/2 - 35, Cohesion.instance.camera.viewportHeight - 20);
+
+        for(int i = 0; i < mergeCount; i++) {
+            batch.draw(Cohesion.instance.mergeIcon, 16 * i + 16, Cohesion.instance.camera.viewportHeight - 32);
+        }
+    }
 
 	public boolean isSlowed() {
 		return Gdx.input.isKeyPressed(Keys.SHIFT_LEFT);

@@ -19,7 +19,7 @@ public abstract class Entity implements Collidable, DamageSource {
 
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
-	public static float COLLISION_ACCURACY = 100f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
+	public static float COLLISION_ACCURACY = 50f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
 
 	private final Vector2 position;
 	public Vector2 velocity;
@@ -114,36 +114,33 @@ public abstract class Entity implements Collidable, DamageSource {
 		if(velocity.len2() > 0.05f) {
 			boolean moved = false;
 			for(float i = 1f; i > 1f/COLLISION_ACCURACY; i-=1f/COLLISION_ACCURACY) {
-				Vector2 tmp = velocity.cpy().scl(i);
-				Vector2 cpy = tmp.cpy();
+				Vector2 tmp = velocity.cpy();
 				if(!move(getPosition().add(tmp))) {
-					tmp = tmp.scl(collisionDrag,1.0f);
+					tmp = velocity.cpy().scl(i * collisionDrag,1.0f);
 					if(!move(getPosition().add(tmp))) {
-						tmp = cpy.cpy();
-						tmp = tmp.scl(1.0f,collisionDrag);
+						tmp = velocity.cpy().scl(1.0f, i * collisionDrag);
 						if(!move(getPosition().add(tmp))) {
-							tmp = cpy.cpy();
-							tmp = tmp.scl(collisionDrag,collisionDrag);
+							tmp = velocity.cpy().scl(i * collisionDrag, i * collisionDrag);
 							if(!move(getPosition().add(tmp)))
 								continue;
 							else {
                                 moved = true;
-								velocity = tmp;
+								velocity.set(tmp);
 								break;
 							}
 						} else {
                             moved = true;
-							velocity = tmp;
+							velocity.set(tmp);
 							break;
 						}
 					} else {
                         moved = true;
-						velocity = tmp;
+						velocity.set(tmp);
 						break;
 					}
 				} else {
 					moved = true;
-					velocity = tmp;
+					velocity.set(tmp);
 					break;
 				}
 			}
@@ -198,6 +195,18 @@ public abstract class Entity implements Collidable, DamageSource {
 		if(doesIntersect(position)) return false;
 		this.position.set(position);
 		return true;
+	}
+
+	public boolean tryMove(Vector2 position) {
+
+		for(float i = 1.0f; i > 0.0f; i -= 0.01f) {
+			Vector2 diff = getPosition().sub(position);
+
+			if(move(getPosition().lerp(getPosition().sub(diff), 1f-i)))
+				return true;
+		}
+
+		return false;
 	}
 
 	public abstract boolean hasGravity();

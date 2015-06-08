@@ -4,10 +4,12 @@ buildscript {
         jcenter {
 			url "http://jcenter.bintray.com/"
 		}
+        flatDir dirs: 'proguard/lib'
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
         classpath 'org.robovm:robovm-gradle-plugin:1.0.0'
+        classpath ':proguard:'
     }
 }
 

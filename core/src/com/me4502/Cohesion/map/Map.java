@@ -108,7 +108,7 @@ public class Map {
 			instances.clear();
 			gameOver();
 			return; //Do stuff.
-		}
+	    }
 
 		if(instances.get(0).getChunks(getCentrePoint().add(Chunk.CHUNK_WIDTH, 0)).isEmpty()) {
 

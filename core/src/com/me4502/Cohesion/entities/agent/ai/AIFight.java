@@ -14,7 +14,6 @@ public class AIFight extends AIBase {
 
     private static Predicate<Entity> defaultPredicate = (entity) -> entity instanceof Player;
 
-    Entity target;
     double attackRadius;
     Predicate<Entity> targetPredicate;
 
@@ -33,7 +32,7 @@ public class AIFight extends AIBase {
     }
 
     public void setTarget(Entity target) {
-        this.target = target;
+        agent.setTarget(target);
         if(target == null)
             setStatus(AIStatus.DONE);
         else
@@ -54,7 +53,7 @@ public class AIFight extends AIBase {
         agent.getMap().entities.stream()
                 .filter(entity -> targetPredicate.test(entity) && agent.getPosition().dst2(entity.getPosition()) <= attackRadius*attackRadius)
                 .forEach(this::setTarget);
-        if(target == null)
+        if(agent.getTarget() == null)
             setStatus(AIStatus.STALLING);
     }
 
@@ -64,13 +63,13 @@ public class AIFight extends AIBase {
             lastShootTime = 0;
             Projectile projectile = agent.getMap().spawnEntity(new Projectile(agent.getMap(), new Sprite(Cohesion.instance.projectile), agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2), agent));
 
-            Vector2 targetPosition = target.getPosition().add(target.sprite.getWidth()/2, target.sprite.getHeight()/2);
+            Vector2 targetPosition = agent.getTarget().getPosition().add(agent.getTarget().sprite.getWidth()/2, agent.getTarget().sprite.getHeight()/2);
             projectile.velocity.set(targetPosition.sub(agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2))).setLength(50);
         }
 
         lastShootTime ++;
 
-        if(target == null || target.shouldRemove() || agent.getPosition().dst2(target.getPosition()) > attackRadius*attackRadius*2) { //Only forget after leaves distance doubled.
+        if(agent.getTarget() == null || agent.getTarget().shouldRemove() || agent.getPosition().dst2(agent.getTarget().getPosition()) > attackRadius*attackRadius*2) { //Only forget after leaves distance doubled.
             setTarget(null);
             setStatus(AIStatus.STALLING);
         }

@@ -12,12 +12,21 @@ import java.util.List;
 public abstract class Agent extends Entity {
 
 	public List<AIBase> aiBehaviour = new LinkedList<>();
+	Entity target;
 
 	public Agent(MapInstance map, Sprite sprite, Vector2 position) {
 		super(map, sprite, position);
 	}
 
 	public abstract void initializeAI();
+
+    public Entity getTarget() {
+        return target;
+    }
+
+    public void setTarget(Entity entity) {
+        this.target = entity;
+    }
 
 	@Override
 	public void update() {

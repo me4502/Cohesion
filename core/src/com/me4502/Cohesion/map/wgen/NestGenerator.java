@@ -19,6 +19,6 @@ public class NestGenerator implements Generator {
                 chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 80)));
         }
 
-        chunk.addEntity(new Flyer(chunk.map, new Sprite(Cohesion.instance.player), new Vector2(Chunk.CHUNK_WIDTH/2, 200)));
+        chunk.addEntity(new Flyer(chunk.map, new Sprite(Cohesion.instance.flyer), new Vector2(Chunk.CHUNK_WIDTH/2, 200)));
     }
 }

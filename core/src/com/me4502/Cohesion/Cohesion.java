@@ -1,7 +1,5 @@
 package com.me4502.Cohesion;
 
-import java.util.Random;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -20,6 +18,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.me4502.Cohesion.map.Map;
+
+import java.util.Random;
 
 public class Cohesion extends ApplicationAdapter {
 
@@ -54,6 +54,7 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture projectile;
 	public Texture blockade;
 	public Texture ground;
+	public Texture mergeIcon;
 
 	public Texture lastFrame;
 
@@ -112,6 +113,7 @@ public class Cohesion extends ApplicationAdapter {
 		projectile = new Texture("data/entity/projectile.png");
 		blockade = new Texture("data/platforms/blockade.png");
 		ground = new Texture("data/platforms/ground.png");
+		mergeIcon = new Texture("data/icons/merge_icon.png");
 
 		map = new Map();
 
@@ -246,10 +248,8 @@ public class Cohesion extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth, camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 
-		String text = "Score " + map.score;
+        map.renderGui(batch);
 
-		mainFont.setFixedWidthGlyphs("Score XXXXX");
-		mainFont.draw(batch, text, camera.viewportWidth/2 - 35, camera.viewportHeight - 20);
 		batch.end();
 	}
 }

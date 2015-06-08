@@ -83,8 +83,12 @@ public class Map {
 
 		if(Gdx.input.isKeyJustPressed(Keys.E) && mergeCount > 0) {
 			boolean success = false;
-			for(MapInstance instance : instances)
-				if(instance.player.move(Cohesion.instance.map.getCentrePoint())) success = true;
+			for(MapInstance instance : instances) {
+                if (instance.player.tryMove(Cohesion.instance.map.getCentrePoint())) {
+                    instance.player.velocity.set(0,0);
+                    success = true;
+                }
+            }
 			if(success)
 				mergeCount --;
 		}
@@ -92,8 +96,7 @@ public class Map {
 		if(Gdx.input.isKeyJustPressed(Keys.R))
 			gameOver();
 
-		for(MapInstance instance : instances)
-			instance.update();
+        instances.forEach(MapInstance::update);
 
 		for(MapInstance instance : instances)
 			if(instance.player.getPosition().y < -128 || instance.player.shouldRemove()) {

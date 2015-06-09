@@ -16,18 +16,22 @@ public class Tile implements Collidable {
 	public Sprite sprite;
 
 	Bounds bounds;
+	int scaleFactor;
 
 	public MapInstance map;
 
-	public Tile(MapInstance map, Sprite sprite, Vector2 position) {
+	public Tile(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
 
 		this.map = map;
 		this.position = position;
-		bounds = new RectangularBounds(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
+		this.scaleFactor = scaleFactor;
+
+        this.sprite = sprite;
+        this.sprite.setSize(sprite.getTexture().getWidth()/scaleFactor, sprite.getTexture().getHeight()/scaleFactor);
+        this.scaleFactor = scaleFactor;
+        bounds = new RectangularBounds((int) sprite.getWidth(), (int) sprite.getHeight());
 
 		sprite.setPosition(position.x, position.y);
-
-		this.sprite = sprite;
 	}
 
 	@Override

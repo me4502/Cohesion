@@ -14,12 +14,12 @@ public class BlockadeDropGenerator implements Generator {
 
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH)
 			if(i / TILE_WIDTH == 0)
-				chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 72)));
+				chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 72), Cohesion.TEXTURE_SIZE / 32));
 			else if(i / TILE_WIDTH == 1)
-				chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 100)));
+				chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 100), Cohesion.TEXTURE_SIZE / 32));
 			else if(i / TILE_WIDTH > 2) {
-				chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 0)));
-				chunk.addEntity(new Blockade(chunk.map, new Sprite(Cohesion.instance.blockade), new Vector2(TILE_WIDTH*3, 64 + i/TILE_WIDTH*64)));
+				chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 0), Cohesion.TEXTURE_SIZE / 32));
+				chunk.addEntity(new Blockade(chunk.map, new Sprite(Cohesion.instance.blockade), new Vector2(TILE_WIDTH*3, 64 + i/TILE_WIDTH*64), Cohesion.TEXTURE_SIZE / 32));
 			}
 	}
 

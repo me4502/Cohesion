@@ -27,6 +27,7 @@ public class Cohesion extends ApplicationAdapter {
 
 	public static final int AA_AMOUNT = 1; //Default is 1
     public static final int SHADER_QUALITY_LEVEL = 8; //Default is 8
+	public static final int TEXTURE_SIZE = 64; //Default is 32
 
 	SpriteBatch batch;
 	public ShapeRenderer shapes;
@@ -112,13 +113,13 @@ public class Cohesion extends ApplicationAdapter {
 		if(background.getLog().length() > 0 && !background.getLog().equals("No errors.\n"))
 			System.out.println(background.getLog());
 
-		player = new Texture(Gdx.files.internal("data/entity/player.png"), Format.RGBA8888, true);
-		flyer = new Texture(Gdx.files.internal("data/entity/flyer.png"), Format.RGBA8888, true);
-		platform = new Texture(Gdx.files.internal("data/platforms/platform.png"), Format.RGBA8888, true);
-		projectile = new Texture(Gdx.files.internal("data/entity/projectile.png"), Format.RGBA8888, true);
-		blockade = new Texture(Gdx.files.internal("data/platforms/blockade.png"), Format.RGBA8888, true);
-		ground = new Texture(Gdx.files.internal("data/platforms/ground.png"), Format.RGBA8888, true);
-		mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon.png"), Format.RGBA8888, true);
+		player = new Texture(Gdx.files.internal("data/entity/player." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
+		flyer = new Texture(Gdx.files.internal("data/entity/flyer." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
+		platform = new Texture(Gdx.files.internal("data/platforms/platform." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
+		projectile = new Texture(Gdx.files.internal("data/entity/projectile." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
+		blockade = new Texture(Gdx.files.internal("data/platforms/blockade." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
+		ground = new Texture(Gdx.files.internal("data/platforms/ground." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
+		mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
 
 		map = new Map();
 

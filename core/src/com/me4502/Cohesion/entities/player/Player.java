@@ -15,8 +15,8 @@ public class Player extends Entity {
 
 	int lastShootTime = 0;
 
-	public Player(MapInstance map, Sprite sprite, Vector2 position) {
-		super(map, sprite, position);
+	public Player(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
+		super(map, sprite, position, scaleFactor);
 
 		this.health = 5;
 		this.maxHealth = this.health;
@@ -50,7 +50,7 @@ public class Player extends Entity {
 
 			Vector2 flatMouse = new Vector2(mouse.x, mouse.y);
 
-			Projectile projectile = map.spawnEntity(new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this));
+			Projectile projectile = map.spawnEntity(new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this.scaleFactor, this));
 
 			projectile.velocity.set(flatMouse.sub(getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)).scl(0.25f));
 			lastShootTime = 0;

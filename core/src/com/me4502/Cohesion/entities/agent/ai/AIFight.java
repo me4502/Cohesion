@@ -61,7 +61,7 @@ public class AIFight extends AIBase {
     public void work() {
         if(lastShootTime > 50) {
             lastShootTime = 0;
-            Projectile projectile = agent.getMap().spawnEntity(new Projectile(agent.getMap(), new Sprite(Cohesion.instance.projectile), agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2), agent));
+            Projectile projectile = agent.getMap().spawnEntity(new Projectile(agent.getMap(), new Sprite(Cohesion.instance.projectile), agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2), agent.scaleFactor, agent));
 
             Vector2 targetPosition = agent.getTarget().getPosition().add(agent.getTarget().sprite.getWidth()/2, agent.getTarget().sprite.getHeight()/2);
             projectile.velocity.set(targetPosition.sub(agent.getPosition().add(agent.sprite.getWidth() / 2, agent.sprite.getHeight() / 2))).setLength(50);

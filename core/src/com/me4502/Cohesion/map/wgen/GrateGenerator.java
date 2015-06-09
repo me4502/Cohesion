@@ -25,7 +25,7 @@ public class GrateGenerator implements Generator {
 
 			blankSpaces = 0;
 
-			chunk.addTile(new Ground(chunk.map, new Sprite(Cohesion.instance.ground), new Vector2(i, 32)));
+			chunk.addTile(new Ground(chunk.map, new Sprite(Cohesion.instance.ground), new Vector2(i, 32), Cohesion.TEXTURE_SIZE / 32));
 		}
 	}
 

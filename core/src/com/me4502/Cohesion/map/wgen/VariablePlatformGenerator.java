@@ -31,7 +31,7 @@ public class VariablePlatformGenerator implements Generator {
 
 			if(lastY < START_Y) lastY = START_Y;
 
-			chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, lastY)));
+			chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, lastY), Cohesion.TEXTURE_SIZE / 32));
 		}
 
 	}

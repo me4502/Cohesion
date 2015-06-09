@@ -9,8 +9,8 @@ public class Projectile extends Entity {
 
 	Entity shooter;
 
-	public Projectile(MapInstance map, Sprite sprite, Vector2 position, Entity shooter) {
-		super(map, sprite, position);
+	public Projectile(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor, Entity shooter) {
+		super(map, sprite, position, scaleFactor);
 
         this.shooter = shooter;
         collisionDrag = -0.3f;

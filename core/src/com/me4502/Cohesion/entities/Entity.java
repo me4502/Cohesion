@@ -112,43 +112,46 @@ public abstract class Entity implements Collidable, DamageSource {
 			velocity.sub(GRAVITY);
 
 		if(velocity.len2() > 0.05f) {
-			boolean moved = false;
-			for(float i = 1f; i > 1f/COLLISION_ACCURACY; i-=1f/COLLISION_ACCURACY) {
-				Vector2 tmp = velocity.cpy();
-				if(!move(getPosition().add(tmp))) {
-					tmp = velocity.cpy().scl(i * collisionDrag,1.0f);
-					if(!move(getPosition().add(tmp))) {
-						tmp = velocity.cpy().scl(1.0f, i * collisionDrag);
-						if(!move(getPosition().add(tmp))) {
-							tmp = velocity.cpy().scl(i * collisionDrag, i * collisionDrag);
-							if(!move(getPosition().add(tmp)))
-								continue;
-							else {
-                                moved = true;
-								velocity.set(tmp);
-								break;
-							}
-						} else {
-                            moved = true;
-							velocity.set(tmp);
-							break;
-						}
-					} else {
-                        moved = true;
-						velocity.set(tmp);
-						break;
-					}
-				} else {
-					moved = true;
-					velocity.set(tmp);
-					break;
-				}
-			}
+            Vector2 bestMove = null;
+            Vector2 newVelocity = null;
+            if (doesIntersect(getPosition().add(velocity))) {
+                for (float i = 0f; i <= 1f; i += 1f/COLLISION_ACCURACY) {
+                    Vector2 tmp = velocity.cpy().scl(i, 1.0f);
+                    if (doesIntersect(getPosition().add(tmp))) {
+                        tmp = velocity.cpy().scl(1.0f, i);
+                        if (doesIntersect(getPosition().add(tmp))) {
+                            tmp = velocity.cpy().scl(i, i);
+                            if (doesIntersect(getPosition().add(tmp))) {
+                                //Can't move here.
+                                break;
+                            } else {
+                                bestMove = getPosition().add(tmp);
+                                newVelocity = tmp.cpy();
+                                //velocity.set(velocity.x * (1f-collisionDrag), velocity.y);
+                            }
+                        } else {
+                            bestMove = getPosition().add(tmp);
+                            newVelocity = tmp.cpy();
+                            //velocity.set(velocity.x, velocity.y * (1f-collisionDrag));
+                        }
+                    } else {
+                        bestMove = getPosition().add(tmp);
+                        newVelocity = tmp.cpy();
+                    }
+                }
+            } else{
+                bestMove = getPosition().add(velocity);
+            }
 
-			if(onGround && !moved)
+			if(onGround && bestMove == null)
 				velocity.y = 0f;
 
-            if(moved) timeSinceMove = 0;
+            if(bestMove != null) {
+                timeSinceMove = 0;
+                move(bestMove);
+                if(newVelocity != null)
+                    velocity.set(newVelocity);
+            }
 		}
 
 		velocity.scl(new Vector2(onGround ? groundDrag : airDrag, onGround ? groundDrag : airDrag));
@@ -199,12 +202,23 @@ public abstract class Entity implements Collidable, DamageSource {
 
 	public boolean tryMove(Vector2 position) {
 
-		for(float i = 1.0f; i > 0.0f; i -= 0.01f) {
+        Vector2 bestMove = null;
+
+        for(float i = 1f; i > 0.0f; i -= 0.01f) {
 			Vector2 diff = getPosition().sub(position);
 
-			if(move(getPosition().lerp(getPosition().sub(diff), 1f-i)))
-				return true;
+            Vector2 point = getPosition().lerp(getPosition().sub(diff), 1-i);
+
+			if(!doesIntersect(point))
+                bestMove = point;
+            else
+                break;
 		}
+
+        if(bestMove != null) {
+            this.position.set(bestMove);
+            return true;
+        }
 
 		return false;
 	}

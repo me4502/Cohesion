@@ -15,8 +15,8 @@ public class Flyer extends Agent {
 	AIFight fightingAI;
     AIFollow followAI;
 
-	public Flyer(MapInstance map, Sprite sprite, Vector2 position) {
-		super(map, sprite, position);
+	public Flyer(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
+		super(map, sprite, position, scaleFactor);
 
 		health = 5;
 		maxHealth = health;

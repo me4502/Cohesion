@@ -21,6 +21,8 @@ public abstract class Entity implements Collidable, DamageSource {
 
 	public static float COLLISION_ACCURACY = 50f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
 
+    public int scaleFactor;
+
 	private final Vector2 position;
 	public Vector2 velocity;
 
@@ -46,12 +48,15 @@ public abstract class Entity implements Collidable, DamageSource {
     public double maxHealth;
     public double health;
 
-    public Entity(MapInstance map, Sprite sprite, Vector2 position) {
+    public Entity(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
 
 		this.map = map;
 		this.position = position;
 		this.sprite = sprite;
-		bounds = new RectangularBounds(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
+        this.sprite.setSize(sprite.getTexture().getWidth()/scaleFactor, sprite.getTexture().getHeight()/scaleFactor);
+        this.sprite.setOriginCenter();
+        this.scaleFactor = scaleFactor;
+		bounds = new RectangularBounds((int) sprite.getWidth(), (int) sprite.getHeight());
 
 		velocity = new Vector2(0,0);
 
@@ -93,6 +98,7 @@ public abstract class Entity implements Collidable, DamageSource {
 		if(!shouldRemove()) {
             if(maxHealth > 0)
                 sprite.setAlpha((float) Math.min(health / maxHealth + 0.05f, 1.0f));
+
             sprite.draw(batch);
         }
 	}
@@ -127,12 +133,10 @@ public abstract class Entity implements Collidable, DamageSource {
                             } else {
                                 bestMove = getPosition().add(tmp);
                                 newVelocity = tmp.cpy();
-                                //velocity.set(velocity.x * (1f-collisionDrag), velocity.y);
                             }
                         } else {
                             bestMove = getPosition().add(tmp);
                             newVelocity = tmp.cpy();
-                            //velocity.set(velocity.x, velocity.y * (1f-collisionDrag));
                         }
                     } else {
                         bestMove = getPosition().add(tmp);

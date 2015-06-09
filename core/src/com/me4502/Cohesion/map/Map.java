@@ -57,7 +57,7 @@ public class Map {
         Cohesion.instance.mainFont.draw(batch, text, Cohesion.instance.camera.viewportWidth/2 - 35, Cohesion.instance.camera.viewportHeight - 20);
 
         for(int i = 0; i < mergeCount; i++) {
-            batch.draw(Cohesion.instance.mergeIcon, 16 * i + 16, Cohesion.instance.camera.viewportHeight - 32);
+            batch.draw(Cohesion.instance.mergeIcon, 16 * i + 16, Cohesion.instance.camera.viewportHeight - 32, 16, 16);
         }
     }
 

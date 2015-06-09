@@ -39,7 +39,7 @@ public class MapInstance {
 		this.color = color;
 
 		playerStartLocation = new Vector2(50, 100);
-		entities.add(player = new Player(this, new Sprite(Cohesion.instance.player), new Vector2(50, 100)));
+		entities.add(player = new Player(this, new Sprite(Cohesion.instance.player), new Vector2(50, 100), Cohesion.TEXTURE_SIZE / 32));
 	}
 
 	public void generateNext(int generatorId) {

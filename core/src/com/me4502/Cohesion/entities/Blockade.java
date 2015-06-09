@@ -6,8 +6,8 @@ import com.me4502.Cohesion.map.MapInstance;
 
 public class Blockade extends Entity {
 
-	public Blockade(MapInstance map, Sprite sprite, Vector2 position) {
-		super(map, sprite, position);
+	public Blockade(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
+		super(map, sprite, position, scaleFactor);
 	}
 
 	@Override

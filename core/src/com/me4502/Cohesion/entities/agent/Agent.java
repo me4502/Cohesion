@@ -14,8 +14,8 @@ public abstract class Agent extends Entity {
 	public List<AIBase> aiBehaviour = new LinkedList<>();
 	Entity target;
 
-	public Agent(MapInstance map, Sprite sprite, Vector2 position) {
-		super(map, sprite, position);
+	public Agent(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
+		super(map, sprite, position, scaleFactor);
 	}
 
 	public abstract void initializeAI();

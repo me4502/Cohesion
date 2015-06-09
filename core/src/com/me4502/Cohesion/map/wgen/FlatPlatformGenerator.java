@@ -20,7 +20,7 @@ public class FlatPlatformGenerator implements Generator {
 			tick ++;
 			if(tick % 2 == 0) continue;
 
-			chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 64)));
+			chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 64), Cohesion.TEXTURE_SIZE / 32));
 		}
 	}
 }

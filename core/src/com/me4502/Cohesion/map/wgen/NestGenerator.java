@@ -14,11 +14,11 @@ public class NestGenerator implements Generator {
 
         for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
             if(i == 0 || i == Chunk.CHUNK_WIDTH - TILE_WIDTH)
-                chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 50)));
+                chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 50), Cohesion.TEXTURE_SIZE / 32));
             if(i == TILE_WIDTH*2 || i == Chunk.CHUNK_WIDTH - (TILE_WIDTH*3))
-                chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 80)));
+                chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, 80), Cohesion.TEXTURE_SIZE / 32));
         }
 
-        chunk.addEntity(new Flyer(chunk.map, new Sprite(Cohesion.instance.flyer), new Vector2(Chunk.CHUNK_WIDTH/2, 200)));
+        chunk.addEntity(new Flyer(chunk.map, new Sprite(Cohesion.instance.flyer), new Vector2(Chunk.CHUNK_WIDTH/2, 200), Cohesion.TEXTURE_SIZE / 32));
     }
 }

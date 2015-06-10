@@ -6,8 +6,16 @@ import com.me4502.Cohesion.Cohesion;
 public class MainMenuScreen extends Screen {
 
     @Override
+    public void initialize() {
+    }
+
+    @Override
     public void render(SpriteBatch batch) {
 
+        batch.setProjectionMatrix(Cohesion.instance.standardMatrix);
+        batch.begin();
+        Cohesion.instance.mainFont.draw(batch, "Click to Play", 50, 200);
+        batch.end();
     }
 
     @Override

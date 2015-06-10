@@ -67,9 +67,14 @@ public class MapInstance {
 		return chunks;
 	}
 
-	public List<Chunk> getLoadedChunks(Vector2 position) {
+	List<Chunk> loadedChunkCache = new ArrayList<>();
 
-		List<Chunk> chunks = new ArrayList<>();
+	public List<Chunk> getLoadedChunks() {
+
+		if(!loadedChunkCache.isEmpty())
+			return loadedChunkCache;
+
+		Vector2 position = Cohesion.instance.getMap().getCentrePoint();
 
 		for(Chunk chunk : this.chunks) {
 			if(chunk == null) continue;
@@ -77,9 +82,10 @@ public class MapInstance {
 			if(chunk.startingX <= position.x && chunk.startingX + Chunk.CHUNK_WIDTH > position.x
 					|| chunk.startingX <= position.x - Chunk.CHUNK_WIDTH && chunk.startingX + Chunk.CHUNK_WIDTH > position.x - Chunk.CHUNK_WIDTH
 					|| chunk.startingX <= position.x + Chunk.CHUNK_WIDTH && chunk.startingX + Chunk.CHUNK_WIDTH > position.x + Chunk.CHUNK_WIDTH)
-				chunks.add(chunk);
+				loadedChunkCache.add(chunk);
 		}
-		return chunks;
+
+		return loadedChunkCache;
 	}
 
 	public int randomRange(int min, int max) {
@@ -94,9 +100,7 @@ public class MapInstance {
 			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
 		}
 
-		for(Chunk chunk : getLoadedChunks(Cohesion.instance.getMap().getCentrePoint()))
-			if(chunk != null)
-				chunk.render(batch);
+		getLoadedChunks().stream().forEach(chunk -> chunk.render(batch));
 
 		for(Entity ent : entities)
 			ent.render(batch);
@@ -106,6 +110,8 @@ public class MapInstance {
 
 	public void update() {
 
+		loadedChunkCache.clear();
+
 		while(!spawningQueue.isEmpty()) {
 			Entity ent = spawningQueue.poll();
 			if(ent instanceof Agent)
@@ -113,11 +119,9 @@ public class MapInstance {
 			entities.add(ent);
 		}
 
-		List<Chunk> loadedChunks = getLoadedChunks(Cohesion.instance.getMap().getCentrePoint());
+		List<Chunk> loadedChunks = getLoadedChunks();
 
-		for(Chunk chunk : loadedChunks)
-			if(chunk != null)
-				chunk.update();
+		loadedChunks.stream().forEach(Chunk::update);
 
 		Iterator<Entity> iter = entities.iterator();
 		while(iter.hasNext()) {

@@ -54,7 +54,7 @@ void main() {
 	gl_FragColor = v_color * sum * vec4(diffuse);
 }
 
-#define color_limit 0.0025
+#define color_limit 0.0015
 
 void addPoint(inout vec4 sum, vec4 color) {
 	if(color.r > color_limit || color.g > color_limit || color.b > color_limit)

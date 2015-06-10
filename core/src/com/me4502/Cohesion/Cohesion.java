@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.badlogic.gdx.math.Matrix4;
 import com.me4502.Cohesion.map.Map;
 import com.me4502.Cohesion.screens.GameScreen;
 import com.me4502.Cohesion.screens.MainMenuScreen;
@@ -21,6 +23,7 @@ import java.util.Random;
 public class Cohesion extends ApplicationAdapter {
 
 	public static final boolean DEBUG = false;
+    public static final boolean PROFILING = false;
 
 	public static final int AA_AMOUNT = 8; //Default is 1
     public static final int SHADER_QUALITY_LEVEL = 64; //Default is 8
@@ -58,8 +61,9 @@ public class Cohesion extends ApplicationAdapter {
 	public BitmapFont mainFont;
 
     public Screen screen;
+	public Matrix4 standardMatrix = new Matrix4();
 
-    public Map getMap() {
+	public Map getMap() {
         if(screen instanceof GameScreen)
             return ((GameScreen)screen).map;
         return null;
@@ -67,6 +71,8 @@ public class Cohesion extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+
+        if(PROFILING) GLProfiler.enable();
 
 		instance = this;
 
@@ -78,7 +84,9 @@ public class Cohesion extends ApplicationAdapter {
 		camera = new OrthographicCamera(640, 640 * (h/w));
 		camera.update();
 
-		batch = new SpriteBatch();
+        standardMatrix.setToOrtho2D(0, 0, (int)Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int)Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT);
+
+        batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 
         loadGraphics();
@@ -176,6 +184,8 @@ public class Cohesion extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+        if(PROFILING) GLProfiler.reset();
         screen.render(batch);
+        if(PROFILING) System.out.println(GLProfiler.calls);
 	}
 }

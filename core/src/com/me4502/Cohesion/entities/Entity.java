@@ -187,7 +187,7 @@ public abstract class Entity implements Collidable, DamageSource {
 					return true;
 
 		for(Entity ent : map.entities) {
-			if(ent == this || !ent.doesHardCollide()) continue;
+			if(ent == this || !ent.doesHardCollide() || !map.isPositionInChunks(ent.getPosition(), chunks)) continue;
 			if(getBoundingBox().doesIntersect(position, ent)) {
 				if(ent.onCollision(this))
 					return true;

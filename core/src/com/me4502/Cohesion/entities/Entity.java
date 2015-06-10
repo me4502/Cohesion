@@ -20,6 +20,7 @@ public abstract class Entity implements Collidable, DamageSource {
 	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
 	public static float COLLISION_ACCURACY = 50f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
+    public static float COLLISION_ACCURACY_INVERTED = 1f/COLLISION_ACCURACY;
 
     public int scaleFactor;
 
@@ -121,7 +122,7 @@ public abstract class Entity implements Collidable, DamageSource {
             Vector2 bestMove = null;
             Vector2 newVelocity = null;
             if (doesIntersect(getPosition().add(velocity))) {
-                for (float i = 0f; i <= 1f; i += 1f/COLLISION_ACCURACY) {
+                for (float i = 0f; i <= 1f; i += COLLISION_ACCURACY_INVERTED) {
                     Vector2 tmp = velocity.cpy().scl(i, 1.0f);
                     if (doesIntersect(getPosition().add(tmp))) {
                         tmp = velocity.cpy().scl(1.0f, i);
@@ -208,7 +209,7 @@ public abstract class Entity implements Collidable, DamageSource {
 
         Vector2 bestMove = null;
 
-        for(float i = 1f; i > 0.0f; i -= 0.01f) {
+        for(float i = 1f; i > 0.0f; i -= COLLISION_ACCURACY_INVERTED) {
 			Vector2 diff = getPosition().sub(position);
 
             Vector2 point = getPosition().lerp(getPosition().sub(diff), 1-i);

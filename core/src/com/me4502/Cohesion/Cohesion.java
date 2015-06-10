@@ -27,7 +27,7 @@ public class Cohesion extends ApplicationAdapter {
 
 	public static final int AA_AMOUNT = 8; //Default is 1
     public static final int SHADER_QUALITY_LEVEL = 64; //Default is 8
-	public static final int TEXTURE_SIZE = 128; //Default is 32
+	public static final int TEXTURE_SIZE = 256; //Default is 32
 
 	SpriteBatch batch;
 	public ShapeRenderer shapes;
@@ -172,6 +172,7 @@ public class Cohesion extends ApplicationAdapter {
         mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
+		FreeTypeFontGenerator.setMaxTextureSize(2048);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = (24 * (TEXTURE_SIZE/32))*AA_AMOUNT;
         parameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;

@@ -94,7 +94,7 @@ public class MapInstance {
 			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
 		}
 
-		for(Chunk chunk : getLoadedChunks(Cohesion.instance.map.getCentrePoint()))
+		for(Chunk chunk : getLoadedChunks(Cohesion.instance.getMap().getCentrePoint()))
 			if(chunk != null)
 				chunk.render(batch);
 
@@ -113,7 +113,7 @@ public class MapInstance {
 			entities.add(ent);
 		}
 
-		List<Chunk> loadedChunks = getLoadedChunks(Cohesion.instance.map.getCentrePoint());
+		List<Chunk> loadedChunks = getLoadedChunks(Cohesion.instance.getMap().getCentrePoint());
 
 		for(Chunk chunk : loadedChunks)
 			if(chunk != null)

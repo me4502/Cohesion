@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.wgen.WorldGenTypes;
+import com.me4502.Cohesion.screens.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +55,10 @@ public class Map {
         String text = "Score " + score;
 
         Cohesion.instance.mainFont.setFixedWidthGlyphs("Score XXXXX");
-        Cohesion.instance.mainFont.draw(batch, text, Cohesion.instance.camera.viewportWidth/2 - 35, Cohesion.instance.camera.viewportHeight - 20);
+        Cohesion.instance.mainFont.draw(batch, text, ((GameScreen)Cohesion.instance.screen).getWidth()/2 - 35 * Cohesion.AA_AMOUNT, ((GameScreen)Cohesion.instance.screen).getHeight() - 32);
 
         for(int i = 0; i < mergeCount; i++) {
-            batch.draw(Cohesion.instance.mergeIcon, 16 * i + 16, Cohesion.instance.camera.viewportHeight - 32, 16, 16);
+            batch.draw(Cohesion.instance.mergeIcon, (16 * Cohesion.AA_AMOUNT) * i + (16 * Cohesion.AA_AMOUNT), ((GameScreen)Cohesion.instance.screen).getHeight() - (16 * Cohesion.AA_AMOUNT * 2), 16 * Cohesion.AA_AMOUNT, 16 * Cohesion.AA_AMOUNT);
         }
     }
 
@@ -84,7 +85,7 @@ public class Map {
 		if(Gdx.input.isKeyJustPressed(Keys.E) && mergeCount > 0) {
 			boolean success = false;
 			for(MapInstance instance : instances) {
-                if (instance.player.tryMove(Cohesion.instance.map.getCentrePoint())) {
+                if (instance.player.tryMove(Cohesion.instance.getMap().getCentrePoint())) {
                     instance.player.velocity.set(0,0);
                     success = true;
                 }
@@ -147,7 +148,7 @@ public class Map {
 
 	public void gameOver() {
 
-		Cohesion.instance.lastFrame = null;
-		Cohesion.instance.map = new Map();
+		((GameScreen)Cohesion.instance.screen).lastFrame = null;
+		((GameScreen)Cohesion.instance.screen).map = new Map();
 	}
 }

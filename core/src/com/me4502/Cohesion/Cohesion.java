@@ -2,22 +2,19 @@ package com.me4502.Cohesion;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.me4502.Cohesion.map.Map;
+import com.me4502.Cohesion.screens.GameScreen;
+import com.me4502.Cohesion.screens.MainMenuScreen;
+import com.me4502.Cohesion.screens.Screen;
 
 import java.util.Random;
 
@@ -25,19 +22,16 @@ public class Cohesion extends ApplicationAdapter {
 
 	public static final boolean DEBUG = false;
 
-	public static final int AA_AMOUNT = 1; //Default is 1
-    public static final int SHADER_QUALITY_LEVEL = 8; //Default is 8
-	public static final int TEXTURE_SIZE = 64; //Default is 32
+	public static final int AA_AMOUNT = 8; //Default is 1
+    public static final int SHADER_QUALITY_LEVEL = 64; //Default is 8
+	public static final int TEXTURE_SIZE = 128; //Default is 32
 
 	SpriteBatch batch;
 	public ShapeRenderer shapes;
 
-	FrameBuffer buffer;
-
 	/* Blur Data */
 	public static final int FBO_SIZE = 128 * SHADER_QUALITY_LEVEL;
 	public static final int BLUR_RADIUS = 5;
-	FrameBuffer blurA, blurB;
 
 	public OrthographicCamera camera;
 
@@ -61,13 +55,15 @@ public class Cohesion extends ApplicationAdapter {
 	public Texture ground;
 	public Texture mergeIcon;
 
-	public Texture lastFrame;
-
-	public Map map;
-
-	private Matrix4 standardMatrix = new Matrix4();
-
 	public BitmapFont mainFont;
+
+    public Screen screen;
+
+    public Map getMap() {
+        if(screen instanceof GameScreen)
+            return ((GameScreen)screen).map;
+        return null;
+    }
 
 	@Override
 	public void create () {
@@ -82,57 +78,13 @@ public class Cohesion extends ApplicationAdapter {
 		camera = new OrthographicCamera(640, 640 * (h/w));
 		camera.update();
 
-		buffer = new FrameBuffer(Format.RGBA8888, (int)camera.viewportWidth * AA_AMOUNT, (int)camera.viewportHeight * AA_AMOUNT, false, true); //Super Sampling
-
-		blurA = new FrameBuffer(Format.RGB888, FBO_SIZE, FBO_SIZE, false);
-		blurB = new FrameBuffer(Format.RGB888, FBO_SIZE, FBO_SIZE, false);
-
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 
-		ShaderProgram.pedantic = true;
+        loadGraphics();
 
-		simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
-		colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
-		postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
-		blur = new ShaderProgram(Gdx.files.internal("data/shaders/blur.vrt"), Gdx.files.internal("data/shaders/blur.frg"));
-		background = new ShaderProgram(Gdx.files.internal("data/shaders/background.vrt"), Gdx.files.internal("data/shaders/background.frg"));
-
-		if(blur.getLog().length() > 0 && !blur.getLog().equals("No errors.\n"))
-			System.out.println(blur.getLog());
-
-		if(simple.getLog().length() > 0 && !simple.getLog().equals("No errors.\n"))
-			System.out.println(simple.getLog());
-
-		if(colorize.getLog().length() > 0 && !colorize.getLog().equals("No errors.\n"))
-			System.out.println(colorize.getLog());
-
-		if(postProcessing.getLog().length() > 0 && !postProcessing.getLog().equals("No errors.\n"))
-			System.out.println(postProcessing.getLog());
-
-		if(background.getLog().length() > 0 && !background.getLog().equals("No errors.\n"))
-			System.out.println(background.getLog());
-
-		player = new Texture(Gdx.files.internal("data/entity/player." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
-		flyer = new Texture(Gdx.files.internal("data/entity/flyer." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
-		platform = new Texture(Gdx.files.internal("data/platforms/platform." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
-		projectile = new Texture(Gdx.files.internal("data/entity/projectile." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
-		blockade = new Texture(Gdx.files.internal("data/platforms/blockade." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
-		ground = new Texture(Gdx.files.internal("data/platforms/ground." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
-		mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon." + TEXTURE_SIZE + ".png"), Format.RGBA8888, true);
-
-		map = new Map();
-
-		standardMatrix.setToOrtho2D(0, 0, buffer.getWidth(), buffer.getHeight());
-
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 24*AA_AMOUNT;
-		parameter.magFilter = TextureFilter.MipMapLinearLinear;
-		parameter.minFilter = TextureFilter.MipMapLinearLinear;
-		parameter.genMipMaps = true;
-		mainFont = generator.generateFont(parameter);
-		generator.dispose();
+        screen = new MainMenuScreen();
+        screen.initialize();
 
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
@@ -152,6 +104,7 @@ public class Cohesion extends ApplicationAdapter {
 
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                screen.mouseClick(screenX, screenY);
 				return false;
 			}
 
@@ -177,85 +130,52 @@ public class Cohesion extends ApplicationAdapter {
 		});
 	}
 
+    public void loadGraphics() {
+
+        ShaderProgram.pedantic = true;
+
+        simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
+        colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
+        postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
+        blur = new ShaderProgram(Gdx.files.internal("data/shaders/blur.vrt"), Gdx.files.internal("data/shaders/blur.frg"));
+        background = new ShaderProgram(Gdx.files.internal("data/shaders/background.vrt"), Gdx.files.internal("data/shaders/background.frg"));
+
+        if(blur.getLog().length() > 0 && !blur.getLog().equals("No errors.\n"))
+            System.out.println(blur.getLog());
+
+        if(simple.getLog().length() > 0 && !simple.getLog().equals("No errors.\n"))
+            System.out.println(simple.getLog());
+
+        if(colorize.getLog().length() > 0 && !colorize.getLog().equals("No errors.\n"))
+            System.out.println(colorize.getLog());
+
+        if(postProcessing.getLog().length() > 0 && !postProcessing.getLog().equals("No errors.\n"))
+            System.out.println(postProcessing.getLog());
+
+        if(background.getLog().length() > 0 && !background.getLog().equals("No errors.\n"))
+            System.out.println(background.getLog());
+
+        player = new Texture(Gdx.files.internal("data/entity/player." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        flyer = new Texture(Gdx.files.internal("data/entity/flyer." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        platform = new Texture(Gdx.files.internal("data/platforms/platform." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        projectile = new Texture(Gdx.files.internal("data/entity/projectile." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        blockade = new Texture(Gdx.files.internal("data/platforms/blockade." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        ground = new Texture(Gdx.files.internal("data/platforms/ground." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (24 * (TEXTURE_SIZE/32))*AA_AMOUNT;
+        parameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;
+        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        parameter.genMipMaps = true;
+        mainFont = generator.generateFont(parameter);
+        mainFont.getData().setScale(32f/TEXTURE_SIZE);
+        generator.dispose();
+    }
+
 	@Override
 	public void render () {
-
-		//Blur. If possible.
-		if(lastFrame != null && blur.isCompiled()) {
-			//Blur it.
-			blurA.begin();
-			batch.setShader(background);
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-			batch.begin();
-
-			batch.draw(lastFrame, 0, 0);
-
-			batch.flush();
-
-			blurA.end();
-			blurB.begin();
-			Gdx.gl.glClearColor(0, 0, 0,1f);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-			batch.setShader(blur);
-
-			blur.setUniform2fv("dir", new float[]{1f, 0f}, 0, 2);
-			blur.setUniformf("resolution", FBO_SIZE);
-			blur.setUniformf("radius", BLUR_RADIUS);
-			blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
-
-			batch.draw(blurA.getColorBufferTexture(), 0, 0, camera.viewportWidth*AA_AMOUNT, camera.viewportHeight*AA_AMOUNT, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
-			batch.flush();
-
-			blurB.end();
-			batch.end();
-		}
-
-		camera.position.set(map.getCentrePoint(), 0);
-
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-
-		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0,1f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		map.update();
-
-		batch.begin();
-		if(lastFrame != null) {
-			batch.setProjectionMatrix(standardMatrix);
-			batch.setShader(blur);
-			blur.setUniform2fv("dir", new float[]{0f, 1f}, 0, 2);
-			blur.setUniformf("resolution", FBO_SIZE);
-			blur.setUniformf("radius", BLUR_RADIUS);
-			blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
-			batch.draw(blurB.getColorBufferTexture(), 0, 0, camera.viewportWidth*AA_AMOUNT, camera.viewportHeight*AA_AMOUNT, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
-
-			batch.setProjectionMatrix(camera.combined);
-		}
-
-		if(simple.isCompiled())
-			batch.setShader(simple);
-		else
-			batch.setShader(null);
-
-		map.render(batch);
-		batch.end();
-		buffer.end();
-
-		if(postProcessing.isCompiled())
-			batch.setShader(postProcessing);
-
-		batch.setProjectionMatrix(standardMatrix);
-
-		batch.begin();
-		batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, camera.viewportWidth*AA_AMOUNT, camera.viewportHeight*AA_AMOUNT, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
-
-        map.renderGui(batch);
-
-		batch.end();
+        screen.render(batch);
 	}
 }

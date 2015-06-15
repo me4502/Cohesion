@@ -97,7 +97,8 @@ public class Map {
 		if(Gdx.input.isKeyJustPressed(Keys.R))
 			gameOver();
 
-        instances.forEach(MapInstance::update);
+		for(MapInstance instance : instances)
+			instance.update();
 
 		for(MapInstance instance : instances)
 			if(instance.player.getPosition().y < -128 || instance.player.shouldRemove()) {

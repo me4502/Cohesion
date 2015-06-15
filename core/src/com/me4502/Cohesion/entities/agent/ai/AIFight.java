@@ -12,7 +12,12 @@ import java.util.function.Predicate;
 
 public class AIFight extends AIBase {
 
-    private static Predicate<Entity> defaultPredicate = (entity) -> entity instanceof Player;
+    private static Predicate<Entity> defaultPredicate = new Predicate<Entity>() {
+        @Override
+        public boolean test(Entity entity) {
+            return entity instanceof Player;
+        }
+    };//(entity) -> entity instanceof Player;
 
     double attackRadius;
     Predicate<Entity> targetPredicate;
@@ -50,9 +55,10 @@ public class AIFight extends AIBase {
 
     @Override
     public void search() {
-        agent.getMap().entities.stream()
-                .filter(entity -> targetPredicate.test(entity) && agent.getPosition().dst2(entity.getPosition()) <= attackRadius*attackRadius)
-                .forEach(this::setTarget);
+        for(Entity ent : agent.getMap().entities) {
+            if(targetPredicate.test(ent) && agent.getPosition().dst2(ent.getPosition()) <= attackRadius*attackRadius)
+                setTarget(ent);
+        }
         if(agent.getTarget() == null)
             setStatus(AIStatus.STALLING);
     }

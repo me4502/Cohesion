@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.me4502.Cohesion.map.Map;
 import com.me4502.Cohesion.screens.GameScreen;
 import com.me4502.Cohesion.screens.MainMenuScreen;
@@ -26,7 +27,7 @@ public class Cohesion extends ApplicationAdapter {
     public static final boolean PROFILING = false;
 
 	public static final int AA_AMOUNT = 8; //Default is 1
-    public static final int SHADER_QUALITY_LEVEL = 64; //Default is 8
+    public static final int SHADER_QUALITY_LEVEL = 32; //Default is 8
 	public static final int TEXTURE_SIZE = 256; //Default is 32
 
 	SpriteBatch batch;
@@ -86,8 +87,9 @@ public class Cohesion extends ApplicationAdapter {
 
         standardMatrix.setToOrtho2D(0, 0, (int)Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int)Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT);
 
-        batch = new SpriteBatch();
-		shapes = new ShapeRenderer();
+        batch = new SpriteBatch(32);
+        if(DEBUG)
+		    shapes = new ShapeRenderer();
 
         loadGraphics();
 
@@ -112,13 +114,19 @@ public class Cohesion extends ApplicationAdapter {
 
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                screen.mouseClick(screenX, screenY);
+
+				Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
+
+				screen.mouseClick(((int)mouse.x) + Gdx.graphics.getWidth() / 2, ((int)mouse.y) + Gdx.graphics.getHeight() / 2);
 				return false;
 			}
 
 			@Override
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-				return false;
+                Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
+
+                screen.mouseRelease(((int)mouse.x) + Gdx.graphics.getWidth() / 2, ((int)mouse.y) + Gdx.graphics.getHeight() / 2);
+                return false;
 			}
 
 			@Override
@@ -172,7 +180,7 @@ public class Cohesion extends ApplicationAdapter {
         mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
-		FreeTypeFontGenerator.setMaxTextureSize(2048);
+		FreeTypeFontGenerator.setMaxTextureSize(256 * AA_AMOUNT);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = (24 * (TEXTURE_SIZE/32))*AA_AMOUNT;
         parameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;

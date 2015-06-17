@@ -54,7 +54,7 @@ public class Map {
 
         String text = "Score " + score;
 
-        Cohesion.instance.mainFont.setFixedWidthGlyphs("Score XXXXX");
+        Cohesion.instance.mainFont.setFixedWidthGlyphs("Score 9999999");
         Cohesion.instance.mainFont.draw(batch, text, ((GameScreen)Cohesion.instance.screen).getWidth()/2 - 35 * Cohesion.AA_AMOUNT, ((GameScreen)Cohesion.instance.screen).getHeight() - 32);
 
         for(int i = 0; i < mergeCount; i++) {

@@ -9,6 +9,7 @@ import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.projectile.Projectile;
 import com.me4502.Cohesion.map.MapInstance;
+import com.me4502.Cohesion.screens.GameScreen;
 import com.me4502.Cohesion.util.DamageSource;
 
 public class Player extends Entity {
@@ -50,7 +51,7 @@ public class Player extends Entity {
 
 			Vector2 flatMouse = new Vector2(mouse.x, mouse.y);
 
-			Projectile projectile = map.spawnEntity(new Projectile(map, new Sprite(Cohesion.instance.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this.scaleFactor, this));
+			Projectile projectile = map.spawnEntity(new Projectile(map, new Sprite(GameScreen.projectile), getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2), this.scaleFactor, this));
 
 			projectile.velocity.set(flatMouse.sub(getPosition().add(sprite.getWidth()/2, sprite.getHeight()/2)).scl(0.25f));
 			lastShootTime = 0;

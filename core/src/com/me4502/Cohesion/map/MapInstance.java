@@ -10,6 +10,7 @@ import com.me4502.Cohesion.entities.agent.Agent;
 import com.me4502.Cohesion.entities.player.Player;
 import com.me4502.Cohesion.map.wgen.Generator;
 import com.me4502.Cohesion.map.wgen.WorldGenTypes;
+import com.me4502.Cohesion.screens.GameScreen;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class MapInstance {
 		this.color = color;
 
 		playerStartLocation = new Vector2(50, 100);
-		entities.add(player = new Player(this, new Sprite(Cohesion.instance.player), new Vector2(50, 100), Cohesion.TEXTURE_SIZE / 32));
+		entities.add(player = new Player(this, new Sprite(GameScreen.player), new Vector2(50, 100), Cohesion.TEXTURE_SIZE / 32));
 	}
 
 	public void generateNext(int generatorId) {
@@ -95,9 +96,9 @@ public class MapInstance {
 
 	public void render(SpriteBatch batch) {
 
-		if(Cohesion.instance.colorize.isCompiled()) {
-			batch.setShader(Cohesion.instance.colorize);
-			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
+		if(GameScreen.colorize.isCompiled()) {
+			batch.setShader(GameScreen.colorize);
+			GameScreen.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
 		}
 
 		for(Chunk chunk : getLoadedChunks()) {
@@ -107,7 +108,7 @@ public class MapInstance {
 		for(Entity ent : entities)
 			ent.render(batch);
 
-		batch.setShader(Cohesion.instance.simple);
+		batch.setShader(GameScreen.simple);
 	}
 
 	public void update() {

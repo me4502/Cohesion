@@ -25,7 +25,7 @@ task dist(type: Jar) {
     }
 }
 
-task minify(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
+/*task minify(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
     injars files("build/libs/desktop-1.0.jar")
     outjars files("build/libs/desktop-1.0-processed.jar")
     libraryjars files("${System.getProperty('java.home')}/lib/rt.jar", configurations.compile.asPath.split(";"))
@@ -41,7 +41,7 @@ task minify(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
                 name:       'main',
                 parameters: 'java.lang.String[]'
     }
-}
+}*/
 
 dist.dependsOn classes
 

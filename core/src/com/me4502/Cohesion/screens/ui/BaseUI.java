@@ -20,7 +20,7 @@ public abstract class BaseUI {
 
     public abstract void drawGuiElement(SpriteBatch batch);
 
-    public boolean mouseClick(int mouseX, int mouseY) {
+    public boolean mouseClick(int mouseX, int mouseY, int button) {
 
         if (mouseX >= x && mouseX <= x + width) {
             if (mouseY <= y && mouseY >= y - height) {
@@ -33,13 +33,13 @@ public abstract class BaseUI {
         return false;
     }
 
-    public boolean mouseReleased(int mouseX, int mouseY) {
+    public boolean mouseReleased(int mouseX, int mouseY, int button) {
 
         if (clicked) {
             // Still in bounds of the object?
             if (mouseX >= x && mouseX <= x + width) {
                 if (mouseY <= y && mouseY >= y - height) {
-                    clickAction();
+                    clickAction(button);
                     return true;
                 }
             }
@@ -54,7 +54,7 @@ public abstract class BaseUI {
 
     }
 
-    public abstract void clickAction();
+    public abstract void clickAction(int button);
 
     public void keyTyped(char character, int keyCode) {
 

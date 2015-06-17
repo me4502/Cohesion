@@ -31,17 +31,17 @@ public abstract class Screen {
         batch.end();
     }
 
-    public void mouseClick(int x, int y) {
+    public void mouseClick(int x, int y, int button) {
 
         for(BaseUI ui : uiComponents) {
-            ui.mouseClick(x, y);
+            ui.mouseClick(x, y, button);
         }
     }
 
-    public void mouseRelease(int x, int y) {
+    public void mouseRelease(int x, int y, int button) {
 
         for(BaseUI ui : uiComponents) {
-            ui.mouseReleased(x, y);
+            ui.mouseReleased(x, y, button);
         }
     }
 

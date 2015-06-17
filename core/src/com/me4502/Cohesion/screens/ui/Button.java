@@ -1,5 +1,6 @@
 package com.me4502.Cohesion.screens.ui;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me4502.Cohesion.Cohesion;
 
@@ -22,4 +23,9 @@ public abstract class Button extends BaseUI {
 
 
     //Texture information
+    public static Texture mainButtonTexture;
+
+    public static void loadTextures() {
+
+    }
 }

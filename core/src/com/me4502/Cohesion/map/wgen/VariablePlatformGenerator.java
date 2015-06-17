@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
+import com.me4502.Cohesion.screens.GameScreen;
 import com.me4502.Cohesion.tile.Platform;
 
 public class VariablePlatformGenerator implements Generator {
@@ -31,7 +32,7 @@ public class VariablePlatformGenerator implements Generator {
 
 			if(lastY < START_Y) lastY = START_Y;
 
-			chunk.addTile(new Platform(chunk.map, new Sprite(Cohesion.instance.platform), new Vector2(i, lastY), Cohesion.TEXTURE_SIZE / 32));
+			chunk.addTile(new Platform(chunk.map, new Sprite(GameScreen.platform), new Vector2(i, lastY), Cohesion.TEXTURE_SIZE / 32));
 		}
 
 	}

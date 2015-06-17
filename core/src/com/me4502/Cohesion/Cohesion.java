@@ -4,12 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Matrix4;
@@ -42,22 +40,6 @@ public class Cohesion extends ApplicationAdapter {
 	public static Cohesion instance;
 
 	public static final Random RANDOM = new Random();
-
-	/* Shaders */
-	public ShaderProgram simple;
-	public ShaderProgram colorize;
-	public ShaderProgram blur;
-	public ShaderProgram postProcessing;
-	public ShaderProgram background;
-
-	/* Textures */
-	public Texture player;
-    public Texture flyer;
-	public Texture platform;
-	public Texture projectile;
-	public Texture blockade;
-	public Texture ground;
-	public Texture mergeIcon;
 
 	public BitmapFont mainFont;
 
@@ -147,37 +129,6 @@ public class Cohesion extends ApplicationAdapter {
 	}
 
     public void loadGraphics() {
-
-        ShaderProgram.pedantic = true;
-
-        simple = new ShaderProgram(Gdx.files.internal("data/shaders/simple.vrt"), Gdx.files.internal("data/shaders/simple.frg"));
-        colorize = new ShaderProgram(Gdx.files.internal("data/shaders/colorize.vrt"), Gdx.files.internal("data/shaders/colorize.frg"));
-        postProcessing = new ShaderProgram(Gdx.files.internal("data/shaders/post.vrt"), Gdx.files.internal("data/shaders/post.frg"));
-        blur = new ShaderProgram(Gdx.files.internal("data/shaders/blur.vrt"), Gdx.files.internal("data/shaders/blur.frg"));
-        background = new ShaderProgram(Gdx.files.internal("data/shaders/background.vrt"), Gdx.files.internal("data/shaders/background.frg"));
-
-        if(blur.getLog().length() > 0 && !blur.getLog().equals("No errors.\n"))
-            System.out.println(blur.getLog());
-
-        if(simple.getLog().length() > 0 && !simple.getLog().equals("No errors.\n"))
-            System.out.println(simple.getLog());
-
-        if(colorize.getLog().length() > 0 && !colorize.getLog().equals("No errors.\n"))
-            System.out.println(colorize.getLog());
-
-        if(postProcessing.getLog().length() > 0 && !postProcessing.getLog().equals("No errors.\n"))
-            System.out.println(postProcessing.getLog());
-
-        if(background.getLog().length() > 0 && !background.getLog().equals("No errors.\n"))
-            System.out.println(background.getLog());
-
-        player = new Texture(Gdx.files.internal("data/entity/player." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
-        flyer = new Texture(Gdx.files.internal("data/entity/flyer." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
-        platform = new Texture(Gdx.files.internal("data/platforms/platform." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
-        projectile = new Texture(Gdx.files.internal("data/entity/projectile." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
-        blockade = new Texture(Gdx.files.internal("data/platforms/blockade." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
-        ground = new Texture(Gdx.files.internal("data/platforms/ground." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
-        mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon." + TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
 		FreeTypeFontGenerator.setMaxTextureSize(256 * AA_AMOUNT);

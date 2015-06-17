@@ -30,8 +30,6 @@ public abstract class BaseUI {
             }
         }
 
-        System.out.println(mouseX + "," + mouseY);
-
         clicked = false;
         return false;
     }

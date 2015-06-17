@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.Chunk;
+import com.me4502.Cohesion.screens.GameScreen;
 import com.me4502.Cohesion.tile.Ground;
 
 public class GrateGenerator implements Generator {
@@ -25,7 +26,7 @@ public class GrateGenerator implements Generator {
 
 			blankSpaces = 0;
 
-			chunk.addTile(new Ground(chunk.map, new Sprite(Cohesion.instance.ground), new Vector2(i, 32), Cohesion.TEXTURE_SIZE / 32));
+			chunk.addTile(new Ground(chunk.map, new Sprite(GameScreen.ground), new Vector2(i, 32), Cohesion.TEXTURE_SIZE / 32));
 		}
 	}
 

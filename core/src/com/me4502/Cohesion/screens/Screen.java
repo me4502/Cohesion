@@ -1,5 +1,8 @@
 package com.me4502.Cohesion.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.screens.ui.BaseUI;
@@ -16,6 +19,9 @@ public abstract class Screen {
     }
 
     public void render(SpriteBatch batch) {
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(Cohesion.instance.standardMatrix);
         batch.begin();
@@ -37,5 +43,21 @@ public abstract class Screen {
         for(BaseUI ui : uiComponents) {
             ui.mouseReleased(x, y);
         }
+    }
+
+    public void mouseDragged(int x, int y) {
+        for(BaseUI ui : uiComponents) {
+            ui.mouseDragged(x, y);
+        }
+    }
+
+    public void onKeyPress(int keyCode) {
+        if(keyCode == Input.Keys.ESCAPE) {
+            Cohesion.instance.switchScreen(new MainMenuScreen());
+        }
+    }
+
+    public void dispose() {
+        //uiComponents.clear();
     }
 }

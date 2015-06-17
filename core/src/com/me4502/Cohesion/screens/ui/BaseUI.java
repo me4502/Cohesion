@@ -7,7 +7,6 @@ public abstract class BaseUI {
     public int width, height;
 
     public boolean clicked;
-    public boolean focused;
 
     boolean removable;
 
@@ -24,7 +23,7 @@ public abstract class BaseUI {
     public boolean mouseClick(int mouseX, int mouseY) {
 
         if (mouseX >= x && mouseX <= x + width) {
-            if (mouseY >= y && mouseY <= y + height) {
+            if (mouseY <= y && mouseY >= y - height) {
                 clicked = true;
                 return true;
             }
@@ -39,7 +38,7 @@ public abstract class BaseUI {
         if (clicked) {
             // Still in bounds of the object?
             if (mouseX >= x && mouseX <= x + width) {
-                if (mouseY >= y && mouseY <= y + height) {
+                if (mouseY <= y && mouseY >= y - height) {
                     clickAction();
                     return true;
                 }
@@ -51,7 +50,7 @@ public abstract class BaseUI {
         return false;
     }
 
-    public void mouseClickMove(int mouseX, int mouseY, int mouseButton) {
+    public void mouseDragged(int mouseX, int mouseY) {
 
     }
 

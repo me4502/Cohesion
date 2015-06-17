@@ -82,6 +82,14 @@ public class GameScreen extends Screen {
         map = new Map();
     }
 
+    public void dispose() {
+        super.dispose();
+
+        blurA.dispose();
+        blurB.dispose();
+        buffer.dispose();
+    }
+
     public int getWidth() {
         return buffer.getWidth();
     }
@@ -93,7 +101,7 @@ public class GameScreen extends Screen {
     @Override
     public void render(SpriteBatch batch) {
         //Blur. If possible.
-        if(lastFrame != null && blur.isCompiled()) {
+        if (lastFrame != null && blur.isCompiled()) {
             //Blur it.
             blurA.begin();
             batch.setShader(background);
@@ -108,7 +116,7 @@ public class GameScreen extends Screen {
 
             blurA.end();
             blurB.begin();
-            Gdx.gl.glClearColor(0, 0, 0,1f);
+            Gdx.gl.glClearColor(0, 0, 0, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             batch.setShader(blur);
@@ -118,7 +126,7 @@ public class GameScreen extends Screen {
             blur.setUniformf("radius", Cohesion.BLUR_RADIUS);
             blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
 
-            batch.draw(blurA.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth* Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight* Cohesion.AA_AMOUNT, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
+            batch.draw(blurA.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
             batch.flush();
 
             blurB.end();
@@ -131,25 +139,25 @@ public class GameScreen extends Screen {
         batch.setProjectionMatrix(Cohesion.instance.camera.combined);
 
         buffer.begin();
-        Gdx.gl.glClearColor(0, 0, 0,1f);
+        Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         map.update();
 
         batch.begin();
-        if(lastFrame != null) {
+        if (lastFrame != null) {
             batch.setProjectionMatrix(Cohesion.instance.standardMatrix);
             batch.setShader(blur);
             blur.setUniform2fv("dir", new float[]{0f, 1f}, 0, 2);
             blur.setUniformf("resolution", Cohesion.FBO_SIZE);
             blur.setUniformf("radius", Cohesion.BLUR_RADIUS);
             blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
-            batch.draw(blurB.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth* Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight* Cohesion.AA_AMOUNT, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
+            batch.draw(blurB.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
 
             batch.setProjectionMatrix(Cohesion.instance.camera.combined);
         }
 
-        if(simple.isCompiled())
+        if (simple.isCompiled())
             batch.setShader(simple);
         else
             batch.setShader(null);
@@ -158,13 +166,13 @@ public class GameScreen extends Screen {
         batch.end();
         buffer.end();
 
-        if(postProcessing.isCompiled())
+        if (postProcessing.isCompiled())
             batch.setShader(postProcessing);
 
         batch.setProjectionMatrix(Cohesion.instance.standardMatrix);
 
         batch.begin();
-        batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth* Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight* Cohesion.AA_AMOUNT, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+        batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 
         map.renderGui(batch);
 

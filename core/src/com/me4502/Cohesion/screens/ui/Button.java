@@ -10,7 +10,7 @@ import com.me4502.Cohesion.Cohesion;
 
 public abstract class Button extends BaseUI {
 
-    String text;
+    public String text;
 
     public Button(int x, int y, int width, int height, String text) {
         super(x, y, width, height);
@@ -51,9 +51,7 @@ public abstract class Button extends BaseUI {
 
         Cohesion.instance.mainFont.draw(batch, text, ax + 24, ay);
     }
-
-    public abstract void clickAction();
-
+    
 
     //Texture information
     public static Texture mainButtonTexture;

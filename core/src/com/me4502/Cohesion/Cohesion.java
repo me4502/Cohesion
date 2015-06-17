@@ -26,15 +26,14 @@ public class Cohesion extends ApplicationAdapter {
 	public static final boolean DEBUG = false;
     public static final boolean PROFILING = false;
 
-	public static final int AA_AMOUNT = 8; //Default is 1
-    public static final int SHADER_QUALITY_LEVEL = 32; //Default is 8
-	public static final int TEXTURE_SIZE = 256; //Default is 32
+	public static int AA_AMOUNT = 2; //Default is 2
+    public static int SHADER_QUALITY_LEVEL = 8; //Default is 8
+	public static int TEXTURE_SIZE = 128; //Default is 128
 
 	SpriteBatch batch;
 	public ShapeRenderer shapes;
 
 	/* Blur Data */
-	public static final int FBO_SIZE = 128 * SHADER_QUALITY_LEVEL;
 	public static final int BLUR_RADIUS = 5;
 
 	public OrthographicCamera camera;
@@ -68,8 +67,6 @@ public class Cohesion extends ApplicationAdapter {
 
 		camera = new OrthographicCamera(640, 640 * (h/w));
 		camera.update();
-
-        standardMatrix.setToOrtho2D(0, 0, (int)Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int)Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT);
 
         batch = new SpriteBatch(32);
         if(DEBUG)
@@ -106,7 +103,7 @@ public class Cohesion extends ApplicationAdapter {
 
 				Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
 
-				screen.mouseClick((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int)mouse.y) + camera.viewportHeight / 2));
+				screen.mouseClick((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int)mouse.y) + camera.viewportHeight / 2), button);
 				return false;
 			}
 
@@ -114,7 +111,7 @@ public class Cohesion extends ApplicationAdapter {
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
 
-                screen.mouseRelease((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int) mouse.y) + camera.viewportHeight / 2));
+                screen.mouseRelease((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int) mouse.y) + camera.viewportHeight / 2), button);
                 return false;
 			}
 
@@ -122,7 +119,7 @@ public class Cohesion extends ApplicationAdapter {
 			public boolean touchDragged(int screenX, int screenY, int pointer) {
                 Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
 
-                screen.mouseDragged((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int) mouse.y) + camera.viewportHeight / 2));
+                screen.mouseDragged((int) (((int) mouse.x) + camera.viewportWidth / 2), (int) (((int) mouse.y) + camera.viewportHeight / 2));
 				return false;
 			}
 
@@ -139,6 +136,8 @@ public class Cohesion extends ApplicationAdapter {
 	}
 
     public void loadGraphics() {
+
+        standardMatrix.setToOrtho2D(0, 0, (int)Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int)Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
 		FreeTypeFontGenerator.setMaxTextureSize(256 * AA_AMOUNT);

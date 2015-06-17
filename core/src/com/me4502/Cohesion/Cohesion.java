@@ -2,6 +2,7 @@ package com.me4502.Cohesion;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ import com.me4502.Cohesion.map.Map;
 import com.me4502.Cohesion.screens.GameScreen;
 import com.me4502.Cohesion.screens.MainMenuScreen;
 import com.me4502.Cohesion.screens.Screen;
+import com.me4502.Cohesion.screens.ui.Button;
 
 import java.util.Random;
 
@@ -81,6 +83,11 @@ public class Cohesion extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
+                if(keycode == Input.Keys.F11) {
+                    Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, !Gdx.graphics.isFullscreen());
+                }
+
+                screen.onKeyPress(keycode);
 				return false;
 			}
 
@@ -99,7 +106,7 @@ public class Cohesion extends ApplicationAdapter {
 
 				Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
 
-				screen.mouseClick(((int)mouse.x) + Gdx.graphics.getWidth() / 2, ((int)mouse.y) + Gdx.graphics.getHeight() / 2);
+				screen.mouseClick((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int)mouse.y) + camera.viewportHeight / 2));
 				return false;
 			}
 
@@ -107,12 +114,15 @@ public class Cohesion extends ApplicationAdapter {
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
 
-                screen.mouseRelease(((int)mouse.x) + Gdx.graphics.getWidth() / 2, ((int)mouse.y) + Gdx.graphics.getHeight() / 2);
+                screen.mouseRelease((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int) mouse.y) + camera.viewportHeight / 2));
                 return false;
 			}
 
 			@Override
 			public boolean touchDragged(int screenX, int screenY, int pointer) {
+                Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
+
+                screen.mouseDragged((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int) mouse.y) + camera.viewportHeight / 2));
 				return false;
 			}
 
@@ -133,13 +143,28 @@ public class Cohesion extends ApplicationAdapter {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
 		FreeTypeFontGenerator.setMaxTextureSize(256 * AA_AMOUNT);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (24 * (TEXTURE_SIZE/32))*AA_AMOUNT;
+        parameter.size = 24*AA_AMOUNT;
         parameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;
         parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
         parameter.genMipMaps = true;
         mainFont = generator.generateFont(parameter);
-        mainFont.getData().setScale(32f/TEXTURE_SIZE);
         generator.dispose();
+
+        Button.loadTextures();
+    }
+
+    public void switchScreen(Screen newScreen) {
+        if(this.screen != null) {
+            this.screen.dispose();
+            this.screen = null;
+        }
+
+        camera.position.set(0,0,0);
+        camera.update();
+
+        batch.setShader(null);
+        screen = newScreen;
+        screen.initialize();
     }
 
 	@Override

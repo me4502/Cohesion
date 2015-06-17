@@ -9,11 +9,17 @@ public class MainMenuScreen extends Screen {
     public void initialize() {
 
         uiComponents.clear();
-        uiComponents.add(new Button(50,200,10,10,"Cake") {
+        uiComponents.add(new Button(320 - 32,300,64,32,"Play") {
             @Override
             public void clickAction() {
-                Cohesion.instance.screen = new GameScreen();
-                Cohesion.instance.screen.initialize();
+                Cohesion.instance.switchScreen(new GameScreen());
+            }
+        });
+
+        uiComponents.add(new Button(320 - 32,250,64,32,"Options") {
+            @Override
+            public void clickAction() {
+                Cohesion.instance.switchScreen(new OptionsScreen());
             }
         });
     }

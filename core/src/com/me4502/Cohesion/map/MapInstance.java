@@ -100,7 +100,9 @@ public class MapInstance {
 			Cohesion.instance.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
 		}
 
-		getLoadedChunks().stream().forEach(chunk -> chunk.render(batch));
+		for(Chunk chunk : getLoadedChunks()) {
+			chunk.render(batch);
+		}
 
 		for(Entity ent : entities)
 			ent.render(batch);
@@ -121,7 +123,8 @@ public class MapInstance {
 
 		List<Chunk> loadedChunks = getLoadedChunks();
 
-		loadedChunks.stream().forEach(Chunk::update);
+		for(Chunk chunk : loadedChunks)
+			chunk.update();
 
 		Iterator<Entity> iter = entities.iterator();
 		while(iter.hasNext()) {

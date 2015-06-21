@@ -75,6 +75,9 @@ public class GameScreen extends Screen {
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int)Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int)Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, false, true); //Super Sampling
 
         map = new Map();
+
+        //Seed the random.
+        Cohesion.RANDOM.setSeed(Cohesion.RANDOM.nextLong());
     }
 
     public void dispose() {

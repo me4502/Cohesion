@@ -83,6 +83,14 @@ public class GameScreen extends Screen {
     public void dispose() {
         super.dispose();
 
+        player.dispose();
+        flyer.dispose();
+        platform.dispose();
+        projectile.dispose();
+        blockade.dispose();
+        ground.dispose();
+        mergeIcon.dispose();
+
         blurA.dispose();
         blurB.dispose();
         buffer.dispose();

@@ -49,7 +49,7 @@ public abstract class Button extends BaseUI {
             }
         }
 
-        Cohesion.instance.mainFont.draw(batch, text, ax + 24, ay);
+        Cohesion.instance.mainFont.draw(batch, text, ax + size, ay);
     }
     
 
@@ -61,6 +61,10 @@ public abstract class Button extends BaseUI {
     public static TextureRegion centre;
 
     public static void loadTextures() {
+
+        if(mainButtonTexture != null) {
+            mainButtonTexture.dispose();
+        }
 
         mainButtonTexture = new Texture(Gdx.files.internal("data/ui/button." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
 

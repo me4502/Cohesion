@@ -26,6 +26,7 @@ public class Cohesion extends ApplicationAdapter {
 	public static final boolean DEBUG = false;
     public static final boolean PROFILING = false;
 
+	//Settings Values
 	public static int AA_AMOUNT = 2; //Default is 2
     public static int SHADER_QUALITY_LEVEL = 8; //Default is 8
 	public static int TEXTURE_SIZE = 128; //Default is 128
@@ -56,27 +57,32 @@ public class Cohesion extends ApplicationAdapter {
 	@Override
 	public void create () {
 
+        //Enable GL Profiling if the mode is on
         if(PROFILING) GLProfiler.enable();
 
 		instance = this;
 
-		RANDOM.setSeed(RANDOM.nextLong());
-
+        //Grab the width and height of the screen.
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
+        //Setup the view camera.
 		camera = new OrthographicCamera(640, 640 * (h/w));
 		camera.update();
 
+        //Setup the sprite and shape batching.
         batch = new SpriteBatch(32);
         if(DEBUG)
 		    shapes = new ShapeRenderer();
 
+        //Load basic graphics required for all screens.
         loadGraphics();
 
+        //Set the main menu as the default screen.
         screen = new MainMenuScreen();
         screen.initialize();
 
+        //Setup an input processor to handle recieved inputs.
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
@@ -100,7 +106,6 @@ public class Cohesion extends ApplicationAdapter {
 
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
 				Vector3 mouse = Cohesion.instance.camera.unproject(new Vector3(screenX, screenY, 1));
 
 				screen.mouseClick((int) (((int)mouse.x) + camera.viewportWidth / 2), (int) (((int)mouse.y) + camera.viewportHeight / 2), button);

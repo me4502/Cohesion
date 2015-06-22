@@ -1,9 +1,6 @@
 package com.me4502.Cohesion;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -57,10 +54,18 @@ public class Cohesion extends ApplicationAdapter {
 	@Override
 	public void create () {
 
-        //Enable GL Profiling if the mode is on
+        //Enable GL Profiling if the mode is on.
         if(PROFILING) GLProfiler.enable();
 
 		instance = this;
+
+		//Load the configuration.
+        Preferences graphicsPreferences = Gdx.app.getPreferences("graphics");
+
+        AA_AMOUNT = graphicsPreferences.getInteger("AntiAliasing", 2);
+        SHADER_QUALITY_LEVEL = graphicsPreferences.getInteger("ShaderQuality", 8);
+        TEXTURE_SIZE = graphicsPreferences.getInteger("TextureQuality", 128);
+        graphicsPreferences.flush();
 
         //Grab the width and height of the screen.
 		float w = Gdx.graphics.getWidth();

@@ -1,6 +1,8 @@
 package com.me4502.Cohesion.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.screens.ui.Button;
 
@@ -10,6 +12,8 @@ public class OptionsScreen extends Screen {
     public void initialize() {
 
         uiComponents.clear();
+
+        Preferences graphicsPreferences = Gdx.app.getPreferences("graphics");
 
         uiComponents.add(new Button(320 - 128,300,256,32,"SSAA Amount " + Cohesion.AA_AMOUNT) {
             @Override
@@ -26,6 +30,9 @@ public class OptionsScreen extends Screen {
 
                 Cohesion.instance.loadGraphics();
                 Cohesion.instance.switchScreen(new OptionsScreen());
+
+                graphicsPreferences.putInteger("AntiAliasing", Cohesion.AA_AMOUNT);
+                graphicsPreferences.flush();
             }
         });
 
@@ -44,6 +51,9 @@ public class OptionsScreen extends Screen {
 
                 Cohesion.instance.loadGraphics();
                 Cohesion.instance.switchScreen(new OptionsScreen());
+
+                graphicsPreferences.putInteger("ShaderQuality", Cohesion.SHADER_QUALITY_LEVEL);
+                graphicsPreferences.flush();
             }
         });
 
@@ -62,6 +72,9 @@ public class OptionsScreen extends Screen {
 
                 Cohesion.instance.loadGraphics();
                 Cohesion.instance.switchScreen(new OptionsScreen());
+
+                graphicsPreferences.putInteger("TextureQuality", Cohesion.TEXTURE_SIZE);
+                graphicsPreferences.flush();
             }
         });
     }

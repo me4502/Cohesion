@@ -40,12 +40,19 @@ public class GameScreen extends Screen {
         super.initialize();
 
         player = new Texture(Gdx.files.internal("data/entity/player." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        player.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         flyer = new Texture(Gdx.files.internal("data/entity/flyer." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        flyer.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         platform = new Texture(Gdx.files.internal("data/platforms/platform." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        platform.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         projectile = new Texture(Gdx.files.internal("data/entity/projectile." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        projectile.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         blockade = new Texture(Gdx.files.internal("data/platforms/blockade." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        blockade.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         ground = new Texture(Gdx.files.internal("data/platforms/ground." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        ground.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         mergeIcon = new Texture(Gdx.files.internal("data/icons/merge_icon." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        mergeIcon.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
 
         //Load Shaders
         if(simple == null) {
@@ -69,10 +76,16 @@ public class GameScreen extends Screen {
                 System.out.println(postProcessing.getLog());
         }
 
-        blurA = new FrameBuffer(Pixmap.Format.RGB888, 128 * Cohesion.SHADER_QUALITY_LEVEL, 128 * Cohesion.SHADER_QUALITY_LEVEL, false);
-        blurB = new FrameBuffer(Pixmap.Format.RGB888, 128 * Cohesion.SHADER_QUALITY_LEVEL, 128 * Cohesion.SHADER_QUALITY_LEVEL, false);
+        try {
+            blurA = new FrameBuffer(Pixmap.Format.RGB888, 128 * Cohesion.SHADER_QUALITY_LEVEL, 128 * Cohesion.SHADER_QUALITY_LEVEL, false);
+            blurB = new FrameBuffer(Pixmap.Format.RGB888, 128 * Cohesion.SHADER_QUALITY_LEVEL, 128 * Cohesion.SHADER_QUALITY_LEVEL, false);
 
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int)Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int)Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, false, true); //Super Sampling
+            buffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int) Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int) Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, false, true); //Super Sampling
+        } catch(Throwable e) {
+            System.out.println("Out of Memory!");
+            e.printStackTrace();
+            Cohesion.instance.switchScreen(new MainMenuScreen());
+        }
 
         map = new Map();
 
@@ -83,17 +96,22 @@ public class GameScreen extends Screen {
     public void dispose() {
         super.dispose();
 
-        player.dispose();
-        flyer.dispose();
-        platform.dispose();
-        projectile.dispose();
-        blockade.dispose();
-        ground.dispose();
-        mergeIcon.dispose();
+        try {
+            player.dispose();
+            flyer.dispose();
+            platform.dispose();
+            projectile.dispose();
+            blockade.dispose();
+            ground.dispose();
+            mergeIcon.dispose();
 
-        blurA.dispose();
-        blurB.dispose();
-        buffer.dispose();
+            blurA.dispose();
+            blurB.dispose();
+            buffer.dispose();
+
+            lastFrame.dispose();
+        } catch(Exception e) {
+        }
     }
 
     public int getWidth() {
@@ -114,7 +132,7 @@ public class GameScreen extends Screen {
             blurA.begin();
             batch.setShader(simple);
             Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 
             batch.begin();
 
@@ -125,7 +143,7 @@ public class GameScreen extends Screen {
             blurA.end();
             blurB.begin();
             Gdx.gl.glClearColor(0, 0, 0, 1f);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 
             batch.setShader(blur);
 
@@ -148,7 +166,7 @@ public class GameScreen extends Screen {
 
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 
         map.update();
 

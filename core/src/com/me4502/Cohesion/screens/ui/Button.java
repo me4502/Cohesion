@@ -67,6 +67,7 @@ public abstract class Button extends BaseUI {
         }
 
         mainButtonTexture = new Texture(Gdx.files.internal("data/ui/button." + Cohesion.TEXTURE_SIZE + ".png"), Pixmap.Format.RGBA8888, true);
+        mainButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
 
         corner = new TextureRegion(mainButtonTexture, 0, 0, mainButtonTexture.getWidth()/2, mainButtonTexture.getHeight()/2);
         top = new TextureRegion(mainButtonTexture, mainButtonTexture.getWidth()/2, 0, mainButtonTexture.getWidth()/2, mainButtonTexture.getHeight()/2);

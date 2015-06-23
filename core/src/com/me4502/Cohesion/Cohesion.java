@@ -157,7 +157,7 @@ public class Cohesion extends ApplicationAdapter {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 24*AA_AMOUNT;
         parameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;
-        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        parameter.minFilter = Texture.TextureFilter.Linear;
         parameter.genMipMaps = true;
         mainFont = generator.generateFont(parameter);
         generator.dispose();

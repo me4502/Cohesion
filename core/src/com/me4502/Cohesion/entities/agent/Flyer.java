@@ -2,10 +2,12 @@ package com.me4502.Cohesion.entities.agent;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.entities.Entity;
 import com.me4502.Cohesion.entities.agent.ai.AIFight;
 import com.me4502.Cohesion.entities.agent.ai.AIFollow;
 import com.me4502.Cohesion.entities.agent.ai.AIHoming;
+import com.me4502.Cohesion.entities.player.Player;
 import com.me4502.Cohesion.map.MapInstance;
 import com.me4502.Cohesion.util.DamageSource;
 
@@ -54,6 +56,8 @@ public class Flyer extends Agent {
             fightingAI.setTarget((Entity) source);
             if(health < 0 && ((Entity) source).health < ((Entity) source).maxHealth) {
                 ((Entity) source).health ++;
+				if(source instanceof Player)
+					Cohesion.instance.getMap().giveScore(100);
             }
         }
 

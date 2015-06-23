@@ -3,10 +3,12 @@ package com.me4502.Cohesion.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.me4502.Cohesion.Cohesion;
 import com.me4502.Cohesion.map.wgen.WorldGenTypes;
+import com.me4502.Cohesion.screens.GameOverScreen;
 import com.me4502.Cohesion.screens.GameScreen;
 
 import java.util.ArrayList;
@@ -27,7 +29,11 @@ public class Map {
 
 	Vector2 centrePoint = new Vector2(0,0);
 
+    GlyphLayout layout;
+
 	public Map() {
+
+        layout = new GlyphLayout();
 
 		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
 		instances.add(new MapInstance(new Color(0f, 1.0f, 0f, 0.33f)));
@@ -52,10 +58,11 @@ public class Map {
 
     public void renderGui(SpriteBatch batch) {
 
-        String text = "Score " + score;
+        if(!(Cohesion.instance.screen instanceof GameScreen)) return;
 
-        Cohesion.instance.mainFont.setFixedWidthGlyphs("Score 9999999");
-        Cohesion.instance.mainFont.draw(batch, text, ((GameScreen)Cohesion.instance.screen).getWidth()/2 - 35 * Cohesion.AA_AMOUNT, ((GameScreen)Cohesion.instance.screen).getHeight() - 32);
+        layout.setText(Cohesion.instance.mainFont, "Score " + score);
+
+        Cohesion.instance.mainFont.draw(batch, layout, ((GameScreen)Cohesion.instance.screen).getWidth()/2 - layout.width/3, ((GameScreen)Cohesion.instance.screen).getHeight() - 32);
 
         for(int i = 0; i < mergeCount; i++) {
             batch.draw(GameScreen.mergeIcon, (16 * Cohesion.AA_AMOUNT) * i + (16 * Cohesion.AA_AMOUNT), ((GameScreen)Cohesion.instance.screen).getHeight() - (16 * Cohesion.AA_AMOUNT * 2), 16 * Cohesion.AA_AMOUNT, 16 * Cohesion.AA_AMOUNT);
@@ -148,8 +155,6 @@ public class Map {
 	}
 
 	public void gameOver() {
-
-		((GameScreen)Cohesion.instance.screen).lastFrame = null;
-		((GameScreen)Cohesion.instance.screen).map = new Map();
+		Cohesion.instance.switchScreen(new GameOverScreen());
 	}
 }

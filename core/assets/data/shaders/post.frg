@@ -23,7 +23,7 @@ void main() {
     if(gl_FragColor.y > 0.0) gl_FragColor.y *= 5.0;
     if(gl_FragColor.z > 0.0) gl_FragColor.z *= 5.0;
 
-    if(all(lessThan(gl_FragColor.xyz, vec3(1.)))) {
+    if(all(lessThan(gl_FragColor.xyz, vec3(0.99)))) {
 
         vec2 uv = -v_texCoords;
 

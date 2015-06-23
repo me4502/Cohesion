@@ -87,7 +87,7 @@ public class Cohesion extends ApplicationAdapter {
         screen = new MainMenuScreen();
         screen.initialize();
 
-        //Setup an input processor to handle recieved inputs.
+        //Setup an input processor to handle received inputs.
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
@@ -156,8 +156,8 @@ public class Cohesion extends ApplicationAdapter {
 		FreeTypeFontGenerator.setMaxTextureSize(256 * AA_AMOUNT);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 24*AA_AMOUNT;
-        parameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;
-        parameter.minFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
+        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
         parameter.genMipMaps = true;
         mainFont = generator.generateFont(parameter);
         generator.dispose();

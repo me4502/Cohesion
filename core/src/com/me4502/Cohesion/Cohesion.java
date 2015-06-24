@@ -1,6 +1,7 @@
 package com.me4502.Cohesion;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -41,6 +42,8 @@ public class Cohesion extends ApplicationAdapter {
 	public static final Random RANDOM = new Random();
 
 	public BitmapFont mainFont;
+
+	public Music music;
 
     public Screen screen;
 	public Matrix4 standardMatrix = new Matrix4();
@@ -83,7 +86,12 @@ public class Cohesion extends ApplicationAdapter {
         //Load basic graphics required for all screens.
         loadGraphics();
 
-        //Set the main menu as the default screen.
+		music = Gdx.audio.newMusic(Gdx.files.internal("data/audio/flowershop.ogg"));
+		music.setVolume(0.5f);
+		music.setLooping(true);
+		music.play();
+
+		//Set the main menu as the default screen.
         screen = new MainMenuScreen();
         screen.initialize();
 

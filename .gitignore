@@ -2,6 +2,7 @@
 /build/
 /bin/
 target/
+out/
  
 # OS Files #
 .DS_Store
@@ -72,6 +73,7 @@ local.properties
 
 # Intellij
 .idea/
+.gradle/
 *.iml
 *.iws
 

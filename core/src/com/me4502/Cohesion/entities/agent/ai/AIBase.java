@@ -4,7 +4,7 @@ import com.me4502.Cohesion.entities.agent.Agent;
 
 public abstract class AIBase {
 
-	AIStatus status;
+	private AIStatus status;
 
 	public final Agent agent;
 
@@ -25,7 +25,6 @@ public abstract class AIBase {
 	}
 
 	public void update() {
-
 		if(getStatus() == AIStatus.STALLING) {
 			stall();
 		} else if(getStatus() == AIStatus.SEARCHING) {

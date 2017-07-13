@@ -12,18 +12,13 @@ import java.util.function.Predicate;
 
 public class AIFight extends AIBase {
 
-    private static Predicate<Entity> defaultPredicate = new Predicate<Entity>() {
-        @Override
-        public boolean test(Entity entity) {
-            return entity instanceof Player;
-        }
-    };//(entity) -> entity instanceof Player;
+    private static Predicate<Entity> defaultPredicate = entity -> entity instanceof Player;
 
-    double attackRadius;
-    Predicate<Entity> targetPredicate;
+    private double attackRadius;
+    private Predicate<Entity> targetPredicate;
 
-    int lastShootTime;
-    int stallTime;
+    private int lastShootTime;
+    private int stallTime;
 
     public AIFight(Agent agent, double attackRadius, Predicate<Entity> targetPredicate) {
         super(agent);
@@ -46,7 +41,6 @@ public class AIFight extends AIBase {
 
     @Override
     public void stall() {
-
         stallTime ++;
 
         if(stallTime % 25 == 0)

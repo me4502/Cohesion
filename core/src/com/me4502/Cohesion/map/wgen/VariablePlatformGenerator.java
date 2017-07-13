@@ -9,16 +9,15 @@ import com.me4502.Cohesion.tile.Platform;
 
 public class VariablePlatformGenerator implements Generator {
 
-	int tick;
+	private int tick;
 
-	int lastY = START_Y;
+	private int lastY = START_Y;
 
-	public static final int START_Y = 32;
-	public static final int VARIANCE = 64;
+	private static final int START_Y = 32;
+	private static final int VARIANCE = 64;
 
 	@Override
 	public void generate(Chunk chunk) {
-
 		lastY = START_Y;
 
 		tick = 0;

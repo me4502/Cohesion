@@ -14,7 +14,7 @@ import com.me4502.Cohesion.util.DamageSource;
 
 public class Player extends Entity {
 
-	int lastShootTime = 0;
+	private int lastShootTime = 0;
 
 	public Player(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
 		super(map, sprite, position, scaleFactor);
@@ -30,7 +30,6 @@ public class Player extends Entity {
 
 	@Override
 	public void update() {
-
 		lastShootTime ++;
 
 		sprite.setRotation(sprite.getRotation() - velocity.x  *4);

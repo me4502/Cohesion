@@ -12,7 +12,6 @@ public class BlockadeDropGenerator implements Generator {
 
 	@Override
 	public void generate(Chunk chunk) {
-
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH)
 			if(i / TILE_WIDTH == 0)
 				chunk.addTile(new Platform(chunk.map, new Sprite(GameScreen.platform), new Vector2(i, 72), Cohesion.TEXTURE_SIZE / 32));

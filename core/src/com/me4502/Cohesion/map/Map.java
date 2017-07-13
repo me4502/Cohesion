@@ -16,23 +16,22 @@ import java.util.List;
 
 public class Map {
 
-	List<MapInstance> instances = new ArrayList<>();
+	private List<MapInstance> instances = new ArrayList<>();
 
-	int currentX = 150;
+	private int currentX = 150;
 
-	int lastScoreX = currentX;
-	public int score = 0;
+	private int lastScoreX = currentX;
+	private int score = 0;
 
-	int updateTick = 0;
+	private int updateTick = 0;
 
-	int mergeCount = 2;
+	private int mergeCount = 2;
 
-	Vector2 centrePoint = new Vector2(0,0);
+	private Vector2 centrePoint = new Vector2(0,0);
 
-    GlyphLayout layout;
+    private GlyphLayout layout;
 
 	public Map() {
-
         layout = new GlyphLayout();
 
 		instances.add(new MapInstance(new Color(1.0f, 0f, 0f, 0.33f)));
@@ -51,13 +50,11 @@ public class Map {
 	}
 
 	public void render(SpriteBatch batch) {
-
 		for(MapInstance instance : instances)
 			instance.render(batch);
     }
 
     public void renderGui(SpriteBatch batch) {
-
         if(!(Cohesion.instance.screen instanceof GameScreen)) return;
 
         layout.setText(Cohesion.instance.mainFont, "Score " + score);
@@ -74,7 +71,6 @@ public class Map {
 	}
 
 	public void update() {
-
 		updateTick ++;
 
 		if(isSlowed() && updateTick < 3)

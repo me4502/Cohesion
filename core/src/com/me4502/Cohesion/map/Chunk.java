@@ -44,7 +44,6 @@ public class Chunk {
 	}
 
 	public void render(SpriteBatch batch) {
-
 		for(Tile tile : tiles)
 			tile.render(batch);
 	}

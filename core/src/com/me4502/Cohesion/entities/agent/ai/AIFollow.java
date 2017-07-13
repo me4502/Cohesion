@@ -5,7 +5,7 @@ import com.me4502.Cohesion.entities.agent.Agent;
 
 public class AIFollow extends AIBase {
 
-    double searchRadius;
+    private double searchRadius;
 
     public AIFollow(Agent agent, double searchRadius) {
         super(agent);
@@ -15,7 +15,6 @@ public class AIFollow extends AIBase {
 
     @Override
     public void stall() {
-
         if(agent.getTarget() != null && agent.getTarget().getPosition().dst2(agent.getPosition()) > searchRadius*searchRadius) {
             setStatus(AIStatus.WORKING);
         }

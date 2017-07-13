@@ -9,15 +9,13 @@ import com.me4502.Cohesion.tile.Platform;
 
 public class FlatPlatformGenerator implements Generator {
 
-	int tick;
+	private int tick;
 
 	@Override
 	public void generate(Chunk chunk) {
-
 		tick = 0;
 
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
-
 			tick ++;
 			if(tick % 2 == 0) continue;
 

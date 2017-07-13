@@ -100,7 +100,11 @@ public class Cohesion extends ApplicationAdapter {
 			@Override
 			public boolean keyDown(int keycode) {
                 if(keycode == Input.Keys.F11) {
-                    Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, !Gdx.graphics.isFullscreen());
+                	if (!Gdx.graphics.isFullscreen()) {
+                		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+					} else {
+                		Gdx.graphics.setWindowedMode(Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
+					}
                 }
 
                 screen.onKeyPress(keycode);
@@ -163,7 +167,7 @@ public class Cohesion extends ApplicationAdapter {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
 		FreeTypeFontGenerator.setMaxTextureSize(256 * AA_AMOUNT);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 24*AA_AMOUNT;
+        parameter.size = 24 * AA_AMOUNT;
         parameter.magFilter = Texture.TextureFilter.Linear;
         parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
         parameter.genMipMaps = true;

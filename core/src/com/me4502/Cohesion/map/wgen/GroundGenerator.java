@@ -11,7 +11,6 @@ public class GroundGenerator implements Generator {
 
 	@Override
 	public void generate(Chunk chunk) {
-
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH)
 			chunk.addTile(new Ground(chunk.map, new Sprite(GameScreen.ground), new Vector2(i, 32), Cohesion.TEXTURE_SIZE / 32));
 	}

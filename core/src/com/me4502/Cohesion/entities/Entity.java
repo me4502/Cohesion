@@ -17,10 +17,10 @@ import java.util.List;
 
 public abstract class Entity implements Collidable, DamageSource {
 
-	public static final Vector2 GRAVITY = new Vector2(0, 1.4f);
+	protected static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
-	public static float COLLISION_ACCURACY = 50f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
-    public static float COLLISION_ACCURACY_INVERTED = 1f/COLLISION_ACCURACY;
+	private static float COLLISION_ACCURACY = 50f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
+    private static float COLLISION_ACCURACY_INVERTED = 1f / COLLISION_ACCURACY;
 
     public int scaleFactor;
 
@@ -29,28 +29,27 @@ public abstract class Entity implements Collidable, DamageSource {
 
 	public Sprite sprite;
 
-	Bounds bounds;
+	private Bounds bounds;
 
 	public MapInstance map;
 
-	public boolean onGround;
-	boolean remove;
+	protected boolean onGround;
+	private boolean remove;
 
-	public int timeSinceHit = 1000;
+	protected int timeSinceHit = 1000;
 
 	/* Movement Modifiers */
-	public float collisionDrag = 0.01f;
-	public float airDrag = 0.99f;
-	public float groundDrag = 0.8f;
+	protected float collisionDrag = 0.01f;
+	private float airDrag = 0.99f;
+	protected float groundDrag = 0.8f;
 
 	protected int age;
-    public int timeSinceMove;
+    protected int timeSinceMove;
 
     public double maxHealth;
     public double health;
 
     public Entity(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
-
 		this.map = map;
 		this.position = position;
 		this.sprite = sprite;
@@ -105,7 +104,6 @@ public abstract class Entity implements Collidable, DamageSource {
 	}
 
 	public void update() {
-
 		age ++;
         timeSinceMove ++;
 
@@ -180,7 +178,6 @@ public abstract class Entity implements Collidable, DamageSource {
     }
 
 	protected boolean doesIntersect(Vector2 position) {
-
 		List<Chunk> chunks = map.getChunks(position);
 		for(Chunk chunk : chunks)
 			for(Tile tile : chunk.getTiles())
@@ -199,14 +196,12 @@ public abstract class Entity implements Collidable, DamageSource {
 	}
 
 	public boolean move(Vector2 position) {
-
 		if(doesIntersect(position)) return false;
 		this.position.set(position);
 		return true;
 	}
 
 	public boolean tryMove(Vector2 position) {
-
         Vector2 bestMove = null;
 
         for(float i = 1f; i > 0.0f; i -= COLLISION_ACCURACY_INVERTED) {

@@ -12,7 +12,6 @@ public class NestGenerator implements Generator {
 
     @Override
     public void generate(Chunk chunk) {
-
         for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
             if(i == 0 || i == Chunk.CHUNK_WIDTH - TILE_WIDTH)
                 chunk.addTile(new Platform(chunk.map, new Sprite(GameScreen.platform), new Vector2(i, 50), Cohesion.TEXTURE_SIZE / 32));

@@ -121,7 +121,7 @@ public class GameScreen extends Screen {
         return buffer.getHeight();
     }
 
-    float elapsedTime = (float)Math.random() * 1000f;
+    private float elapsedTime = (float)Math.random() * 1000f;
 
     @Override
     public void render(SpriteBatch batch) {

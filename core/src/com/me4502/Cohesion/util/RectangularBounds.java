@@ -7,10 +7,10 @@ import com.me4502.Cohesion.Cohesion;
 
 public class RectangularBounds extends Bounds {
 
-	int width;
-	int height;
+	private int width;
+	private int height;
 
-	int padding = 0;
+	private int padding = 0;
 
 	public RectangularBounds(int width, int height) {
 

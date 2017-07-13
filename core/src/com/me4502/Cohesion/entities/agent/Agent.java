@@ -30,7 +30,6 @@ public abstract class Agent extends Entity {
 
 	@Override
 	public void update() {
-
 		for(AIBase ai : aiBehaviour) {
 			ai.update();
 			if(ai.isBlocking()) break;

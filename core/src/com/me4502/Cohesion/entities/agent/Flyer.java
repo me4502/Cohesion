@@ -13,9 +13,9 @@ import com.me4502.Cohesion.util.DamageSource;
 
 public class Flyer extends Agent {
 
-	AIHoming homingAI;
-	AIFight fightingAI;
-    AIFollow followAI;
+	private AIHoming homingAI;
+	private AIFight fightingAI;
+    private AIFollow followAI;
 
 	public Flyer(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor) {
 		super(map, sprite, position, scaleFactor);

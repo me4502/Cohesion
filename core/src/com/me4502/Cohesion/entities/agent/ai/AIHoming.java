@@ -5,7 +5,7 @@ import com.me4502.Cohesion.entities.agent.Agent;
 
 public class AIHoming extends AIBase {
 
-	Vector2 homeLocation;
+	private Vector2 homeLocation;
 
 	public AIHoming(Agent agent, Vector2 homeLocation) {
 		super(agent);

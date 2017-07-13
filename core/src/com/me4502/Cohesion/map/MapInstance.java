@@ -25,15 +25,15 @@ public class MapInstance {
 
 	Player player;
 
-	Color color;
+	private Color color;
 
-	Vector2 playerStartLocation;
+	private Vector2 playerStartLocation;
 
 	private Queue<Entity> spawningQueue = new ArrayDeque<>();
 
 	private static final int CHUNK_LOADING_RANGE = 1;
 
-	int chunkIndex = -1;
+	private int chunkIndex = -1;
 	private Chunk[] chunks = new Chunk[CHUNK_LOADING_RANGE];
 
 	public MapInstance(Color color) {
@@ -44,7 +44,6 @@ public class MapInstance {
 	}
 
 	public void generateNext(int generatorId) {
-
 		chunkIndex ++;
 		if(chunkIndex >= chunks.length)
 			chunks = Arrays.copyOf(chunks, chunks.length + CHUNK_LOADING_RANGE);
@@ -56,7 +55,6 @@ public class MapInstance {
 	}
 
 	public List<Chunk> getChunks(Vector2 position) {
-
 		List<Chunk> chunks = new ArrayList<>();
 
 		for(Chunk chunk : this.chunks) {
@@ -68,10 +66,9 @@ public class MapInstance {
 		return chunks;
 	}
 
-	List<Chunk> loadedChunkCache = new ArrayList<>();
+	private List<Chunk> loadedChunkCache = new ArrayList<>();
 
 	public List<Chunk> getLoadedChunks() {
-
 		if(!loadedChunkCache.isEmpty())
 			return loadedChunkCache;
 
@@ -90,12 +87,10 @@ public class MapInstance {
 	}
 
 	public int randomRange(int min, int max) {
-
 		return min + Cohesion.RANDOM.nextInt(max - min + 1);
 	}
 
 	public void render(SpriteBatch batch) {
-
 		if(GameScreen.colorize.isCompiled()) {
 			batch.setShader(GameScreen.colorize);
 			GameScreen.colorize.setUniformf("color", color.r, color.g, color.b, color.a);
@@ -112,7 +107,6 @@ public class MapInstance {
 	}
 
 	public void update() {
-
 		loadedChunkCache.clear();
 
 		while(!spawningQueue.isEmpty()) {
@@ -146,13 +140,11 @@ public class MapInstance {
 	}
 
 	public <T extends Entity> T spawnEntity(T entity) {
-
 		spawningQueue.add(entity);
 		return entity;
 	}
 
 	public float getDistanceFromStart() {
-
 		return player.getPosition().dst2(playerStartLocation);
 	}
 }

@@ -7,7 +7,7 @@ import com.me4502.Cohesion.map.MapInstance;
 
 public class Projectile extends Entity {
 
-	Entity shooter;
+	private Entity shooter;
 
 	public Projectile(MapInstance map, Sprite sprite, Vector2 position, int scaleFactor, Entity shooter) {
 		super(map, sprite, position, scaleFactor);

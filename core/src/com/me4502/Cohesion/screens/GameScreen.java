@@ -195,11 +195,16 @@ public class GameScreen extends Screen {
         if (postProcessing.isCompiled()) {
             batch.setShader(postProcessing);
             postProcessing.setUniformf("elapsedTime", elapsedTime += 0.01);
+            postProcessing.setUniformi("slowed", Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 1 : 0);
         }
 
         batch.setProjectionMatrix(Cohesion.instance.standardMatrix);
 
         batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+
+        if (simple.isCompiled()) {
+            batch.setShader(simple);
+        }
 
         map.renderGui(batch);
 

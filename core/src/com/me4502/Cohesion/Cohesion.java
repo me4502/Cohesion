@@ -171,6 +171,7 @@ public class Cohesion extends ApplicationAdapter {
         parameter.magFilter = Texture.TextureFilter.Linear;
         parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
         parameter.genMipMaps = true;
+        parameter.hinting = FreeTypeFontGenerator.Hinting.Full;
         mainFont = generator.generateFont(parameter);
         generator.dispose();
 

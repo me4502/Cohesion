@@ -2,6 +2,7 @@ apply plugin: "java"
 
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs = ["../core/assets"]
 
 project.ext.mainClassName = "com.me4502.Cohesion.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
@@ -14,51 +15,23 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 }
 
+task debug(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+    debug = true
+}
+
 task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
- 
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
-}
-
-/*task minify(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
-    injars files("build/libs/desktop-1.0.jar")
-    outjars files("build/libs/desktop-1.0-processed.jar")
-    libraryjars files("${System.getProperty('java.home')}/lib/rt.jar", configurations.compile.asPath.split(";"))
-    dontobfuscate
-    dontoptimize
-    ignorewarnings
-    forceprocessing
-    skipnonpubliclibraryclasses
-    keep access: 'public',
-         name: project.ext.mainClassName, {
-        method access: 'public static',
-                type: 'void',
-                name:       'main',
-                parameters: 'java.lang.String[]'
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-}*/
+    with jar
+}
 
 dist.dependsOn classes
-
-eclipse {
-    project {
-        name = appName + "-desktop"
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/core/assets'
-    }
-}
-
-task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
-  doLast {
-    def classpath = new XmlParser().parse(file(".classpath"))
-    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
-    def writer = new FileWriter(file(".classpath"))
-    def printer = new XmlNodePrinter(new PrintWriter(writer))
-    printer.setPreserveWhitespace(true)
-    printer.print(classpath)
-  }
-}

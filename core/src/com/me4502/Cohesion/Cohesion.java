@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.me4502.Cohesion.map.Map;
@@ -22,7 +21,6 @@ import java.util.Random;
 public class Cohesion extends ApplicationAdapter {
 
 	public static final boolean DEBUG = false;
-    public static final boolean PROFILING = false;
 
 	//Settings Values
 	public static int AA_AMOUNT = 2; //Default is 2
@@ -56,10 +54,6 @@ public class Cohesion extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-
-        //Enable GL Profiling if the mode is on.
-        if(PROFILING) GLProfiler.enable();
-
 		instance = this;
 
 		//Load the configuration.
@@ -194,8 +188,6 @@ public class Cohesion extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-        if(PROFILING) GLProfiler.reset();
         screen.render(batch);
-        if(PROFILING) System.out.println(GLProfiler.calls);
 	}
 }

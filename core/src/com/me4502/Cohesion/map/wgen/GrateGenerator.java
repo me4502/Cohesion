@@ -9,18 +9,15 @@ import com.me4502.Cohesion.tile.Ground;
 
 public class GrateGenerator implements Generator {
 
-	//Do not tell Taylor Swift about this code.
-	private int blankSpaces = 0;
-
 	@Override
 	public void generate(Chunk chunk) {
-
-		blankSpaces = 0;
+		//Do not tell Taylor Swift about this code.
+		int blankSpaces = 0;
 
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
 
 			if(i > 0 && blankSpaces == 0 && Cohesion.RANDOM.nextFloat() >= 0.4f) {
-				blankSpaces ++;
+				blankSpaces++;
 				continue;
 			}
 

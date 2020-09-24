@@ -10,7 +10,7 @@ import com.me4502.Cohesion.Cohesion;
 
 public class GameOverScreen extends Screen {
 
-    private static String text = "Game Over\nClick to Play Again";
+    private static final String TEXT = "Game Over\nClick to Play Again";
 
     GlyphLayout layout;
 
@@ -19,7 +19,7 @@ public class GameOverScreen extends Screen {
         super.initialize();
 
         layout = new GlyphLayout();
-        layout.setText(Cohesion.instance.mainFont, text, Color.WHITE, 400, Align.center, false);
+        layout.setText(Cohesion.instance.mainFont, TEXT, Color.WHITE, 400, Align.center, false);
     }
 
     public void render(SpriteBatch batch) {
@@ -30,7 +30,7 @@ public class GameOverScreen extends Screen {
         batch.setProjectionMatrix(Cohesion.instance.standardMatrix);
         batch.begin();
 
-        Cohesion.instance.mainFont.draw(batch, layout, ((Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT) / 2) - (layout.width/3), (Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT) / 2 + layout.height/3);
+        Cohesion.instance.mainFont.draw(batch, layout, Cohesion.instance.camera.viewportWidth / 2 - (int)(layout.width*1.5), Cohesion.instance.camera.viewportHeight / 2 + layout.height);
 
         batch.end();
     }

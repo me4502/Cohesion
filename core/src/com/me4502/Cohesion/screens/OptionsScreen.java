@@ -15,28 +15,7 @@ public class OptionsScreen extends Screen {
 
         Preferences graphicsPreferences = Gdx.app.getPreferences("graphics");
 
-        uiComponents.add(new Button(320 - 128,300,256,32,"SSAA Amount " + Cohesion.AA_AMOUNT) {
-            @Override
-            public void clickAction(int button) {
-                if(button == Input.Buttons.RIGHT)
-                    Cohesion.AA_AMOUNT /= 2;
-                else
-                    Cohesion.AA_AMOUNT *= 2;
-
-                if(Cohesion.AA_AMOUNT < 1)
-                    Cohesion.AA_AMOUNT = 16;
-                if(Cohesion.AA_AMOUNT > 16)
-                    Cohesion.AA_AMOUNT = 1;
-
-                Cohesion.instance.loadGraphics();
-                Cohesion.instance.switchScreen(new OptionsScreen());
-
-                graphicsPreferences.putInteger("AntiAliasing", Cohesion.AA_AMOUNT);
-                graphicsPreferences.flush();
-            }
-        });
-
-        uiComponents.add(new Button(320 - 128,250,256,32,"SHADER QUALITY " + Cohesion.SHADER_QUALITY_LEVEL) {
+        uiComponents.add(new Button(320 - 128,300,256,32,"SHADER QUALITY " + Cohesion.SHADER_QUALITY_LEVEL) {
             @Override
             public void clickAction(int button) {
                 if(button == Input.Buttons.RIGHT)
@@ -57,7 +36,7 @@ public class OptionsScreen extends Screen {
             }
         });
 
-        uiComponents.add(new Button(320 - 128,200,256,32,"TEXTURE QUALITY " + Cohesion.TEXTURE_SIZE) {
+        uiComponents.add(new Button(320 - 128,250,256,32,"TEXTURE QUALITY " + Cohesion.TEXTURE_SIZE) {
             @Override
             public void clickAction(int button) {
                 if(button == Input.Buttons.RIGHT)
@@ -75,6 +54,13 @@ public class OptionsScreen extends Screen {
 
                 graphicsPreferences.putInteger("TextureQuality", Cohesion.TEXTURE_SIZE);
                 graphicsPreferences.flush();
+            }
+        });
+
+        uiComponents.add(new Button(320 - 128,150,256,32,"Back") {
+            @Override
+            public void clickAction(int button) {
+                Cohesion.instance.switchScreen(new MainMenuScreen());
             }
         });
     }

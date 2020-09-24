@@ -9,8 +9,8 @@ public enum WorldGenTypes {
 	BLOCKADE_DROP(4, new BlockadeDropGenerator()),
 	NEST(5, new NestGenerator());
 
-	private int id;
-	private Generator generator;
+	private final int id;
+	private final Generator generator;
 
 	WorldGenTypes(int id, Generator generator) {
 		this.id = id;

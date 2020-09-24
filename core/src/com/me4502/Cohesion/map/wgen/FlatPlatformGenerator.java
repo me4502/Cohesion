@@ -9,14 +9,12 @@ import com.me4502.Cohesion.tile.Platform;
 
 public class FlatPlatformGenerator implements Generator {
 
-	private int tick;
-
 	@Override
 	public void generate(Chunk chunk) {
-		tick = 0;
+		int tick = 0;
 
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
-			tick ++;
+			tick++;
 			if(tick % 2 == 0) continue;
 
 			chunk.addTile(new Platform(chunk.map, new Sprite(GameScreen.platform), new Vector2(i, 64), Cohesion.TEXTURE_SIZE / 32));

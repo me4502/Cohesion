@@ -56,6 +56,5 @@ void main() {
 #define color_limit 0.0015
 
 void addPoint(inout vec4 sum, vec4 color) {
-	if(color.r > color_limit || color.g > color_limit || color.b > color_limit)
-		sum += color;
+    sum += step(vec4(color_limit), color) * color;
 }

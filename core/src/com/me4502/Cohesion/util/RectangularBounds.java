@@ -7,8 +7,8 @@ import com.me4502.Cohesion.Cohesion;
 
 public class RectangularBounds extends Bounds {
 
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 
 	private int padding = 0;
 
@@ -54,8 +54,8 @@ public class RectangularBounds extends Bounds {
 	@Override
 	public Bounds padding() {
 
-		Bounds bounds = new RectangularBounds(width, height);
-		((RectangularBounds)bounds).padding = 2;
+		RectangularBounds bounds = new RectangularBounds(width, height);
+		bounds.padding = 2;
 
 		return bounds;
 	}

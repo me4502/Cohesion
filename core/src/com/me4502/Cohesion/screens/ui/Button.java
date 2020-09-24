@@ -3,6 +3,7 @@ package com.me4502.Cohesion.screens.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
@@ -10,48 +11,48 @@ import com.me4502.Cohesion.Cohesion;
 
 public abstract class Button extends BaseUI {
 
-    public String text;
+    private final GlyphLayout layout;
 
     public Button(int x, int y, int width, int height, String text) {
         super(x, y, width, height);
 
-        this.text = text;
+        this.layout = new GlyphLayout(Cohesion.instance.mainFont, text);
+
     }
 
     @Override
     public void drawGuiElement(SpriteBatch batch) {
 
-        int ax = x * Cohesion.AA_AMOUNT;
-        int ay = y * Cohesion.AA_AMOUNT;
+        int ax = x;
+        int ay = y;
 
-        int size = 4 * Cohesion.AA_AMOUNT;
+        int size = 4;
 
-        for(int xx = ax; xx < ax + width * Cohesion.AA_AMOUNT; xx += size) {
-            for(int yy = ay; yy > ay - height * Cohesion.AA_AMOUNT; yy -= size) {
+        for(int xx = ax; xx < ax + width; xx += size) {
+            for(int yy = ay; yy > ay - height; yy -= size) {
                 if (xx == ax && yy == ay)
                     batch.draw(corner, xx, yy, size, size);
-                else if (xx == ax && yy-size <= ay - height * Cohesion.AA_AMOUNT)
+                else if (xx == ax && yy-size <= ay - height)
                     batch.draw(corner, size, size, new Affine2().setToTrnRotScl(xx + size, yy, 90, 1, 1));
-                else if (xx+size >= ax + width * Cohesion.AA_AMOUNT && yy == ay)
+                else if (xx+size >= ax + width && yy == ay)
                     batch.draw(corner, size, size, new Affine2().setToTrnRotScl(xx, yy + size, 270, 1, 1));
-                else if (xx+size >= ax + width * Cohesion.AA_AMOUNT && yy-size <= ay - height * Cohesion.AA_AMOUNT)
+                else if (xx+size >= ax + width && yy-size <= ay - height)
                     batch.draw(corner, size, size, new Affine2().setToTrnRotScl(xx + size, yy + size, 180, 1, 1));
                 else if(yy == ay)
                     batch.draw(top, xx, yy, size, size);
-                else if(yy-size <= ay - height * Cohesion.AA_AMOUNT)
+                else if(yy-size <= ay - height)
                     batch.draw(top, size, size, new Affine2().setToTrnRotScl(xx + size, yy + size, 180, 1, 1));
                 else if(xx == ax)
                     batch.draw(side, xx, yy, size, size);
-                else if(xx+size >= ax + width * Cohesion.AA_AMOUNT)
+                else if(xx+size >= ax + width)
                     batch.draw(side, size, size, new Affine2().setToTrnRotScl(xx+size, yy+size, 180, 1, 1));
                 else
                     batch.draw(centre, xx, yy, size, size);
             }
         }
 
-        Cohesion.instance.mainFont.draw(batch, text, ax + size, ay);
+        Cohesion.instance.mainFont.draw(batch, layout, (ax + width / 2) - layout.width / 2, ay);
     }
-    
 
     //Texture information
     public static Texture mainButtonTexture;
@@ -61,7 +62,6 @@ public abstract class Button extends BaseUI {
     public static TextureRegion centre;
 
     public static void loadTextures() {
-
         if(mainButtonTexture != null) {
             mainButtonTexture.dispose();
         }

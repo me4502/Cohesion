@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Map {
 
-	private List<MapInstance> instances = new ArrayList<>();
+	private final List<MapInstance> instances = new ArrayList<>();
 
 	private int currentX = 150;
 
@@ -27,9 +27,9 @@ public class Map {
 
 	private int mergeCount = 2;
 
-	private Vector2 centrePoint = new Vector2(0,0);
+	private final Vector2 centrePoint = new Vector2(0,0);
 
-    private GlyphLayout layout;
+    private final GlyphLayout layout;
 
 	public Map() {
         layout = new GlyphLayout();
@@ -62,7 +62,7 @@ public class Map {
         Cohesion.instance.mainFont.draw(batch, layout, ((GameScreen)Cohesion.instance.screen).getWidth()/2 - layout.width/3, ((GameScreen)Cohesion.instance.screen).getHeight() - 32);
 
         for(int i = 0; i < mergeCount; i++) {
-            batch.draw(GameScreen.mergeIcon, (16 * Cohesion.AA_AMOUNT) * i + (16 * Cohesion.AA_AMOUNT), ((GameScreen)Cohesion.instance.screen).getHeight() - (16 * Cohesion.AA_AMOUNT * 2), 16 * Cohesion.AA_AMOUNT, 16 * Cohesion.AA_AMOUNT);
+            batch.draw(GameScreen.mergeIcon, 16 * i + (16), ((GameScreen)Cohesion.instance.screen).getHeight() - (16 * 2), 16, 16);
         }
     }
 

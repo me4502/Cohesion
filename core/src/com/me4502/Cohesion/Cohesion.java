@@ -3,10 +3,8 @@ package com.me4502.Cohesion;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -23,7 +21,6 @@ public class Cohesion extends ApplicationAdapter {
 	public static final boolean DEBUG = false;
 
 	//Settings Values
-	public static int AA_AMOUNT = 2; //Default is 2
     public static int SHADER_QUALITY_LEVEL = 8; //Default is 8
 	public static int TEXTURE_SIZE = 128; //Default is 128
 
@@ -59,7 +56,6 @@ public class Cohesion extends ApplicationAdapter {
 		//Load the configuration.
         Preferences graphicsPreferences = Gdx.app.getPreferences("graphics");
 
-        AA_AMOUNT = graphicsPreferences.getInteger("AntiAliasing", 2);
         SHADER_QUALITY_LEVEL = graphicsPreferences.getInteger("ShaderQuality", 8);
         TEXTURE_SIZE = graphicsPreferences.getInteger("TextureQuality", 128);
         graphicsPreferences.flush();
@@ -153,23 +149,14 @@ public class Cohesion extends ApplicationAdapter {
 
     public void loadGraphics() {
 
-        standardMatrix.setToOrtho2D(0, 0, (int)Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int)Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT);
+        standardMatrix.setToOrtho2D(0, 0, (int)Cohesion.instance.camera.viewportWidth, (int)Cohesion.instance.camera.viewportHeight);
 
         if(mainFont != null)
             mainFont.dispose();
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/crumbs.ttf"));
-		FreeTypeFontGenerator.setMaxTextureSize(256 * AA_AMOUNT);
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 24 * AA_AMOUNT;
-        parameter.magFilter = Texture.TextureFilter.Linear;
-        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
-        parameter.genMipMaps = true;
-        parameter.hinting = FreeTypeFontGenerator.Hinting.Full;
-        mainFont = generator.generateFont(parameter);
-        generator.dispose();
+		mainFont = new BitmapFont(Gdx.files.internal("data/fonts/crumbs.fnt"), Gdx.files.internal("data/fonts/crumbs.png"), false);
 
-        Button.loadTextures();
+		Button.loadTextures();
     }
 
     public void switchScreen(Screen newScreen) {

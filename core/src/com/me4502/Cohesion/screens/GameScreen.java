@@ -79,7 +79,7 @@ public class GameScreen extends Screen {
             blurA = new FrameBuffer(Pixmap.Format.RGB888, 128 * Cohesion.SHADER_QUALITY_LEVEL, 128 * Cohesion.SHADER_QUALITY_LEVEL, false);
             blurB = new FrameBuffer(Pixmap.Format.RGB888, 128 * Cohesion.SHADER_QUALITY_LEVEL, 128 * Cohesion.SHADER_QUALITY_LEVEL, false);
 
-            buffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int) Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, (int) Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, false, true); //Super Sampling
+            buffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int) Cohesion.instance.camera.viewportWidth, (int) Cohesion.instance.camera.viewportHeight, false, true); //Super Sampling
         } catch(Throwable e) {
             System.out.println("Out of Memory!");
             e.printStackTrace();
@@ -151,7 +151,7 @@ public class GameScreen extends Screen {
             blur.setUniformf("radius", Cohesion.BLUR_RADIUS);
             blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
 
-            batch.draw(blurA.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
+            batch.draw(blurA.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth, Cohesion.instance.camera.viewportHeight, 0, 0, blurA.getWidth(), blurA.getHeight(), false, false);
             batch.flush();
 
             blurB.end();
@@ -177,7 +177,7 @@ public class GameScreen extends Screen {
             blur.setUniformf("resolution", 128 * Cohesion.SHADER_QUALITY_LEVEL);
             blur.setUniformf("radius", Cohesion.BLUR_RADIUS);
             blur.setUniformf("diffuse", Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 0.99f : 0.93f);
-            batch.draw(blurB.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
+            batch.draw(blurB.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth, Cohesion.instance.camera.viewportHeight, 0, 0, blurB.getWidth(), blurB.getHeight(), false, true);
 
             batch.setProjectionMatrix(Cohesion.instance.camera.combined);
         }
@@ -195,12 +195,12 @@ public class GameScreen extends Screen {
         if (postProcessing.isCompiled()) {
             batch.setShader(postProcessing);
             postProcessing.setUniformf("elapsedTime", elapsedTime += 0.01);
-            postProcessing.setUniformi("slowed", Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 1 : 0);
+            postProcessing.setUniformf("slowed", Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 1 : 0);
         }
 
         batch.setProjectionMatrix(Cohesion.instance.standardMatrix);
 
-        batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth * Cohesion.AA_AMOUNT, Cohesion.instance.camera.viewportHeight * Cohesion.AA_AMOUNT, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
+        batch.draw(lastFrame = buffer.getColorBufferTexture(), 0, 0, Cohesion.instance.camera.viewportWidth, Cohesion.instance.camera.viewportHeight, 0, 0, buffer.getWidth(), buffer.getHeight(), false, true);
 
         if (simple.isCompiled()) {
             batch.setShader(simple);

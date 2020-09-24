@@ -19,8 +19,8 @@ public abstract class Entity implements Collidable, DamageSource {
 
 	protected static final Vector2 GRAVITY = new Vector2(0, 1.4f);
 
-	private static float COLLISION_ACCURACY = 50f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
-    private static float COLLISION_ACCURACY_INVERTED = 1f / COLLISION_ACCURACY;
+	private static final float COLLISION_ACCURACY = 75f; //Collision Accuracy. Higher = Less Wall Clipping & More Lag
+    private static final float COLLISION_ACCURACY_INVERTED = 1f / COLLISION_ACCURACY;
 
     public int scaleFactor;
 
@@ -29,7 +29,7 @@ public abstract class Entity implements Collidable, DamageSource {
 
 	public Sprite sprite;
 
-	private Bounds bounds;
+	private final Bounds bounds;
 
 	public MapInstance map;
 

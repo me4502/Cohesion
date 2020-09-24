@@ -9,22 +9,17 @@ import com.me4502.Cohesion.tile.Platform;
 
 public class VariablePlatformGenerator implements Generator {
 
-	private int tick;
-
-	private int lastY = START_Y;
-
 	private static final int START_Y = 32;
 	private static final int VARIANCE = 64;
 
 	@Override
 	public void generate(Chunk chunk) {
-		lastY = START_Y;
-
-		tick = 0;
+		int lastY = START_Y;
+		int tick = 0;
 
 		for(int i = 0; i < Chunk.CHUNK_WIDTH; i += TILE_WIDTH) {
 
-			tick ++;
+			tick++;
 			if(tick % 2 == 0) continue;
 
 			lastY = lastY + VARIANCE/2-Cohesion.RANDOM.nextInt(VARIANCE);

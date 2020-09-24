@@ -42,8 +42,9 @@ public class Flyer extends Agent {
 
 		timeSinceHit ++;
 
-		if(timeSinceHit > 5)
-			velocity.set(0, GRAVITY.y + (float)Math.cos(age / 5));
+		if(timeSinceHit > 5) {
+			velocity.set(0, GRAVITY.y + (float) Math.cos(age / 5.0));
+		}
 
 		super.update();
 	}

@@ -5,7 +5,7 @@ import com.me4502.Cohesion.entities.agent.Agent;
 
 public class AIFollow extends AIBase {
 
-    private double searchRadius;
+    private final double searchRadius;
 
     public AIFollow(Agent agent, double searchRadius) {
         super(agent);

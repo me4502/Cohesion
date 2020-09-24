@@ -12,10 +12,10 @@ import java.util.function.Predicate;
 
 public class AIFight extends AIBase {
 
-    private static Predicate<Entity> defaultPredicate = entity -> entity instanceof Player;
+    private static final Predicate<Entity> defaultPredicate = entity -> entity instanceof Player;
 
-    private double attackRadius;
-    private Predicate<Entity> targetPredicate;
+    private final double attackRadius;
+    private final Predicate<Entity> targetPredicate;
 
     private int lastShootTime;
     private int stallTime;
